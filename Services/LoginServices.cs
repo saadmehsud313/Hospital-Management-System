@@ -1,0 +1,46 @@
+﻿using Hospital_Management_System.Repositories;
+using Hospital_Management_System.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Diagnostics;
+
+namespace Hospital_Management_System.Services
+{
+    public class LoginServices
+    {
+        private readonly LoginRepository _mainPageRepository;
+
+        public LoginServices(LoginRepository mainPageRepository)
+        {
+            _mainPageRepository = mainPageRepository;
+        }
+
+
+        public async Task<bool> LoginCheck(string userID,string password)
+        {
+                UserAccount user =await _mainPageRepository.GetUserData(userID);
+                if(user is null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("User Not Found", "User Does Not Exist", "Ok");
+                    return false;
+                }
+                else if(userID.Equals($"{user.UserId}") && password.Equals(user.Password))
+                {
+                    return true;
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Invalid Credentials","Please Enter Collect Credentials","Ok");
+                    return false;
+                }
+        }
+        public async Task<UserAccount> GetUserData(string userID)
+        {
+            UserAccount user = await _mainPageRepository.GetUserData(userID);
+            return user;
+        }
+    }
+}

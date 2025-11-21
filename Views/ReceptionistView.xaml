@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Hospital_Management_System.Views.ReceptionistView"
+             xmlns:viewmodels="clr-namespace:Hospital_Management_System.ViewModels"
+             x:DataType="viewmodels:ReceptionistViewModel"
+             Title="Profile"
+             Background="Wheat"
+             Shell.NavBarIsVisible="False"
+             >
+    <HorizontalStackLayout VerticalOptions="Start" Background="Wheat">
+        
+            <VerticalStackLayout Margin="20,20,10,10" WidthRequest="200" Background="AntiqueWhite">
+            <Border WidthRequest="150" Margin="0,20,0,0" HeightRequest="150" BackgroundColor="Aqua">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="120"/>
+                </Border.StrokeShape>
+                <Image ></Image>
+            </Border>
+            <Label Text="{Binding StaffName}"
+                   TextColor="Black"
+                   HorizontalOptions="Center" 
+                   FontSize="Medium" 
+                   Padding="4" 
+                   Margin="20,8,25,6"/>
+            <Label Text="{Binding StaffDepartmet}" 
+                   HorizontalOptions="Center" 
+                   FontSize="Medium"
+                   Padding="4" 
+                   TextColor="Black"
+                   Margin="20,8,25,6"/>
+            <Label Text="{Binding StaffRole}" 
+                   HorizontalOptions="Center" 
+                   FontSize="Small"
+                   Padding="4" 
+                   TextColor="Black"
+                   Margin="20,8,25,15"/>
+            <Button Text="Profile" Clicked="ProfilePageClicked"  Background="#EC9C13">
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                    
+                </Button.GestureRecognizers>
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="TextColor" Value="White"/>
+                        <Setter Property="WidthRequest" Value="150"/>
+                        <Setter Property="Padding" Value="10"/>
+                        <Setter Property="Margin" Value="0,35,0,20"/>
+                        
+                    </Style>
+                </Button.Style>
+               
+            </Button>
+            <Button Text="Change Password" Clicked="ChangePasswordClicked" Background="#EC9C13">
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                </Button.GestureRecognizers>
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="BackgroundColor" Value="Green"/>
+                        <Setter Property="TextColor" Value="White"/>
+                        <Setter Property="WidthRequest" Value="150"/>
+                        <Setter Property="Padding" Value="10"/>
+                        <Setter Property="Margin" Value="0,10,0,20"/>
+
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Text="Logout" Command="{Binding LogoutClickedCommand}" Background="#EC9C13">
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                </Button.GestureRecognizers>
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="BackgroundColor" Value="Green"/>
+                        <Setter Property="TextColor" Value="White"/>
+                        <Setter Property="WidthRequest" Value="150"/>
+                        <Setter Property="Padding" Value="10"/>
+                        <Setter Property="Margin" Value="0,10,0,100"/>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </VerticalStackLayout>
+        <ContentView IsVisible="True" x:Name="PersonalInfoPage">
+        <VerticalStackLayout 
+               WidthRequest="900" 
+               Background="AntiqueWhite" 
+               Margin="20,20,8,10"
+               >
+            
+            
+            <Label Text="Personal Information" 
+                   FontSize="Large"  
+                   Margin="4,22,10,15" 
+                   TextColor="Black" 
+                   FontAttributes="Bold"/>
+            
+            
+                <VerticalStackLayout Margin="20,10">
+                    <Label 
+                        Text="ID"
+                        Padding="1"
+                        TextColor="#C4C4C4"
+                        />
+                    <Border 
+                         WidthRequest="400"
+                         Stroke="#DBDBDB"
+                         Background="#DBDBDB"
+                         Padding="10,10"
+                         HorizontalOptions="Start"
+                         >
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20"/>
+                        </Border.StrokeShape>
+                        <Label Text="{Binding StaffId}"
+                               
+                               FontSize="18"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout
+                                Spacing="20"
+                                Margin="20"
+                                >
+                
+                <VerticalStackLayout >
+                    <Label Text="First Name"
+                           Padding="1"
+                           TextColor="#C4C4C4"
+                           />
+                    <Border WidthRequest="400"
+                            Stroke="#DBDBDB"
+                            Background="#DBDBDB"
+                            Padding="10,10"
+                            HorizontalOptions="Fill"
+                            >
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20"/>
+                        </Border.StrokeShape>
+                        <Label Text="{Binding StaffFirstName}"
+                               
+                               FontSize="18"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout>
+                    <Label Text="Last Name"
+                    Padding="1"
+                    TextColor="#C4C4C4"
+                    />
+                    <Border WidthRequest="400"
+                        Stroke="#DBDBDB"
+                        Background="#DBDBDB"
+                        Padding="10,10"
+                        HorizontalOptions="Fill"
+                        >
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20"/>
+                        </Border.StrokeShape>
+                        <Label Text="{Binding StaffLastName}"
+                               
+                               FontSize="18"/>
+                    </Border>
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
+            <VerticalStackLayout Margin="20,10">
+                <Label 
+                      Text="Email Address"
+                      Padding="1"
+                      TextColor="#C4C4C4"
+                      />
+                <Border 
+                      WidthRequest="800"
+                      Stroke="#DBDBDB"
+                      Background="#DBDBDB"
+                      Padding="10,10"
+                      HorizontalOptions="Start"
+                      >
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20"/>
+                    </Border.StrokeShape>
+                    <Label Text="{Binding StaffEmail}"
+                           
+                           FontSize="18"/>
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Margin="20,10">
+                <Label 
+                    Text="Address"
+                    Padding="1"
+                    TextColor="#C4C4C4"
+                    />
+                <Border 
+                    WidthRequest="800"
+                    Stroke="#DBDBDB"
+                    Background="#DBDBDB"
+                    Padding="10,10"
+                    HorizontalOptions="Start"
+                    >
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20"/>
+                    </Border.StrokeShape>
+                    <Label Text="{Binding StaffAddress}"
+                    
+                    FontSize="18"/>
+                </Border>
+            </VerticalStackLayout>
+
+            <HorizontalStackLayout
+                Spacing="20"
+                Margin="20"
+                >
+                <VerticalStackLayout >
+                    <Label Text="Phone Number"
+                            Padding="1"
+                            TextColor="#C4C4C4"
+                            />
+                    <Border WidthRequest="400"
+                            Stroke="#DBDBDB"
+                            Background="#DBDBDB"
+                            Padding="10,10"
+                            HorizontalOptions="Fill"
+                            >
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20"/>
+                        </Border.StrokeShape>
+                        <Label Text="{Binding StaffPhoneNumber}"
+                            
+                            FontSize="18"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout>
+                    <Label Text="Hire Date"
+                           Padding="1"
+                           TextColor="#C4C4C4"
+                           />
+                    <Border WidthRequest="400"
+                            Stroke="#DBDBDB"
+                            Background="#DBDBDB"
+                            Padding="10,10"
+                            HorizontalOptions="Fill"
+                            >
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20"/>
+                        </Border.StrokeShape>
+                        <Label Text="{Binding StaffHireDate}"
+                               
+                               FontSize="18"/>
+                    </Border>
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
+            
+                <VerticalStackLayout Margin="20,10">
+                    
+                    <Label Text="Active Status"
+                           Padding="1"
+                           TextColor="#C4C4C4"
+                           />
+                    
+                    <Border WidthRequest="400"
+                           Stroke="#DBDBDB"
+                           Background="#DBDBDB"
+                           Padding="10,10"
+                           HorizontalOptions="Start"
+                           >
+                        
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20"/>
+                        </Border.StrokeShape>
+                        
+                        <Label Text="{Binding StaffStatus}"
+                           
+                           FontSize="18"/>
+                        
+                    </Border>
+                </VerticalStackLayout>
+
+
+            </VerticalStackLayout>
+            
+      </ContentView>
+        
+        
+        <ContentView IsVisible="False" x:Name="LoginInfoPage">
+            <VerticalStackLayout 
+                        WidthRequest="900" 
+                        Background="AntiqueWhite" 
+                        Margin="20,20,8,10"
+                         >
+
+
+                <Label Text="Login Information" 
+                       FontSize="Large"  
+                       Margin="4,22,10,15" 
+                       TextColor="Black" 
+                       FontAttributes="Bold"/>
+
+
+                <VerticalStackLayout Margin="20,10">
+                    <Label 
+                        Text="User ID"
+                        Padding="1"
+                        TextColor="#C4C4C4"
+                        />
+                    <Border 
+                          WidthRequest="400"
+                          Stroke="#DBDBDB"
+                          Background="#DBDBDB"
+                          Padding="10,10"
+                          HorizontalOptions="Start"
+                          >
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20"/>
+                        </Border.StrokeShape>
+                        <Label Text="REC1001"
+                         
+                         FontSize="18"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout
+                          Spacing="20"
+                          Margin="20"
+                          >
+
+                    <VerticalStackLayout >
+                        <Label Text="User Name"
+                               Padding="1"
+                               TextColor="#C4C4C4"
+                               />
+                        <Border WidthRequest="400"
+                                Stroke="#DBDBDB"
+                                Background="#DBDBDB"
+                                Padding="10,10"
+                                HorizontalOptions="Fill"
+                                >
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="20"/>
+                            </Border.StrokeShape>
+                            <Label Text="Muhammad Saad"
+                                   FontSize="18"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Label Text="Password"
+                                Padding="1"
+                                TextColor="#C4C4C4"
+                                />
+                        <Border WidthRequest="400"
+                                Stroke="#DBDBDB"
+                                Background="#DBDBDB"
+                                Padding="10,10"
+                                HorizontalOptions="Fill"
+                                >
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="20"/>
+                            </Border.StrokeShape>
+                            <Label Text="Password"
+                                   FontSize="18"/>
+                        </Border>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+                <VerticalStackLayout Margin="20,10">
+                    <Label Text="EmailAddress"
+                           Padding="1"
+                           TextColor="#C4C4C4"
+                            />
+                    <Border 
+                           WidthRequest="800"
+                           Stroke="#DBDBDB"
+                           Background="#DBDBDB"
+                           Padding="10,10"
+                           HorizontalOptions="Start"
+                           >
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20"/>
+                        </Border.StrokeShape>
+                        <Label Text="First Name"
+                               
+                               FontSize="18"/>
+                    </Border>
+                </VerticalStackLayout>
+                
+                <HorizontalStackLayout HorizontalOptions="End" Margin="20,0,70,20" Spacing="20">
+                    <Button Text="Discard Change"  Background="AntiqueWhite">
+                        
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="TextColor" Value="#EC9C13"/>
+                                <Setter Property="WidthRequest" Value="150"/>
+                                <Setter Property="Padding" Value="10"/>
+                                <Setter Property="Margin" Value="0,35,0,20"/>
+                                <Setter Property="BorderWidth" Value="2"/>
+                                <Setter Property="BorderColor" Value="#EC9C13"/>
+                            </Style>
+                        </Button.Style>
+
+                    </Button>
+                    <Button Text="Change Password" Background="#EC9C13">
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+
+                        </Button.GestureRecognizers>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="TextColor" Value="White"/>
+                                <Setter Property="WidthRequest" Value="250"/>
+                                <Setter Property="Padding" Value="5,0,1,0"/>
+                                <Setter Property="Margin" Value="0,35,0,20"/>
+
+                            </Style>
+                        </Button.Style>
+
+                    </Button>
+
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </ContentView>
+
+        
+        
+    </HorizontalStackLayout>
+</ContentPage>

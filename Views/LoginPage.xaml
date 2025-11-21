@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Hospital_Management_System.Views.LoginPage"
+             xmlns:viewmodels="clr-namespace:Hospital_Management_System.ViewModels"
+             x:DataType="viewmodels:LoginViewModel"
+             BackgroundColor="LightGreen"
+             Shell.NavBarIsVisible="False"
+             Shell.FlyoutBehavior="Disabled"
+             
+    >
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" IsEnabled="False"/>
+    </Shell.BackButtonBehavior>
+
+    
+    <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">
+
+        <Label Text="Login" FontSize="Title" TextColor="Orchid" FontAttributes="Bold" HorizontalOptions="Center" />
+        <Entry x:Name="usernameEntry" Placeholder="Email" Text="{Binding EmailEntry}" WidthRequest="250" Margin="0,10" BackgroundColor="LightCyan" TextColor="Black"/>
+        <Entry x:Name="passwordEntry" Placeholder="Password" IsPassword="True" Text="{Binding PasswordEntry}" WidthRequest="250" Margin="0,10" BackgroundColor="LightCyan" TextColor="Black"  />
+        <Label Text="{Binding LoginLabel}" TextColor="Red" HorizontalOptions="Center"  />
+        <Button Text="Login" Command="{Binding LoginClickedCommand}"  WidthRequest="150" Margin="0,10" BackgroundColor="#EC9C13">
+            <Button.GestureRecognizers>
+                <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+
+            </Button.GestureRecognizers>
+        </Button>
+
+    </StackLayout>
+</ContentPage>
+    

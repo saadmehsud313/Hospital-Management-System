@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Hospital_Management_System.Models
+{
+    public class Patient
+    {
+        int _patientId;
+        string MRN;
+        string _firstName;
+        string _lastName;
+        string _dateOfBirth;
+        string _Gender;
+        string _phone;
+        string _email;
+        string _address;
+        string _BloodGroup;
+        string _emergencyContactName;
+        string _emergencyContactPhone;
+        string _CreatedAt;
+        bool _isActive;
+
+        public int PatientId { get => _patientId; set => _patientId = value; }
+        public string MRN1 { get => MRN; set => MRN = value; }
+        public string FirstName { get => _firstName; set => _firstName = value; }
+        public string LastName { get => _lastName; set => _lastName = value; }
+        public string DateOfBirth { get => _dateOfBirth; set => _dateOfBirth = value; }
+        public string Gender { get => _dateOfBirth; set=> _dateOfBirth = value; }
+        public string Phone { get => _phone; set => _phone = value; }
+        public string Email { get => _email; set => _email = value; }
+        public string Address { get => _address; set => _address = value; }
+        public string BloodGroup { get => _BloodGroup; set => _BloodGroup = value; }
+        public string EmergencyContactName { get => _emergencyContactName; set => _emergencyContactName = value; }
+        public string EmergencyContactPhone { get => _emergencyContactPhone; set => _emergencyContactPhone = value; }
+        public string CreatedAt { get => _CreatedAt; set => _CreatedAt = value; }
+        public bool IsActive { get => _isActive; set => _isActive = value; }
+
+
+    }
+}
