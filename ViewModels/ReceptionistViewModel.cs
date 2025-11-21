@@ -11,12 +11,12 @@ namespace Hospital_Management_System.ViewModels
     {
         private readonly StaffService _staffService;
         private readonly Staff _staff;
+        public static int id;
         public ReceptionistViewModel(StaffService staffService,Staff staff)
         {
             _staffService = staffService;
             _staff = staff;
-            Debug.WriteLine(_staff.StaffId);
-            loadStaffData(_staff.StaffId);
+            loadStaffData(ReceptionistViewModel.id);
 
         }
         
@@ -44,6 +44,12 @@ namespace Hospital_Management_System.ViewModels
         string staffHireDate;
         [ObservableProperty]
         string staffStatus;
+        [ObservableProperty]
+        string userId;
+        [ObservableProperty]
+        string userName;
+        [ObservableProperty]
+        string userPassword;
 
         [RelayCommand]
         async Task OnLogoutClicked()
@@ -64,6 +70,9 @@ namespace Hospital_Management_System.ViewModels
                 StaffPhoneNumber = staff.Phone;
                 StaffCode = staff.StaffCode;
                 StaffStatus = staff.IsActive ? "Active" : "Inactive";
+                UserId = $"{LoginViewModel.user.UserId}";
+                UserName = $"{staff.FirstName} {staff.LastName}";
+                UserPassword = $"{LoginViewModel.user.Password}";
             }
             else
             {

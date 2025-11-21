@@ -314,9 +314,8 @@
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20"/>
                         </Border.StrokeShape>
-                        <Label Text="REC1001"
-                         
-                         FontSize="18"/>
+                        <Label Text="{Binding UserID}"
+                               FontSize="18"/>
                     </Border>
                 </VerticalStackLayout>
 
@@ -339,7 +338,7 @@
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="20"/>
                             </Border.StrokeShape>
-                            <Label Text="Muhammad Saad"
+                            <Label Text="{Binding UserName}"
                                    FontSize="18"/>
                         </Border>
                     </VerticalStackLayout>
@@ -358,13 +357,13 @@
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="20"/>
                             </Border.StrokeShape>
-                            <Label Text="Password"
+                            <Label Text="{Binding Password}"
                                    FontSize="18"/>
                         </Border>
                     </VerticalStackLayout>
                 </HorizontalStackLayout>
                 <VerticalStackLayout Margin="20,10">
-                    <Label Text="EmailAddress"
+                    <Label Text="Email Address"
                            Padding="1"
                            TextColor="#C4C4C4"
                             />
@@ -378,7 +377,7 @@
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20"/>
                         </Border.StrokeShape>
-                        <Label Text="First Name"
+                        <Label Text="{Binding StaffEmail}"
                                
                                FontSize="18"/>
                     </Border>

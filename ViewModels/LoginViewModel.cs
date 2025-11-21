@@ -12,12 +12,10 @@ namespace Hospital_Management_System.ViewModels
     {
         private readonly LoginServices _LoginServices;
         private readonly UserAccount _userAccount;
-        private readonly Staff _staff;
-        public LoginViewModel(LoginServices LoginServices, UserAccount userAccount, Staff staff)
+        public static UserAccount user;
+        public LoginViewModel(LoginServices LoginServices)
         {
             _LoginServices = LoginServices;
-            _userAccount = userAccount;
-            _staff = staff;
         }
         [ObservableProperty]
         string emailEntry;
@@ -30,7 +28,6 @@ namespace Hospital_Management_System.ViewModels
         [RelayCommand]
         async Task OnLoginClicked()
         {
-            string role;
             string email = EmailEntry;
             string password = PasswordEntry;
             Debug.WriteLine("PasswordEntry:" + PasswordEntry);
@@ -39,14 +36,13 @@ namespace Hospital_Management_System.ViewModels
             Debug.WriteLine(loginStatus);
             if (loginStatus)
             {
-                UserAccount user = await _LoginServices.GetUserData(email);
+                user = await _LoginServices.GetUserData(email);
                 if (user.Role.Equals("Database Admin"))
                 {
                     LoginLabel =string.Empty;
                     EmailEntry = string.Empty;
                     PasswordEntry = string.Empty;
-                    _staff.StaffId=user.UserId;
-                    Debug.WriteLine("Staff ID in login"+_staff.StaffId);
+                    ReceptionistViewModel.id = user.UserId;
                     Application.Current.MainPage = new AppShell(user.Role);
                     
                 }
