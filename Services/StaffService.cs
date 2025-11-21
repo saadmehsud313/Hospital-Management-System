@@ -18,7 +18,7 @@ namespace Hospital_Management_System.Services
         public async Task<Staff> GetStaff(int id)
         {
             Staff staff= await _staffRepository.GetStaffData(id);
-            if (staff is not null && staff.IsActive)
+            if (staff is not null)
             { return staff; }
             else
             { return null; }

@@ -11,17 +11,17 @@ namespace Hospital_Management_System.Services
 {
     public class LoginServices
     {
-        private readonly LoginRepository _mainPageRepository;
+        private readonly LoginRepository _loginPageRepository;
 
-        public LoginServices(LoginRepository mainPageRepository)
+        public LoginServices(LoginRepository loginPageRepository)
         {
-            _mainPageRepository = mainPageRepository;
+            _loginPageRepository = loginPageRepository;
         }
 
 
         public async Task<bool> LoginCheck(string userID,string password)
         {
-                UserAccount user =await _mainPageRepository.GetUserData(userID);
+                UserAccount user =await _loginPageRepository.GetUserData(userID);
                 if(user is null)
                 {
                     await Application.Current.MainPage.DisplayAlert("User Not Found", "User Does Not Exist", "Ok");
@@ -39,7 +39,7 @@ namespace Hospital_Management_System.Services
         }
         public async Task<UserAccount> GetUserData(string userID)
         {
-            UserAccount user = await _mainPageRepository.GetUserData(userID);
+            UserAccount user = await _loginPageRepository.GetUserData(userID);
             return user;
         }
     }

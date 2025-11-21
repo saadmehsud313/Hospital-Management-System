@@ -12,6 +12,7 @@ namespace Hospital_Management_System.ViewModels
         private readonly StaffService _staffService;
         private readonly Staff _staff;
         public static int id;
+        public static UserAccount user;
         public ReceptionistViewModel(StaffService staffService,Staff staff)
         {
             _staffService = staffService;
@@ -41,7 +42,7 @@ namespace Hospital_Management_System.ViewModels
         [ObservableProperty]
         string staffDepartment;
         [ObservableProperty]
-        string staffHireDate;
+        DateTime staffHireDate;
         [ObservableProperty]
         string staffStatus;
         [ObservableProperty]
@@ -58,7 +59,7 @@ namespace Hospital_Management_System.ViewModels
         }
         public void loadStaffData(int id)
         {
-            var staff = _staffService.GetStaff(id).Result;
+            var staff = _staffService.GetStaff(user.UserId).Result;
             if (staff != null)
             {
                 StaffId = staff.StaffId.ToString();
@@ -69,10 +70,12 @@ namespace Hospital_Management_System.ViewModels
                 StaffEmail = staff.Email;
                 StaffPhoneNumber = staff.Phone;
                 StaffCode = staff.StaffCode;
+                StaffDepartment = $"{staff.DepartmentId}";
+                StaffHireDate = staff.HireDate;
                 StaffStatus = staff.IsActive ? "Active" : "Inactive";
-                UserId = $"{LoginViewModel.user.UserId}";
+                UserId = $"{user.UserId}";
                 UserName = $"{staff.FirstName} {staff.LastName}";
-                UserPassword = $"{LoginViewModel.user.Password}";
+                UserPassword = $"{user.Password}";
             }
             else
             {

@@ -11,8 +11,6 @@ namespace Hospital_Management_System.ViewModels
     public partial class LoginViewModel : ObservableObject
     {
         private readonly LoginServices _LoginServices;
-        private readonly UserAccount _userAccount;
-        public static UserAccount user;
         public LoginViewModel(LoginServices LoginServices)
         {
             _LoginServices = LoginServices;
@@ -30,19 +28,16 @@ namespace Hospital_Management_System.ViewModels
         {
             string email = EmailEntry;
             string password = PasswordEntry;
-            Debug.WriteLine("PasswordEntry:" + PasswordEntry);
-            Debug.WriteLine("Password:"+ password);
             bool loginStatus = await _LoginServices.LoginCheck(email, password);
-            Debug.WriteLine(loginStatus);
             if (loginStatus)
             {
-                user = await _LoginServices.GetUserData(email);
+                var user = await _LoginServices.GetUserData(email);
                 if (user.Role.Equals("Database Admin"))
                 {
                     LoginLabel =string.Empty;
                     EmailEntry = string.Empty;
                     PasswordEntry = string.Empty;
-                    ReceptionistViewModel.id = user.UserId;
+                    ReceptionistViewModel.user = user;
                     Application.Current.MainPage = new AppShell(user.Role);
                     
                 }

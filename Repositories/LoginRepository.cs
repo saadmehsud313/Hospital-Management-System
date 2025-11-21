@@ -23,7 +23,7 @@ namespace Hospital_Management_System.Repositories
                 SqlConnection connect = new SqlConnection(_connectionString);
                 connect.Open();
                 String query = $"select * from User_Account where User_Account.UserID={userID};";
-                SqlCommand command = new SqlCommand(query, connect);
+                SqlCommand command = new(query, connect);
                 SqlDataReader reader = command.ExecuteReader();
                 
                 if(!(reader.Read()))

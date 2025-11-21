@@ -13,7 +13,7 @@ namespace Hospital_Management_System.Models
         int _departmentId;
         string _phone;
         string _email;
-        string _hireDate;
+        DateTime _hireDate;
         bool _isActive;
         public int StaffId { get => _staffId; set => _staffId = value; }
         public string StaffCode { get => _staffCode; set => _staffCode = value; }
@@ -23,7 +23,7 @@ namespace Hospital_Management_System.Models
         public int DepartmentId { get => _departmentId; set => _departmentId = value; }
         public string Phone { get => _phone; set => _phone = value; }
         public string Email { get => _email; set => _email = value; }
-        public string HireDate { get => HireDate; set => HireDate = value; }
+        public DateTime HireDate { get => _hireDate; set => _hireDate = value; }
         public bool IsActive { get => _isActive; set => _isActive = value; }
     }
 }

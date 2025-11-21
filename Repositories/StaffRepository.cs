@@ -36,6 +36,7 @@ namespace Hospital_Management_System.Repositories
                         DepartmentId = reader.GetInt32(5),
                         Phone = reader.GetString(6),
                         Email = reader.GetString(7),
+                        HireDate= reader.GetDateTime(8),
                         IsActive = reader.GetBoolean(9)
                     };
                     connection.Close();

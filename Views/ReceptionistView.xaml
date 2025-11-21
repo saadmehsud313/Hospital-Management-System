@@ -23,7 +23,7 @@
                    FontSize="Medium" 
                    Padding="4" 
                    Margin="20,8,25,6"/>
-            <Label Text="{Binding StaffDepartmet}" 
+            <Label Text="{Binding StaffDepartment}" 
                    HorizontalOptions="Center" 
                    FontSize="Medium"
                    Padding="4" 
@@ -314,7 +314,7 @@
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20"/>
                         </Border.StrokeShape>
-                        <Label Text="{Binding UserID}"
+                        <Label Text="{Binding UserId}"
                                FontSize="18"/>
                     </Border>
                 </VerticalStackLayout>
@@ -357,7 +357,7 @@
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="20"/>
                             </Border.StrokeShape>
-                            <Label Text="{Binding Password}"
+                            <Label Text="{Binding UserPassword}"
                                    FontSize="18"/>
                         </Border>
                     </VerticalStackLayout>
