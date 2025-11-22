@@ -26,24 +26,25 @@ namespace Hospital_Management_System.ViewModels
         [RelayCommand]
         async Task OnLoginClicked()
         {
-            string email = EmailEntry;
-            string password = PasswordEntry;
-            bool loginStatus = await _LoginServices.LoginCheck(email, password);
-            if (loginStatus)
-            {
-                var user = await _LoginServices.GetUserData(email);
-                if (user.Role.Equals("Database Admin"))
-                {
-                    LoginLabel =string.Empty;
-                    EmailEntry = string.Empty;
-                    PasswordEntry = string.Empty;
-                    ReceptionistViewModel.user = user;
-                    Application.Current.MainPage = new AppShell(user.Role);
-                    
-                }
+            Application.Current.MainPage = new AppShell("Database Admin");
+            //string email = EmailEntry;
+            //string password = PasswordEntry;
+            //bool loginStatus = await _LoginServices.LoginCheck(email, password);
+            //if (loginStatus)
+            //{
+            //    var user = await _LoginServices.GetUserData(email);
+            //    if (user.Role.Equals("Database Admin"))
+            //    {
+            //        LoginLabel = string.Empty;
+            //        EmailEntry = string.Empty;
+            //        PasswordEntry = string.Empty;
+            //        ReceptionistViewModel.user = user;
+            //        Application.Current.MainPage = new AppShell(user.Role);
 
-            }
-            
+            //    }
+
+            //}
+
         }
     }
 }

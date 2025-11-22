@@ -5,6 +5,7 @@ using Hospital_Management_System.Views;
 using Hospital_Management_System.Models;
 using Hospital_Management_System.Services;
 using System.Diagnostics;
+using System.ComponentModel;
 namespace Hospital_Management_System.ViewModels
 {
     public partial class ReceptionistViewModel:ObservableObject
@@ -17,7 +18,7 @@ namespace Hospital_Management_System.ViewModels
         {
             _staffService = staffService;
             _staff = staff;
-            loadStaffData(ReceptionistViewModel.id);
+            //loadStaffData(ReceptionistViewModel.id);
 
         }
         
@@ -51,7 +52,22 @@ namespace Hospital_Management_System.ViewModels
         string userName;
         [ObservableProperty]
         string userPassword;
-
+        [ObservableProperty]
+        bool profileViewStatus = true;
+        [ObservableProperty]
+        bool infoViewState = false;
+        [RelayCommand]
+        public void ToggleProfileView()
+        {
+            ProfileViewStatus = true;
+            InfoViewState = false;
+        }
+        [RelayCommand]
+        public void ToggleInfoView()
+        {
+            ProfileViewStatus = false;
+            InfoViewState = true;
+        }
         [RelayCommand]
         async Task OnLogoutClicked()
         {

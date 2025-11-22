@@ -35,7 +35,7 @@
                    Padding="4" 
                    TextColor="Black"
                    Margin="20,8,25,15"/>
-            <Button Text="Profile" Clicked="ProfilePageClicked"  Background="#EC9C13">
+            <Button Text="Profile"  Command="{Binding ToggleProfileViewCommand}"  Background="#EC9C13">
                 <Button.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
                     
@@ -51,7 +51,7 @@
                 </Button.Style>
                
             </Button>
-            <Button Text="Change Password" Clicked="ChangePasswordClicked" Background="#EC9C13">
+            <Button Text="Change Password" Command="{Binding ToggleInfoViewCommand}" Background="#EC9C13">
                 <Button.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
                 </Button.GestureRecognizers>
@@ -81,15 +81,13 @@
                 </Button.Style>
             </Button>
         </VerticalStackLayout>
-        <ContentView IsVisible="True" x:Name="PersonalInfoPage">
-        <VerticalStackLayout 
+        <ContentView IsVisible="{Binding ProfileViewStatus}"  x:Name="PersonalInfoPage">
+            <VerticalStackLayout 
                WidthRequest="900" 
                Background="AntiqueWhite" 
                Margin="20,20,8,10"
                >
-            
-            
-            <Label Text="Personal Information" 
+               <Label Text="Personal Information" 
                    FontSize="Large"  
                    Margin="4,22,10,15" 
                    TextColor="Black" 
@@ -283,7 +281,7 @@
       </ContentView>
         
         
-        <ContentView IsVisible="False" x:Name="LoginInfoPage">
+        <ContentView IsVisible="{Binding InfoViewState}" x:Name="LoginInfoPage">
             <VerticalStackLayout 
                         WidthRequest="900" 
                         Background="AntiqueWhite" 
