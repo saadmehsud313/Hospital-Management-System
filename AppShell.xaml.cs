@@ -27,7 +27,7 @@ namespace Hospital_Management_System
                 });
                 Items.Add(new FlyoutItem
                 {
-                    Title="Add Patients",
+                    Title="Create Appointment",
                     Items =
                     {
                         new ShellContent
