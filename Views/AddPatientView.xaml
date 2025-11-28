@@ -3,15 +3,91 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Hospital_Management_System.Views.AddPatientView"
              xmlns:viewmodels="clr-namespace:Hospital_Management_System.ViewModels"
+             x:DataType="viewmodels:AddPatientViewModel"
              Shell.NavBarIsVisible="False"
              Title="Create Appointment">
     <ContentPage.Resources>
         <StyleSheetExtension Source="../Resources/Styles/Style.css" />
     </ContentPage.Resources>
-    <StackLayout  Background="Wheat">
+    <HorizontalStackLayout Background="Wheat">
+        <VerticalStackLayout Margin="20,20,10,10" WidthRequest="200" Background="AntiqueWhite">
+            <Border WidthRequest="150" Margin="0,20,0,0" HeightRequest="150" BackgroundColor="Aqua">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="120"/>
+                </Border.StrokeShape>
+                <Image ></Image>
+            </Border>
+            <Label Text="{Binding StaffName}"
+               TextColor="Black"
+               HorizontalOptions="Center" 
+               FontSize="Medium" 
+               Padding="4" 
+               Margin="20,8,25,6"/>
+            <Label Text="{Binding StaffDepartment}" 
+               HorizontalOptions="Center" 
+               FontSize="Medium"
+               Padding="4" 
+               TextColor="Black"
+               Margin="20,8,25,6"/>
+            <Label Text="{Binding StaffRole}" 
+               HorizontalOptions="Center" 
+               FontSize="Small"
+               Padding="4" 
+               TextColor="Black"
+               Margin="20,8,25,15"/>
+            <Button Text="Profile"  Command="{Binding ToggleProfileViewCommand}"  Background="#EC9C13">
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+
+                </Button.GestureRecognizers>
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="TextColor" Value="White"/>
+                        <Setter Property="WidthRequest" Value="150"/>
+                        <Setter Property="Padding" Value="10"/>
+                        <Setter Property="Margin" Value="0,35,0,20"/>
+
+                    </Style>
+                </Button.Style>
+
+            </Button>
+            <Button Text="Change Password" Command="{Binding ToggleInfoViewCommand}" Background="#EC9C13">
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                </Button.GestureRecognizers>
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="BackgroundColor" Value="Green"/>
+                        <Setter Property="TextColor" Value="White"/>
+                        <Setter Property="WidthRequest" Value="150"/>
+                        <Setter Property="Padding" Value="10"/>
+                        <Setter Property="Margin" Value="0,10,0,20"/>
+
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Text="Logout" Command="{Binding LogoutClickedCommand}" Background="#EC9C13">
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                </Button.GestureRecognizers>
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="BackgroundColor" Value="Green"/>
+                        <Setter Property="TextColor" Value="White"/>
+                        <Setter Property="WidthRequest" Value="150"/>
+                        <Setter Property="Padding" Value="10"/>
+                        <Setter Property="Margin" Value="0,10,0,100"/>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </VerticalStackLayout>
+
+
+        <ScrollView Margin="20,20,8,10" WidthRequest="1000">
+           <VerticalStackLayout  Background="AntiqueWhite">
         <HorizontalStackLayout VerticalOptions="Start">
             <Border StyleId="patientContainer"  Margin="30,20,30,15">
-                <Label Text="Add Patient" StyleId="patientTitle"/>
+                <Label Text="Create Appointment" StyleId="patientTitle"/>
             </Border>
         </HorizontalStackLayout>
         <VerticalStackLayout Margin="100,10,30,10">
@@ -32,7 +108,7 @@
                     <VerticalStackLayout>
                         <Label Text="Last Name"
                                Padding="1"
-                               TextColor="#C4C4C4"/>
+                               />
                     <Border>
                         <Entry Placeholder="Last Name"
                                Text="{Binding LastName}"
@@ -40,46 +116,51 @@
                     </Border>
                 </VerticalStackLayout>
                     </HorizontalStackLayout>
-                <HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="10">
                     <VerticalStackLayout>
-                        <Label Text="Date Of Birth"
-                             />
-                        <Border HorizontalOptions="Start">
-                        <DatePicker Date="06/21/2022" 
-                                    BackgroundColor="#DBDBDB"/>
+                        <Label Text="Appointment Date"/>
+                        <Border HorizontalOptions="Start" Background="#DBDBDB">
+                            <DatePicker Date="{Binding AppointmentDate}" MinimumDate="{Binding Today}" />
                         </Border>
                     </VerticalStackLayout>
-                <VerticalStackLayout>
-                    <Label Text="Created At"/>
-                    <Border HorizontalOptions="Start" Background="#DBDBDB">
-                        <DatePicker Date="12/11/2025" />
-                    </Border>
-                </VerticalStackLayout>
-                    </HorizontalStackLayout>
+                    <VerticalStackLayout>
+                        <Label Text="Blood Group"/>
+                        <Border HorizontalOptions="Start">
+                            <Picker  BackgroundColor="#DBDBDB" WidthRequest="150"
+                                     SelectedIndex="{Binding SelectedBloodGroup}">
+                                <Picker.Items>
+                                    <x:String>A+</x:String>
+                                    <x:String>A-</x:String>
+                                    <x:String>B+</x:String>
+                                    <x:String>B-</x:String>
+                                    <x:String>AB+</x:String>
+                                    <x:String>AB-</x:String>
+                                    <x:String>O+</x:String>
+                                    <x:String>O-</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+                    </VerticalStackLayout>
+                    
+                </HorizontalStackLayout>
 
                 <VerticalStackLayout>
                 <Label Text="Gender"/>
                 <Border HorizontalOptions="Start">
-                    <Entry  Placeholder="Gender" Text="{Binding Gender}" />
-                </Border>
+                       <Picker  BackgroundColor="#DBDBDB" WidthRequest="150"
+                            SelectedIndex="{Binding SelectedGender}">
+                            <Picker.Items>
+                                <x:String>Male</x:String>
+                                <x:String>Female</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Border>
             </VerticalStackLayout>
             <VerticalStackLayout>
                 <Label Text="Phone Number"/>
                 <Border HorizontalOptions="Start">
                     <Entry Placeholder="Phone Number" Text="{Binding Phone}" />
                </Border>
-            </VerticalStackLayout>
-                <VerticalStackLayout>
-                    <Label Text="Email"/>
-                    <Border HorizontalOptions="Start">
-                        <Entry Placeholder="Email" Text="{Binding Email}" />
-                    </Border>
-                </VerticalStackLayout>
-                <VerticalStackLayout>
-                <Label Text="Blood Group"/>
-                <Border HorizontalOptions="Start">
-                    <Entry Placeholder="Blood Group" Text="{Binding BloodGroup}" />
-                </Border>
             </VerticalStackLayout>
             
             <HorizontalStackLayout Spacing="20">
@@ -97,21 +178,33 @@
                 </VerticalStackLayout>
             </HorizontalStackLayout>
 
+                <VerticalStackLayout>
+                    <Label Text="Doctor Name"/>
+                    <Border HorizontalOptions="Start" WidthRequest="200">
+                    <Picker TitleColor="White" 
+                            ItemsSource="{Binding Doctors}"
+                            ItemDisplayBinding="{Binding DoctorName}"
+                            SelectedIndex="{Binding DoctorSelected}">
+                        
+                    </Picker>
+                    </Border>
+                </VerticalStackLayout>
 
 
                 <HorizontalStackLayout Margin="20" HorizontalOptions="End">
             <!-- BUTTON -->
-                <Button Text="Add Patient"
-                        
-                        Command="{Binding AddPatientCommand}" />
-
-                <!-- Status message -->
-                <Label Text="Status"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"
-                   TextColor="Green"/>
+                    <Button Text="Add Patient"
+                        Command="{Binding AddPatientCommand}" >
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                        </Button.GestureRecognizers>
+                    </Button>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </VerticalStackLayout>
-    </StackLayout>
+    </VerticalStackLayout>
+
+
+  </ScrollView>
+    </HorizontalStackLayout>
 </ContentPage>

@@ -16,7 +16,6 @@ namespace Hospital_Management_System.Views
             {
                 button.TextColor = Color.FromArgb("#EC9C13");
                 button.BorderColor = Color.FromArgb("#EC9C13");
-                button.BorderWidth = 1;
                 button.Background = Colors.White;
                 button.FontAttributes = FontAttributes.Bold;
             }

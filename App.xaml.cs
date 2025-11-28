@@ -7,11 +7,6 @@ namespace Hospital_Management_System
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
-
-
-
-
-
         }
 
         protected override Window CreateWindow(IActivationState? activationState)

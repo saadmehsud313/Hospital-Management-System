@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Hospital_Management_System.Views.AdmitPatientView"
              xmlns:viewmodels="clr-namespace:Hospital_Management_System.ViewModels"
-             x:DataType="viewmodels:AdmitPatientViewModel"
              Title="AdmitPatientView">
     <HorizontalStackLayout VerticalOptions="Start" Background="Wheat">
 
