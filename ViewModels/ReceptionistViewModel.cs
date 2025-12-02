@@ -6,6 +6,7 @@ using Hospital_Management_System.Models;
 using Hospital_Management_System.Services;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Threading.Tasks;
 namespace Hospital_Management_System.ViewModels
 {
     public partial class ReceptionistViewModel:ObservableObject
@@ -18,7 +19,7 @@ namespace Hospital_Management_System.ViewModels
         {
             _staffService = staffService;
             _staff = staff;
-            //loadStaffData(ReceptionistViewModel.id);
+            LoadStaffData(id);
 
         }
         
@@ -73,29 +74,30 @@ namespace Hospital_Management_System.ViewModels
         {
             await Shell.Current.GoToAsync(nameof(LoginPage));
         }
-        public void loadStaffData(int id)
+        public async Task LoadStaffData(int id)
         {
-            var staff = _staffService.GetStaff(user.UserId).Result;
+
+            Staff staff = await _staffService.GetStaff(id);
+
             if (staff != null)
             {
-                StaffId = staff.StaffId.ToString();
+                StaffId = staff.StaffID.ToString();
                 StaffFirstName = staff.FirstName;
                 StaffLastName = staff.LastName;
                 StaffRole = staff.Role;
                 StaffName = staff.FirstName + " " + staff.LastName;
                 StaffEmail = staff.Email;
                 StaffPhoneNumber = staff.Phone;
-                StaffCode = staff.StaffCode;
-                StaffDepartment = $"{staff.DepartmentId}";
+                StaffDepartment = staff.DepartmentName;
                 StaffHireDate = staff.HireDate;
                 StaffStatus = staff.IsActive ? "Active" : "Inactive";
-                UserId = $"{user.UserId}";
+                UserId = $"{staff.StaffID}";
                 UserName = $"{staff.FirstName} {staff.LastName}";
-                UserPassword = $"{user.Password}";
+                UserPassword = $"{staff.Password}";
             }
             else
             {
-                Application.Current.MainPage.DisplayAlert("Staff Not Found","Staff With mentioned user id cannot be acces.","Ok");
+                Application.Current.MainPage.DisplayAlertAsync("Staff Not Found","Staff With mentioned user id cannot be acces.","Ok");
             }
         }
     }

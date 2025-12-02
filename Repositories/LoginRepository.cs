@@ -18,25 +18,27 @@ namespace Hospital_Management_System.Repositories
         public async Task<UserAccount> GetUserData(string userID)
         {
             UserAccount user = new UserAccount();
+
             try
             {
-                SqlConnection connect = new SqlConnection(_connectionString);
-                connect.Open();
-                String query = $"select * from User_Account where User_Account.UserID={userID};";
-                SqlCommand command = new(query, connect);
-                SqlDataReader reader = command.ExecuteReader();
+               using SqlConnection connect = new(_connectionString);
+               await connect.OpenAsync();
+               string query = $"select * from User_Account where User_Account.StaffID={userID};";
+               using SqlCommand command = new(query, connect);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
                 
-                if(!(reader.Read()))
+                if(!(await reader.ReadAsync()))
                 {
                     return null;
                 }
                 else
                 {
-                    user.UserId = reader.GetInt32(0);
-                    user.Username = reader.GetString(1);
-                    user.Password = reader.GetString(2);
+                    user.DocOrStaffId = reader.GetInt32(0);
+                    user.Username = reader.GetString(1)+" "+reader.GetString(2);
                     user.Role = reader.GetString(3);
-                    user.DocOrStaffId = reader.GetInt32(4);
+                    user.DepartmentName = reader.GetString(4);
+                    user.Email = reader.GetString(5);
+                    user.Password = reader.GetString(6);
                     connect.Close();
                     return user;
                 }    

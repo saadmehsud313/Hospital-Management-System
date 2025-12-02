@@ -8,6 +8,7 @@ using Microsoft.Maui;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
 using Microsoft.Maui.LifecycleEvents;
+using Hospital_Management_System.Repository;
 
 #if WINDOWS
 using WinRT.Interop;
@@ -63,7 +64,25 @@ namespace Hospital_Management_System
             builder.Services.AddTransient<StaffService>();
             builder.Services.AddTransient<ReceptionistView>();
             builder.Services.AddTransient<ReceptionistViewModel>();
-            builder.Services.AddTransient<AddPatientView>();
+            builder.Services.AddTransient<Patient>();
+            builder.Services.AddTransient<PatientService>();
+            builder.Services.AddSingleton<AddPatientView>();
+            builder.Services.AddSingleton<AddPatientViewModel>();
+            builder.Services.AddTransient<Doctor>();
+            builder.Services.AddTransient<DoctorService>();
+            builder.Services.AddTransient<DoctorRepository>(
+                sp=>
+                {
+                    var dbConfig = sp.GetRequiredService<DatabaseConfig>();
+                    return new DoctorRepository(dbConfig);
+                }
+                );
+            builder.Services.AddTransient<PatientRepository>(sp=>
+            {
+                var dbConfig = sp.GetRequiredService<DatabaseConfig>();
+                return new PatientRepository(dbConfig);
+            });
+            
             builder.Services.AddSingleton<DatabaseConfig>(new DatabaseConfig
                 {
                 ConnectionString = @"Data Source=MR-ANDROID\SQLEXPRESS;Database=HospitalDatabase;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Command Timeout=30"

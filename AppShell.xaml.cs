@@ -7,12 +7,12 @@ namespace Hospital_Management_System
         public AppShell(string role)
         {
             InitializeComponent();
-            setupFlyout(role);
+            SetupFlyout(role);
         }
-        public void setupFlyout(string role)
+        public void SetupFlyout(string role)
         {
             Items.Clear();
-            if(role.Equals("Database Admin"))
+            if(role.Equals("Database Admin") || role.Equals("Receptionist"))
             {
                 Items.Add(new FlyoutItem
                 {
@@ -36,6 +36,33 @@ namespace Hospital_Management_System
                         }
                     }
                 });
+            }
+            else if (role.Equals("Doctor"))
+            {
+                Items.Clear();
+                Items.Add(new FlyoutItem
+                    {
+                    Title="Profile",
+                    Items ={
+                        new ShellContent
+                    {
+                        ContentTemplate=new DataTemplate(typeof(ReceptionistView))
+                    }
+
+                    }
+                    
+                });
+                Items.Add(new FlyoutItem
+                {
+                    Title = "View Appointments",
+                    Items =
+                    {
+                        new ShellContent{
+                            ContentTemplate=new DataTemplate(typeof(ReceptionistView))
+                    }
+                    }
+                });
+
             }
         }
     }

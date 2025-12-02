@@ -15,9 +15,17 @@ namespace Hospital_Management_System.Services
         {
             _patientRepository = patientRepository;
         }
-        public void AddPatient(Patient patient)
+        public async Task<int> GeneratePatientID()
+        {
+            int lastPatientID = await _patientRepository.GetLastPatientAsync();
+            return lastPatientID + 1;
+        }
+        
+        public async Task AddPatient(Patient patient)
         {     
-            _patientRepository.AddPatient(patient);
+            patient.PatientId = await GeneratePatientID();
+
+            await _patientRepository.AddPatientAsync(patient);
         }
         
     }

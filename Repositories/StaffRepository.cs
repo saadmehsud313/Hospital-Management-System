@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using System.Diagnostics;
 
 namespace Hospital_Management_System.Repositories
 {
@@ -19,37 +20,35 @@ namespace Hospital_Management_System.Repositories
             Staff staffData;
             try
             {
-                SqlConnection connection = new SqlConnection(_connectionString);
+                using SqlConnection connection = new(_connectionString);
                 connection.Open();
-                string query = $"select * from Staff where StaffID in (select StaffOrDoctorID from User_Account where UserID={id})";
-                SqlCommand sqlCommand = new(query, connection);
-                SqlDataReader reader = sqlCommand.ExecuteReader();
+                string query = $"select * from Staff where StaffID ={id}";
+                using SqlCommand sqlCommand = new(query, connection);
+                using SqlDataReader reader = sqlCommand.ExecuteReader();
                 if (reader.Read())
                 {
-                    staffData = new Staff
-                    {
-                        StaffId = reader.GetInt32(0),
-                        StaffCode = reader.GetString(1),
-                        FirstName = reader.GetString(2),
-                        LastName = reader.GetString(3),
-                        Role = reader.GetString(4),
-                        DepartmentId = reader.GetInt32(5),
-                        Phone = reader.GetString(6),
-                        Email = reader.GetString(7),
-                        HireDate= reader.GetDateTime(8),
-                        IsActive = reader.GetBoolean(9)
-                    };
-                    connection.Close();
-                    return await Task.FromResult(staffData);
+                    staffData = new Staff();
+                    staffData.FirstName = reader.GetString(1);
+                    staffData.StaffID = reader.GetInt32(0);
+                    staffData.LastName = reader.GetString(2);
+                    staffData.Role = reader.GetString(3);
+                    staffData.Phone = reader.GetString(4);
+                    staffData.Email = reader.GetString(5);
+                    staffData.HireDate = reader.GetDateTime(6);
+                    staffData.IsActive = reader.GetBoolean(7);
+                    staffData.Password = reader.GetString(8);
+                    staffData.Salary = reader.GetDouble(9);
+                    staffData.Gender = reader.GetString(10);
+                    staffData.DepartmentName = reader.GetString(11);
+                    return staffData;
                 }
                 else
                 {
-                    connection.Close();
                     return null;
                 }
             }
             catch(Exception e) {
-                Console.WriteLine("Error:" + e.Message);
+                Debug.WriteLine("Error:" + e.Message);
                 return null;
             }
         }

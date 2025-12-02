@@ -9,18 +9,18 @@ namespace Hospital_Management_System.Models
     public class Patient
     {
         int _patientId;
-        string MRN;
-        string _firstName;
-        string _lastName;
-        string _dateOfBirth;
-        string _Gender;
-        string _phone;
-        string _email;
-        string _address;
-        string _BloodGroup;
-        string _emergencyContactName;
-        string _emergencyContactPhone;
-        DateTime _createdAt;
+        string? MRN;
+        string? _firstName;
+        string? _lastName;
+        string? _dateOfBirth;
+        string? _Gender;
+        string? _phone;
+        string? _email;
+        string? _address;
+        string? _BloodGroup;
+        string? _emergencyContactName;
+        string? _emergencyContactPhone;
+        DateTime? _createdAt = null;
         bool _isActive;
 
         public int PatientId { get => _patientId; set => _patientId = value; }
@@ -35,7 +35,7 @@ namespace Hospital_Management_System.Models
         public string BloodGroup { get => _BloodGroup; set => _BloodGroup = value; }
         public string EmergencyContactName { get => _emergencyContactName; set => _emergencyContactName = value; }
         public string EmergencyContactPhone { get => _emergencyContactPhone; set => _emergencyContactPhone = value; }
-        public DateTime CreatedAt { get => _createdAt; set => _createdAt = value; }
+        public DateTime? CreatedAt { get => _createdAt; set => _createdAt = value; }
         public bool IsActive { get => _isActive; set => _isActive = value; }
 
 

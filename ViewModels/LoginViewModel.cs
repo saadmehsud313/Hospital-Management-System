@@ -11,40 +11,60 @@ namespace Hospital_Management_System.ViewModels
     public partial class LoginViewModel : ObservableObject
     {
         private readonly LoginServices _LoginServices;
-        public LoginViewModel(LoginServices LoginServices)
-        {
-            _LoginServices = LoginServices;
-        }
         [ObservableProperty]
         string emailEntry;
         [ObservableProperty]
         string passwordEntry;
         [ObservableProperty]
         string loginLabel;
-
+        [ObservableProperty]
+        bool isBusy;
+        public LoginViewModel(LoginServices LoginServices)
+        {
+            _LoginServices = LoginServices;
+            IsBusy = false;
+        }
 
         [RelayCommand]
         async Task OnLoginClicked()
         {
-            Application.Current.MainPage = new AppShell("Database Admin");
-            //string email = EmailEntry;
-            //string password = PasswordEntry;
-            //bool loginStatus = await _LoginServices.LoginCheck(email, password);
-            //if (loginStatus)
-            //{
-            //    var user = await _LoginServices.GetUserData(email);
-            //    if (user.Role.Equals("Database Admin"))
-            //    {
-            //        LoginLabel = string.Empty;
-            //        EmailEntry = string.Empty;
-            //        PasswordEntry = string.Empty;
-            //        ReceptionistViewModel.user = user;
-            //        Application.Current.MainPage = new AppShell(user.Role);
+            //Application.Current.MainPage = new AppShell("Database Admin");
+            if (ValidateInput())
+            {
+                string email = EmailEntry;
+                string password = PasswordEntry;
+                IsBusy = true;
+                bool loginStatus = await _LoginServices.LoginCheck(email, password);
+                IsBusy = false;
+                if (loginStatus)
+                {
+                    UserAccount user = await _LoginServices.GetUserData(email);
 
-            //    }
+                    LoginLabel = string.Empty;
+                    EmailEntry = string.Empty;
+                    PasswordEntry = string.Empty;
+                    ReceptionistViewModel.id = user.DocOrStaffId;
+                    ReceptionistViewModel.user = user;
+                    Application.Current.MainPage = new AppShell(user.Role);
 
-            //}
+                }
+            }
 
+        }
+        public bool ValidateInput()
+        {
+            if (EmailEntry is null)
+            {
+                Application.Current.MainPage.DisplayAlertAsync("Error!","Please insert a valid email","Ok");
+
+                return false;
+            }
+            if (PasswordEntry is null)
+            {
+                Application.Current.MainPage.DisplayAlertAsync("Error!", "Please enter password", "Ok");
+                return false;
+            }
+               return true;
         }
     }
 }

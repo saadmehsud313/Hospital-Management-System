@@ -1,11 +1,13 @@
-
+using Hospital_Management_System.ViewModels;
 namespace Hospital_Management_System.Views;
     public partial class AddPatientView : ContentPage
     {
-        public AddPatientView()
+        public AddPatientView(AddPatientViewModel vm)
         {
             InitializeComponent();
-        }
+            BindingContext = vm;
+
+    }
         private void OnPointerEntered(object sender, PointerEventArgs e)
         {
             Button button = (Button)sender;

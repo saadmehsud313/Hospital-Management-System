@@ -1,0 +1,12 @@
+Queries
+
+Query For creating doctor view  :
+
+Create view DoctorView as
+
+select st.StaffID as StaffNo,doc.DoctorID as DocID,
+st.FirstName as [F.Name],
+st.LastName as [L.Name],
+st.Role,Doc.Speciality,doc.MaxAppointment,Doc.ConsultationFee from staff st 
+inner join doctor doc
+on st.StaffID=doc.StaffID and st.Role='Doctor'

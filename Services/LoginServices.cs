@@ -24,16 +24,16 @@ namespace Hospital_Management_System.Services
                 UserAccount user =await _loginPageRepository.GetUserData(userID);
                 if(user is null)
                 {
-                    await Application.Current.MainPage.DisplayAlert("User Not Found", "User Does Not Exist", "Ok");
+                    await Application.Current.MainPage.DisplayAlertAsync("User Not Found", "User Does Not Exist", "Ok");
                     return false;
                 }
-                else if(userID.Equals($"{user.UserId}") && password.Equals(user.Password))
+                else if(userID.Equals($"{user.DocOrStaffId}") && password.Equals(user.Password))
                 {
                     return true;
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Invalid Credentials","Please Enter Collect Credentials","Ok");
+                    await Application.Current.MainPage.DisplayAlertAsync("Invalid Credentials","Please Enter Correct Credentials","Ok");
                     return false;
                 }
         }

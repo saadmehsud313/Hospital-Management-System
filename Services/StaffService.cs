@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Hospital_Management_System.Services
 {
@@ -19,9 +20,11 @@ namespace Hospital_Management_System.Services
         {
             Staff staff= await _staffRepository.GetStaffData(id);
             if (staff is not null)
-            { return staff; }
+            { 
+                return staff; }
             else
-            { return null; }
+            { 
+                return null; }
         }
     }
 }
