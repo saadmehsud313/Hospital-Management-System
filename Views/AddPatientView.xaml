@@ -3,215 +3,556 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Hospital_Management_System.Views.AddPatientView"
              xmlns:viewmodels="clr-namespace:Hospital_Management_System.ViewModels"
+             xmlns:models="clr-namespace:Hospital_Management_System.Models"
              x:DataType="viewmodels:AddPatientViewModel"
              Shell.NavBarIsVisible="False"
              Title="Create Appointment">
     <ContentPage.Resources>
         <StyleSheetExtension Source="../Resources/Styles/Style.css" />
     </ContentPage.Resources>
-    <HorizontalStackLayout Background="Wheat">
-        <VerticalStackLayout Margin="20,20,10,10" WidthRequest="200" Background="AntiqueWhite">
-            
+    <HorizontalStackLayout Background="#F5F7FA">
+
+        <!-- Sidebar Navigation -->
+        <VerticalStackLayout Margin="20" WidthRequest="280" Background="White" Padding="20">
+            <Border StrokeShape="RoundRectangle 60" 
+                    WidthRequest="120" 
+                    HeightRequest="120" 
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,10"
+                    Stroke="#4A90E2"
+                    StrokeThickness="3"
+                    Background="#E8F4FF">
+                <Label Text="{Binding StaffName, StringFormat='{0:substring(0,1)}'}"
+                       TextColor="#4A90E2"
+                       FontSize="25"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Border>
+
             <Label Text="{Binding StaffName}"
-               TextColor="Black"
-               HorizontalOptions="Center" 
-               FontSize="Medium" 
-               Padding="4" 
-               Margin="20,8,25,6"/>
-            <Label Text="{Binding DepartmentName}" 
-               HorizontalOptions="Center" 
-               FontSize="Medium"
-               Padding="4" 
-               TextColor="Black"
-               Margin="20,8,25,6"/>
+                   TextColor="#2C3E50"
+                   HorizontalOptions="Center" 
+                   FontSize="20" 
+                   FontAttributes="Bold"
+                   Margin="0,10,0,5"/>
+
             <Label Text="{Binding Role}" 
-               HorizontalOptions="Center" 
-               FontSize="Small"
-               Padding="4" 
-               TextColor="Black"
-               Margin="20,8,25,15"/>
-            <Button Text="Profile"  Command="{Binding ToggleProfileViewCommand}"  Background="#EC9C13">
+                   HorizontalOptions="Center" 
+                   FontSize="14"
+                   TextColor="#7F8C8D"
+                   Margin="0,0,0,5"/>
+
+            <Border StrokeShape="RoundRectangle 15"
+                    Background="#E8F4FF"
+                    Padding="10,5"
+                    HorizontalOptions="Center"
+                    Margin="0,5,0,20">
+                <Label Text="{Binding DepartmentName}" 
+                       HorizontalOptions="Center" 
+                       FontSize="12"
+                       TextColor="#4A90E2"
+                       FontAttributes="Bold"/>
+            </Border>
+
+            <BoxView Color="#E1E8ED" HeightRequest="1" Margin="0,10,0,20"/>
+
+            <Button Text="Create" 
+                    ImageSource="add_appointment_40.png"
+                    Command="{Binding ShowNewAppointmentCommand}" 
+                    Background="Transparent">
                 <Button.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
-
                 </Button.GestureRecognizers>
                 <Button.Style>
                     <Style TargetType="Button">
-                        <Setter Property="TextColor" Value="White"/>
-                        <Setter Property="WidthRequest" Value="150"/>
-                        <Setter Property="Padding" Value="10"/>
-                        <Setter Property="Margin" Value="0,35,0,20"/>
-
+                        <Setter Property="TextColor" Value="#2C3E50"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Padding" Value="15,12"/>
+                        <Setter Property="Margin" Value="0,10"/>
+                        <Setter Property="CornerRadius" Value="10"/>
                     </Style>
                 </Button.Style>
-
             </Button>
-            <Button Text="Change Password" Command="{Binding ToggleInfoViewCommand}" Background="#EC9C13">
+
+            <Button Text="Cancel"
+                    ImageSource="cancel_appointment_logo_40.png"
+                    Command="{Binding ShowManageAppointmentCommand}"
+                    Background="Transparent">
                 <Button.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
                 </Button.GestureRecognizers>
                 <Button.Style>
                     <Style TargetType="Button">
-                        <Setter Property="BackgroundColor" Value="Green"/>
-                        <Setter Property="TextColor" Value="White"/>
-                        <Setter Property="WidthRequest" Value="150"/>
-                        <Setter Property="Padding" Value="10"/>
-                        <Setter Property="Margin" Value="0,10,0,20"/>
-
+                        <Setter Property="TextColor" Value="#2C3E50"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Padding" Value="15,12"/>
+                        <Setter Property="Margin" Value="0,5"/>
+                        <Setter Property="CornerRadius" Value="10"/>
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Text="Logout" Command="{Binding LogoutClickedCommand}" Background="#EC9C13">
+
+            <Button Text="Update"
+                    Command="{Binding LogoutClickedCommand}"
+                    Background="Transparent">
                 <Button.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
                 </Button.GestureRecognizers>
                 <Button.Style>
                     <Style TargetType="Button">
-                        <Setter Property="BackgroundColor" Value="Green"/>
-                        <Setter Property="TextColor" Value="White"/>
-                        <Setter Property="WidthRequest" Value="150"/>
-                        <Setter Property="Padding" Value="10"/>
-                        <Setter Property="Margin" Value="0,10,0,100"/>
+                        <Setter Property="TextColor" Value="#2C3E50"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Padding" Value="15,12"/>
+                        <Setter Property="Margin" Value="0,5,0,20"/>
+                        <Setter Property="CornerRadius" Value="10"/>
                     </Style>
                 </Button.Style>
             </Button>
         </VerticalStackLayout>
 
+        <!-- Create Appointment Form -->
+        <ContentView IsVisible="{Binding ToggleNewAppointment}" IsEnabled="{Binding ToggleNewAppointment}">
+            <ScrollView Margin="20,20,20,10" WidthRequest="1000">
+                <Border StrokeShape="RoundRectangle 20" 
+                        Background="White" 
+                        Padding="40"
+                        StrokeThickness="0">
+                    <VerticalStackLayout>
 
-        <ScrollView Margin="20,20,8,10" WidthRequest="1000">
-            <VerticalStackLayout  Background="AntiqueWhite">
-                <HorizontalStackLayout VerticalOptions="Start">
-                    <Border StyleId="patientContainer"  Margin="30,20,30,15">
-                        <Label Text="Create Appointment" StyleId="patientTitle"/>
+                        <!-- Header -->
+                        <HorizontalStackLayout Spacing="10" Margin="0,0,0,30">
+                            <BoxView Color="#4A90E2" WidthRequest="4" HeightRequest="32" CornerRadius="2"/>
+                            <Label Text="Create Appointment" 
+                                   FontSize="28"
+                                   TextColor="#2C3E50" 
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <VerticalStackLayout Spacing="20">
+
+                            <!-- Patient Name -->
+                            <HorizontalStackLayout Spacing="20">
+                                <VerticalStackLayout>
+                                    <Label Text="First Name" 
+                                           FontSize="12" 
+                                           TextColor="#7F8C8D"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            WidthRequest="390"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="4">
+                                        <Entry Placeholder="First Name"
+                                               Text="{Binding FirstName}"
+                                               TextColor="#2C3E50"
+                                               PlaceholderColor="#95A5A6"
+                                               FontSize="16"/>
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout>
+                                    <Label Text="Last Name" 
+                                           FontSize="12" 
+                                           TextColor="#7F8C8D"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            WidthRequest="390"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="4">
+                                        <Entry Placeholder="Last Name"
+                                               Text="{Binding LastName}"
+                                               TextColor="#2C3E50"
+                                               PlaceholderColor="#95A5A6"
+                                               FontSize="16"/>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+
+                            <!-- Appointment Date & Time & Blood Group -->
+                            <HorizontalStackLayout Spacing="20">
+                                <VerticalStackLayout>
+                                    <Label Text="Appointment Date" 
+                                           FontSize="12" 
+                                           TextColor="#7F8C8D"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="8,4">
+                                        <DatePicker Date="{Binding AppointmentDate}" 
+                                                    MinimumDate="{Binding Today}"
+                                                    TextColor="#2C3E50"
+                                                    FontSize="16"/>
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout>
+                                    <Label Text="Appointment Time" 
+                                           FontSize="12" 
+                                           TextColor="#7F8C8D"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="8,4">
+                                        <TimePicker Time="{Binding AppointmentTime}"
+                                                    TextColor="#2C3E50"
+                                                    FontSize="16"/>
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout>
+                                    <Label Text="Blood Group" 
+                                           FontSize="12" 
+                                           TextColor="#7F8C8D"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            WidthRequest="150"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="8,4">
+                                        <Picker SelectedItem="{Binding SelectedBloodGroup}"
+                                                TextColor="#2C3E50"
+                                                FontSize="16">
+                                            <Picker.Items>
+                                                <x:String>A+</x:String>
+                                                <x:String>A-</x:String>
+                                                <x:String>B+</x:String>
+                                                <x:String>B-</x:String>
+                                                <x:String>AB+</x:String>
+                                                <x:String>AB-</x:String>
+                                                <x:String>O+</x:String>
+                                                <x:String>O-</x:String>
+                                            </Picker.Items>
+                                        </Picker>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+
+                            <!-- Gender & Age -->
+                            <HorizontalStackLayout Spacing="20">
+                                <VerticalStackLayout>
+                                    <Label Text="Gender" 
+                                           FontSize="12" 
+                                           TextColor="#7F8C8D"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            WidthRequest="200"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="8,4">
+                                        <Picker SelectedItem="{Binding SelectedGender}"
+                                                TextColor="#2C3E50"
+                                                FontSize="16">
+                                            <Picker.Items>
+                                                <x:String>Male</x:String>
+                                                <x:String>Female</x:String>
+                                            </Picker.Items>
+                                        </Picker>
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout>
+                                    <Label Text="Age" 
+                                           FontSize="12" 
+                                           TextColor="#7F8C8D"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            WidthRequest="150"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="4">
+                                        <Entry Placeholder="Age"
+                                               Text="{Binding Age}"
+                                               TextColor="#2C3E50"
+                                               PlaceholderColor="#95A5A6"
+                                               FontSize="16"
+                                               Keyboard="Numeric"/>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+
+                            <!-- Phone Number -->
+                            <VerticalStackLayout>
+                                <Label Text="Phone Number" 
+                                       FontSize="12" 
+                                       TextColor="#7F8C8D"
+                                       FontAttributes="Bold"
+                                       Margin="0,0,0,8"/>
+                                <Border StrokeShape="RoundRectangle 12"
+                                        WidthRequest="400"
+                                        Stroke="#E1E8ED"
+                                        Background="#F8FAFB"
+                                        Padding="4"
+                                        HorizontalOptions="Start">
+                                    <Entry Placeholder="Phone Number" 
+                                           Text="{Binding Phone}"
+                                           TextColor="#2C3E50"
+                                           PlaceholderColor="#95A5A6"
+                                           FontSize="16"
+                                           Keyboard="Telephone"/>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!-- Emergency Contacts -->
+                            <HorizontalStackLayout Spacing="20">
+                                <VerticalStackLayout>
+                                    <Label Text="Emergency Contact Name" 
+                                           FontSize="12" 
+                                           TextColor="#7F8C8D"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            WidthRequest="390"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="4">
+                                        <Entry Placeholder="Emergency Contact Name" 
+                                               Text="{Binding EmergencyContactName}"
+                                               TextColor="#2C3E50"
+                                               PlaceholderColor="#95A5A6"
+                                               FontSize="16"/>
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout>
+                                    <Label Text="Emergency Contact Phone" 
+                                           FontSize="12" 
+                                           TextColor="#7F8C8D"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            WidthRequest="250"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="4">
+                                        <Entry Placeholder="Emergency Contact Phone" 
+                                               Text="{Binding EmergencyContactPhone}"
+                                               TextColor="#2C3E50"
+                                               PlaceholderColor="#95A5A6"
+                                               FontSize="16"
+                                               Keyboard="Telephone"/>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+
+                            <!-- Speciality, Doctor & Reason -->
+                            <HorizontalStackLayout Spacing="20">
+                                <VerticalStackLayout>
+                                    <Label Text="Speciality" 
+                                           FontSize="12" 
+                                           TextColor="#7F8C8D"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            WidthRequest="250"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="8,4">
+                                        <Picker ItemsSource="{Binding Specializations}"
+                                                SelectedIndex="{Binding SelectedSpecialization}"
+                                                TextColor="#2C3E50"
+                                                FontSize="16"/>
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout>
+                                    <Label Text="Doctor Name" 
+                                           FontSize="12" 
+                                           TextColor="#7F8C8D"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            WidthRequest="250"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="8,4">
+                                        <Picker ItemsSource="{Binding FilteredDoctors}"
+                                                ItemDisplayBinding="{Binding FullName}"
+                                                SelectedItem="{Binding DoctorSelected}"
+                                                TextColor="#2C3E50"
+                                                FontSize="16"/>
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout>
+                                    <Label Text="Reason" 
+                                           FontSize="12" 
+                                           TextColor="#7F8C8D"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            WidthRequest="250"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="8,4">
+                                        <Picker SelectedItem="{Binding Reason}"
+                                                TextColor="#2C3E50"
+                                                FontSize="16">
+                                            <Picker.Items>
+                                                <x:String>General Checkup</x:String>
+                                                <x:String>Follow Up</x:String>
+                                            </Picker.Items>
+                                        </Picker>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+
+                            <!-- Submit Button -->
+                            <HorizontalStackLayout HorizontalOptions="End" Margin="0,20,0,0">
+                                <Button x:Name="AddPatient"
+                                        Text="Add Patient"
+                                        Command="{Binding AddPatientCommand}"
+                                        BackgroundColor="#4A90E2">
+                                    <Button.GestureRecognizers>
+                                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                                    </Button.GestureRecognizers>
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="TextColor" Value="White"/>
+                                            <Setter Property="FontSize" Value="16"/>
+                                            <Setter Property="FontAttributes" Value="Bold"/>
+                                            <Setter Property="WidthRequest" Value="180"/>
+                                            <Setter Property="Padding" Value="20,12"/>
+                                            <Setter Property="CornerRadius" Value="10"/>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+            </ScrollView>
+        </ContentView>
+
+        <!-- Manage Appointments List -->
+        <ContentView IsVisible="{Binding ToggleManageAppointment}" IsEnabled="{Binding ToggleManageAppointment}">
+            <ScrollView Margin="20,20,20,10" WidthRequest="1000">
+                <VerticalStackLayout>
+
+                    <!-- Header -->
+                    <Border StrokeShape="RoundRectangle 20" 
+                            Background="White" 
+                            Padding="30,20"
+                            Margin="0,0,0,20"
+                            StrokeThickness="0">
+                        <HorizontalStackLayout Spacing="10">
+                            <BoxView Color="#4A90E2" WidthRequest="4" HeightRequest="32" CornerRadius="2"/>
+                            <Label Text="Manage Appointments" 
+                                   FontSize="28"
+                                   TextColor="#2C3E50" 
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
                     </Border>
-                </HorizontalStackLayout>
 
-                <VerticalStackLayout HorizontalOptions="Start" Margin="20,10,30,10">
+                    <!-- Appointments List -->
+                    <CollectionView ItemsSource="{Binding Appointments}" 
+                                    SelectionMode="Single"
+                                    Margin="0">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Appointment">
+                                <Border StrokeShape="RoundRectangle 15" 
+                                        Background="White" 
+                                        Padding="25"
+                                        Margin="0,0,0,15"
+                                        StrokeThickness="0">
+                                    <Grid RowDefinitions="Auto,Auto" 
+                                          ColumnDefinitions="*,*,*,*,*,*"
+                                          ColumnSpacing="20"
+                                          RowSpacing="10">
 
-                    <HorizontalStackLayout Spacing="10">
+                                        <!-- Labels -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                                            <Label Text="Appointment ID" 
+                                                   FontSize="11" 
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding AppointmentID}" 
+                                                   TextColor="#4A90E2"
+                                                   FontSize="15"
+                                                   FontAttributes="Bold"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
 
-                        <VerticalStackLayout>
-                            <Label Text="First Name"
-                           />
-                            <Border>
-                                <Entry Placeholder="First Name"
-                           Text="{Binding FirstName}"
-                           />
-                            </Border>
-                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                                            <Label Text="Patient ID" 
+                                                   FontSize="11" 
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding PatientID}" 
+                                                   TextColor="#2C3E50"
+                                                   FontSize="15"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
 
-                        <VerticalStackLayout>
-                            <Label Text="Last Name"
-                               Padding="1"
-                               />
-                            <Border>
-                                <Entry Placeholder="Last Name"
-                               Text="{Binding LastName}"
-                        />
-                            </Border>
-                        </VerticalStackLayout>
-                    </HorizontalStackLayout>
-                    <HorizontalStackLayout Spacing="10">
-                        <VerticalStackLayout>
-                            <Label Text="Appointment Date"/>
-                            <Border HorizontalOptions="Start" Background="#DBDBDB">
-                                <DatePicker Date="{Binding AppointmentDate}" MinimumDate="{Binding Today}"
-                                            TextColor="Black"/>
-                            </Border>
-                        </VerticalStackLayout>
-                        <VerticalStackLayout>
-                            <Label Text="Blood Group"/>
-                            <Border HorizontalOptions="Start">
-                                <Picker  BackgroundColor="#DBDBDB" WidthRequest="150"
-                                     SelectedIndex="{Binding SelectedBloodGroup}">
-                                    <Picker.Items>
-                                        <x:String>A+</x:String>
-                                        <x:String>A-</x:String>
-                                        <x:String>B+</x:String>
-                                        <x:String>B-</x:String>
-                                        <x:String>AB+</x:String>
-                                        <x:String>AB-</x:String>
-                                        <x:String>O+</x:String>
-                                        <x:String>O-</x:String>
-                                    </Picker.Items>
-                                </Picker>
-                            </Border>
-                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="2">
+                                            <Label Text="Doctor ID" 
+                                                   FontSize="11" 
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding DoctorID}" 
+                                                   TextColor="#2C3E50"
+                                                   FontSize="15"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
 
-                    </HorizontalStackLayout>
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="3">
+                                            <Label Text="Date" 
+                                                   FontSize="11" 
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding AppointmentDate}" 
+                                                   TextColor="#2C3E50"
+                                                   FontSize="15"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
 
-                    <VerticalStackLayout>
-                        <Label Text="Gender"/>
-                        <Border HorizontalOptions="Start">
-                            <Picker  BackgroundColor="#DBDBDB" WidthRequest="150"
-                            SelectedIndex="{Binding SelectedGender}">
-                                <Picker.Items>
-                                    <x:String>Male</x:String>
-                                    <x:String>Female</x:String>
-                                </Picker.Items>
-                            </Picker>
-                        </Border>
-                    </VerticalStackLayout>
-                    <VerticalStackLayout>
-                        <Label Text="Phone Number"/>
-                        <Border HorizontalOptions="Start">
-                            <Entry Placeholder="Phone Number" Text="{Binding Phone}" />
-                        </Border>
-                    </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="4">
+                                            <Label Text="Reason" 
+                                                   FontSize="11" 
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding Reason}" 
+                                                   TextColor="#2C3E50"
+                                                   FontSize="15"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
 
-                    <HorizontalStackLayout Spacing="20">
-                        <VerticalStackLayout>
-                            <Label Text="Emergency Contact Name"/>
-                            <Border>
-                                <Entry Placeholder="Emergency Contact Name" Text="{Binding EmergencyContactName}" />
-                            </Border>
-                        </VerticalStackLayout>
-                        <VerticalStackLayout>
-                            <Label Text="Emergency Contact Name"/>
-                            <Border>
-                                <Entry Placeholder="Emergency Contact Phone" Text="{Binding EmergencyContactPhone}" />
-                            </Border>
-                        </VerticalStackLayout>
-                    </HorizontalStackLayout>
-                    <HorizontalStackLayout>
-                        <VerticalStackLayout>
-                            <Label Text="Doctor Name"/>
-                            <Border HorizontalOptions="Start" WidthRequest="200">
-                                <Picker TitleColor="White" 
-                                        ItemsSource="{Binding Doctors}"
-                                        ItemDisplayBinding="{Binding Speciality}"
-                                        SelectedIndex="{Binding DoctorSelected}"
-                                        TextColor="Black">
-                                </Picker>
-                            </Border>
-                        </VerticalStackLayout>
-                        <VerticalStackLayout>
-                        <Label Text="Doctor Name"/>
-                        <Border HorizontalOptions="Start" WidthRequest="200">
-                            <Picker TitleColor="White" 
-                            ItemsSource="{Binding Doctors}"
-                            ItemDisplayBinding="{Binding FullName}"
-                            SelectedIndex="{Binding DoctorSelected}"
-                                    TextColor="Black">
-                            </Picker>
-                        </Border>
-                    </VerticalStackLayout>
-                    </HorizontalStackLayout>
-
-
-                    <HorizontalStackLayout Margin="20" HorizontalOptions="End">
-                        <!-- BUTTON -->
-                        <Button Text="Add Patient"
-                        Command="{Binding AddPatientCommand}" >
-                            <Button.GestureRecognizers>
-                                <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
-                            </Button.GestureRecognizers>
-                        </Button>
-                    </HorizontalStackLayout>
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="5">
+                                            <Label Text="Status" 
+                                                   FontSize="11" 
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Border StrokeShape="RoundRectangle 12"
+                                                    Background="#E8F8F5"
+                                                    Padding="8,4"
+                                                    Margin="0,5,0,0"
+                                                    HorizontalOptions="Start">
+                                                <Label Text="{Binding Status}" 
+                                                       TextColor="#27AE60"
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"/>
+                                            </Border>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
                 </VerticalStackLayout>
-            </VerticalStackLayout>
+            </ScrollView>
+        </ContentView>
 
-
-        </ScrollView>
     </HorizontalStackLayout>
 </ContentPage>

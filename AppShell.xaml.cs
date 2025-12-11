@@ -58,7 +58,7 @@ namespace Hospital_Management_System
                     Items =
                     {
                         new ShellContent{
-                            ContentTemplate=new DataTemplate(typeof(ReceptionistView))
+                            ContentTemplate=new DataTemplate(typeof(DoctorPage))
                     }
                     }
                 });

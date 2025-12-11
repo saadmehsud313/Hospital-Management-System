@@ -9,7 +9,7 @@ namespace Hospital_Management_System.Models
     public class Patient
     {
         int _patientId;
-        string? MRN;
+        string? _mrn;
         string? _firstName;
         string? _lastName;
         string? _dateOfBirth;
@@ -22,21 +22,21 @@ namespace Hospital_Management_System.Models
         string? _emergencyContactPhone;
         DateTime? _createdAt = null;
         bool _isActive;
+        int age;
 
         public int PatientId { get => _patientId; set => _patientId = value; }
-        public string MRN1 { get => MRN; set => MRN = value; }
+        public string MRN { get => _mrn; set => _mrn = value; }
         public string FirstName { get => _firstName; set => _firstName = value; }
         public string LastName { get => _lastName; set => _lastName = value; }
         public string DateOfBirth { get => _dateOfBirth; set => _dateOfBirth = value; }
         public string Gender { get => _dateOfBirth; set=> _dateOfBirth = value; }
         public string Phone { get => _phone; set => _phone = value; }
-        public string Email { get => _email; set => _email = value; }
-        public string Address { get => _address; set => _address = value; }
         public string BloodGroup { get => _BloodGroup; set => _BloodGroup = value; }
         public string EmergencyContactName { get => _emergencyContactName; set => _emergencyContactName = value; }
         public string EmergencyContactPhone { get => _emergencyContactPhone; set => _emergencyContactPhone = value; }
         public DateTime? CreatedAt { get => _createdAt; set => _createdAt = value; }
         public bool IsActive { get => _isActive; set => _isActive = value; }
+        public int Age { get => age; set => age = value; }
 
 
     }

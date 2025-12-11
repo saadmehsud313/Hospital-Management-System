@@ -12,38 +12,61 @@ public partial class ReceptionistView : ContentPage
         InitializeComponent();
         BindingContext = models;
     }
-        private void ChangePasswordClicked(object sender,EventArgs e)
+        private void ChangePasswordClicked(object sender, EventArgs e)
         {
             Button button = (Button)sender;
             PersonalInfoPage.IsVisible = false;
             LoginInfoPage.IsVisible = true;
-            button.TextColor = Color.FromArgb("#EC9C13");
-            button.BorderColor = Color.FromArgb("#EC9C13");
+
+            // Update to modern blue theme
+            button.TextColor = Color.FromArgb("#4A90E2");
+            button.BorderColor = Color.FromArgb("#4A90E2");
             button.Background = Colors.White;
+            button.BorderWidth = 2;
         }
+
         private void ProfilePageClicked(object sender, EventArgs e)
         {
+            Button button = (Button)sender;
             PersonalInfoPage.IsVisible = true;
             LoginInfoPage.IsVisible = false;
+
+            // Update to modern blue theme
+            button.TextColor = Color.FromArgb("#4A90E2");
+            button.BorderColor = Color.FromArgb("#4A90E2");
+            button.Background = Colors.White;
+            button.BorderWidth = 2;
         }
-        private void OnPointerEntered(object sender,PointerEventArgs e)
+
+        private void OnPointerEntered(object sender, PointerEventArgs e)
         {
-            Button button = (Button) sender;
+            Button button = (Button)sender;
             if (button != null)
             {
-                button.TextColor = Color.FromArgb("#EC9C13");
-                button.BackgroundColor = Colors.White;
+                // Modern hover effect with blue theme
+                button.TextColor = Colors.White;
+                button.BackgroundColor = Color.FromArgb("#4A90E2");
                 button.FontAttributes = FontAttributes.Bold;
+                button.BorderWidth = 0;
+
+                // Optional: Add subtle scale effect (requires additional setup)
+                // button.Scale = 1.02;
             }
         }
-        private void OnPointerExited(object sender,PointerEventArgs e)
+
+        private void OnPointerExited(object sender, PointerEventArgs e)
         {
-            Button button = (Button) sender;
+            Button button = (Button)sender;
             if (button != null)
             {
-                button.BackgroundColor = Colors.AntiqueWhite;
-                button.TextColor = Color.FromArgb("#EC9133");
+                // Return to default state
+                button.BackgroundColor = Colors.Transparent;
+                button.TextColor = Color.FromArgb("#2C3E50");
                 button.FontAttributes = FontAttributes.None;
+                button.BorderWidth = 0;
+
+                // Optional: Reset scale
+                // button.Scale = 1.0;
             }
             else
             {
@@ -51,6 +74,5 @@ public partial class ReceptionistView : ContentPage
             }
         }
 
-        
     }
 }

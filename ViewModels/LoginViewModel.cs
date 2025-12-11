@@ -35,7 +35,6 @@ namespace Hospital_Management_System.ViewModels
                 string password = PasswordEntry;
                 IsBusy = true;
                 bool loginStatus = await _LoginServices.LoginCheck(email, password);
-                IsBusy = false;
                 if (loginStatus)
                 {
                     UserAccount user = await _LoginServices.GetUserData(email);
@@ -46,7 +45,12 @@ namespace Hospital_Management_System.ViewModels
                     ReceptionistViewModel.id = user.DocOrStaffId;
                     ReceptionistViewModel.user = user;
                     Application.Current.MainPage = new AppShell(user.Role);
+                    IsBusy = false;
 
+                }
+                else
+                {
+                    IsBusy = false;
                 }
             }
 

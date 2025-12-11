@@ -19,5 +19,9 @@ namespace Hospital_Management_System.Services
         {
             return _doctorRepository.GetAllDOctors();
         }
+        public async Task<int> GetDocIDByStaffId(int staffId)
+        {
+            return await _doctorRepository.GetDocIDByStaffId(staffId);
+        }
     }
 }

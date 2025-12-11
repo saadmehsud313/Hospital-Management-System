@@ -70,6 +70,8 @@ namespace Hospital_Management_System
             builder.Services.AddSingleton<AddPatientViewModel>();
             builder.Services.AddTransient<Doctor>();
             builder.Services.AddTransient<DoctorService>();
+            builder.Services.AddSingleton<DoctorViewModel>();
+            builder.Services.AddTransient<DoctorPage>();
             builder.Services.AddTransient<DoctorRepository>(
                 sp=>
                 {
@@ -85,7 +87,7 @@ namespace Hospital_Management_System
             
             builder.Services.AddSingleton<DatabaseConfig>(new DatabaseConfig
                 {
-                ConnectionString = @"Data Source=MR-ANDROID\SQLEXPRESS;Database=HospitalDatabase;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Command Timeout=30"
+                ConnectionString = @"Data Source=127.0.0.1,1433;Database=HospitalDatabase;User ID=saadmehsud;password=mrcomputer313;Encrypt=false;TrustServerCertificate=true;Connect Timeout=30;"
             });
             builder.Services.AddTransient<LoginRepository>(sp =>
             {
@@ -97,9 +99,14 @@ namespace Hospital_Management_System
                 var dbConfig = sp.GetRequiredService<DatabaseConfig>();
                 return new StaffRepository(dbConfig);
             });
+            builder.Services.AddTransient<AppointmentRepository>(ap =>
+            {
+                var dbConfig = ap.GetRequiredService<DatabaseConfig>();
+                return new AppointmentRepository(dbConfig);
+            });
             builder.Services.AddTransient<UserAccount>();
             builder.Services.AddTransient<UserAccountService>();
-
+            builder.Services.AddTransient<AppointmentService>();
 
             var app = builder.Build();
             Services = app.Services;

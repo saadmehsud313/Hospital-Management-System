@@ -2,11 +2,611 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Hospital_Management_System.Views.DoctorPage"
-             Title="DoctorPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             xmlns:viewmodels="clr-namespace:Hospital_Management_System.ViewModels"
+             xmlns:models="clr-namespace:Hospital_Management_System.Models"
+             x:DataType="viewmodels:DoctorViewModel"
+             Title="Doctor Dashboard"
+             Background="#F5F7FA"  Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <Style x:Key="SidebarButton" TargetType="Button">
+            <Setter Property="TextColor" Value="#FFFFFF"/>
+            <Setter Property="BackgroundColor" Value="#34495E"/>
+            <Setter Property="WidthRequest" Value="180"/>
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Margin" Value="0,15,0,0"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style x:Key="AppointmentTabButton" TargetType="Button">
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <HorizontalStackLayout VerticalOptions="Start" Background="#F5F7FA" HeightRequest="750">
+
+            <VerticalStackLayout 
+                Margin="0" 
+                WidthRequest="250" 
+                Background="#34495E"  Padding="20, 30">
+
+                <Label Text="{Binding StaffName}"
+                       TextColor="White"
+                       HorizontalOptions="Center" 
+                       FontSize="20" 
+                       FontAttributes="Bold"
+                       Margin="0, 0, 0, 5"/>
+                <Label Text="{Binding StaffDepartment}" 
+                       HorizontalOptions="Center" 
+                       FontSize="16"
+                       TextColor="#BDC3C7"
+                       Margin="0,0,0,5"/>
+                <Label Text="{Binding StaffRole}" 
+                       HorizontalOptions="Center" 
+                       FontSize="14"
+                       TextColor="#BDC3C7"
+                       Margin="0,0,0,30"/>
+
+                <BoxView HeightRequest="1" Color="#5D6D7E" Margin="0, 10, 0, 30"/>
+
+                <Button Text="Profile" 
+                        Command="{Binding ShowProfileCommand}" >
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource SidebarButton}">
+                            <Setter Property="BackgroundColor" Value="{Binding ProfileButtonColor}"/>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button Text="Appointments" 
+                        Command="{Binding ShowAppointmentsCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource SidebarButton}">
+                            <Setter Property="BackgroundColor" Value="{Binding AppointmentsButtonColor}"/>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button Text="Update Credentials" 
+                        Command="{Binding ShowInfoCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource SidebarButton}">
+                            <Setter Property="BackgroundColor" Value="{Binding InfoButtonColor}"/>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <BoxView HeightRequest="1" Color="#5D6D7E" Margin="0, 30, 0, 10"/>
+
+                <Button Text="Logout" Command="{Binding LogoutCommand}" BackgroundColor="#E74C3C" TextColor="White" Margin="0, 60, 0, 0" WidthRequest="180" HeightRequest="50" CornerRadius="10"/>
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout 
+                WidthRequest="850" 
+                Background="White" 
+                Margin="30,30,20,30" 
+                Padding="30, 20"
+                Spacing="20">
+
+                <VerticalStackLayout.Shadow>
+                    <Shadow Brush="Gray" Offset="5,5" Radius="10" Opacity="0.3"/>
+                </VerticalStackLayout.Shadow>
+                <ContentView IsVisible="{Binding ShowProfileView}" IsEnabled="{Binding ShowProfileView}">
+                    <VerticalStackLayout Spacing="15">
+                    <Label Text="👨‍⚕️ Personal Information" 
+                           FontSize="24"  
+                           TextColor="#34495E" 
+                           FontAttributes="Bold"
+                           Margin="0,0,0,10"/>
+
+                    <VerticalStackLayout>
+                        <Label Text="ID" FontSize="12" TextColor="#7F8C8D"/>
+                        <Border Style="{StaticResource DataDisplayBorder}" WidthRequest="400" HorizontalOptions="Start">
+                            <Label Text="{Binding StaffId}" TextColor="#2C3E50" FontSize="16"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <HorizontalStackLayout Spacing="30">
+                        <VerticalStackLayout WidthRequest="400">
+                            <Label Text="First Name" FontSize="12" TextColor="#7F8C8D"/>
+                            <Border Style="{StaticResource DataDisplayBorder}">
+                                <Label Text="{Binding StaffFirstName}" TextColor="#2C3E50" FontSize="16"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout WidthRequest="400">
+                            <Label Text="Last Name" FontSize="12" TextColor="#7F8C8D"/>
+                            <Border Style="{StaticResource DataDisplayBorder}">
+                                <Label Text="{Binding StaffLastName}" TextColor="#2C3E50" FontSize="16"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Label Text="Email Address" FontSize="12" TextColor="#7F8C8D"/>
+                        <Border Style="{StaticResource DataDisplayBorder}" WidthRequest="830" HorizontalOptions="Start">
+                            <Label Text="{Binding StaffEmail}" TextColor="#2C3E50" FontSize="16"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <HorizontalStackLayout Spacing="30">
+                        <VerticalStackLayout WidthRequest="400">
+                            <Label Text="Phone Number" FontSize="12" TextColor="#7F8C8D"/>
+                            <Border Style="{StaticResource DataDisplayBorder}">
+                                <Label Text="{Binding StaffPhoneNumber}" TextColor="#2C3E50" FontSize="16"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout WidthRequest="400">
+                            <Label Text="Hire Date" FontSize="12" TextColor="#7F8C8D"/>
+                            <Border Style="{StaticResource DataDisplayBorder}">
+                                <Label Text="{Binding StaffHireDate, StringFormat='{0:dd MMM yyyy}'}" TextColor="#2C3E50" FontSize="16"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Label Text="Active Status" FontSize="12" TextColor="#7F8C8D"/>
+                        <Border Style="{StaticResource DataDisplayBorder}" WidthRequest="400" HorizontalOptions="Start">
+                            <Label Text="{Binding StaffStatus}" TextColor="#27AE60" FontSize="16" FontAttributes="Bold"/>
+                        </Border>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+                </ContentView>
+                <ContentView IsVisible="{Binding ShowAppointmentsView}" IsEnabled="{Binding ShowAppointmentsView}">
+                <VerticalStackLayout  Spacing="15">
+
+
+                    <VerticalStackLayout.Resources>
+                        <Style x:Key="DataDisplayBorder" TargetType="Border">
+                            <Setter Property="Stroke" Value="#EAECEE"/>
+                            <Setter Property="BackgroundColor" Value="#F8F9F9"/>
+                            <Setter Property="Padding" Value="15, 10"/>
+                            <Setter Property="HeightRequest" Value="45"/>
+                            <Setter Property="Border.StrokeShape">
+                                <Setter.Value>
+                                    <RoundRectangle CornerRadius="8"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+
+                        <Style x:Key="InputBorder" TargetType="Border">
+                            <Setter Property="Stroke" Value="#EAECEE"/>
+                            <Setter Property="BackgroundColor" Value="#FFFFFF"/>
+                            <Setter Property="Padding" Value="10, 0"/>
+                            <Setter Property="HeightRequest" Value="45"/>
+                            <Setter Property="Border.StrokeShape">
+                                <Setter.Value>
+                                    <RoundRectangle CornerRadius="8"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </VerticalStackLayout.Resources>
+
+
+
+                    <Label Text="📅 Appointments Management" 
+                           FontSize="24"  
+                           TextColor="#34495E" 
+                           FontAttributes="Bold"
+                           Margin="0,0,0,10"/>
+
+                    <HorizontalStackLayout Margin="0" Spacing="15" HorizontalOptions="Center">
+                        <Button Text="TODAY" 
+                                Command="{Binding SelectTodayTabCommand}" 
+                                BackgroundColor="{Binding TodayTabColor}"
+                                Style="{StaticResource AppointmentTabButton}"
+                                WidthRequest="200"/>
+
+                        <Button Text="PENDING" 
+                                Command="{Binding SelectPendingTabCommand}" 
+                                BackgroundColor="{Binding PendingTabColor}"
+                                Style="{StaticResource AppointmentTabButton}"
+                                WidthRequest="200"/>
+
+                        <Button Text="HISTORY" 
+                                Command="{Binding SelectHistoryTabCommand}" 
+                                BackgroundColor="{Binding HistoryTabColor}"
+                                Style="{StaticResource AppointmentTabButton}"
+                                WidthRequest="200"/>
+                    </HorizontalStackLayout>
+
+                    <ActivityIndicator IsVisible="{Binding IsLoading}" 
+                                       IsRunning="{Binding IsLoading}"
+                                       HorizontalOptions="Center"
+                                       Margin="0,20"
+                                       Color="#3498DB"/>
+
+                    <VerticalStackLayout IsVisible="{Binding ShowTodayAppointments}">
+                        <Label Text="TODAY'S APPOINTMENTS" 
+                           FontSize="18" 
+                           TextColor="#2C3E50"
+                           FontAttributes="Bold"
+                           Margin="0,10,0,0"/>
+
+                        <Label Text="{Binding TodayCount, StringFormat='Total: {0} appointments'}" 
+                               FontSize="14" 
+                               TextColor="#7F8C8D"
+                               Margin="0,0,0,10"/>
+
+                        <CollectionView ItemsSource="{Binding TodayAppointments}" 
+                                        HeightRequest="480"
+                                        EmptyView="No appointments scheduled for today.">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Appointment">
+                                    <Border Padding="20" 
+                                            Margin="0,0,0,15" 
+                                            BackgroundColor="#FFFFFF" 
+                                            Stroke="#D5DBE3"  
+                                            StrokeThickness="1"
+                                            HeightRequest="180">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12"/>
+                                        </Border.StrokeShape>
+                                        <Border.Shadow>
+                                            <Shadow Brush="#EAECEE" Offset="2,2" Radius="5" Opacity="0.5"/>
+                                        </Border.Shadow>
+
+                                        <Grid ColumnDefinitions="4*, 3*, 2*" 
+                                              RowDefinitions="Auto, Auto, Auto"
+                                              RowSpacing="8" 
+                                              ColumnSpacing="20">
+
+                                            <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                                <Label Text="👤" FontSize="18" VerticalOptions="Center"/>
+                                                <Label Text="{Binding PatientName}" 
+                                                       FontSize="18" 
+                                                       FontAttributes="Bold"
+                                                       TextColor="#2C3E50"
+                                                       VerticalOptions="Center"/>
+                                                <Label Text="{Binding PatientId, StringFormat='(ID: {0})'}"
+                                                       FontSize="14"
+                                                       TextColor="#7F8C8D"
+                                                       VerticalOptions="Center"/>
+                                            </StackLayout>
+
+                                            <Border Grid.Row="0" Grid.Column="2"
+                                                    Background="{Binding StatusColor}" 
+                                                    Padding="10,5"
+                                                    HorizontalOptions="End">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="10"/>
+                                                </Border.StrokeShape>
+                                                <Label Text="{Binding Status}" 
+                                                       FontSize="14" 
+                                                       FontAttributes="Bold"
+                                                       TextColor="Black"/>
+                                            </Border>
+
+
+                                            <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="1" Color="#EAECEE"/>
+
+                                            <VerticalStackLayout Grid.Row="2" Grid.Column="0" Spacing="5">
+                                                <Label Text="Scheduled Time" FontSize="12" TextColor="#7F8C8D"/>
+                                                <Label Text="{Binding AppointmentDate, StringFormat='{0:hh:mm tt}'}" 
+                                                       FontSize="16" 
+                                                       FontAttributes="Bold"
+                                                       TextColor="#34495E"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Row="2" Grid.Column="1" Spacing="5">
+                                                <Label Text="Appointment ID" FontSize="12" TextColor="#7F8C8D"/>
+                                                <Label Text="{Binding AppointmentID}" 
+                                                       FontSize="16" 
+                                                       TextColor="#34495E"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Row="2" Grid.Column="2" Spacing="5">
+                                                <Label Text="Reason" FontSize="12" TextColor="#7F8C8D"/>
+                                                <Label Text="{Binding Reason}" 
+                                                       FontSize="16" 
+                                                       TextColor="#34495E"
+                                                       LineBreakMode="TailTruncation"/>
+                                            </VerticalStackLayout>
+
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout IsVisible="{Binding ShowPendingAppointments}">
+                        <Label Text="UPCOMING APPOINTMENTS" 
+                           FontSize="18" 
+                           TextColor="#2C3E50"
+                           FontAttributes="Bold"
+                           Margin="0,10,0,0"/>
+
+                        <Label Text="{Binding PendingCount, StringFormat='Total: {0} appointments'}" 
+                               FontSize="14" 
+                               TextColor="#7F8C8D"
+                               Margin="0,0,0,10"/>
+
+                        <CollectionView ItemsSource="{Binding PendingAppointments}" 
+                                        HeightRequest="480"
+                                        EmptyView="No upcoming appointments found.">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Appointment">
+                                    <Border Padding="20" 
+                                            Margin="0,0,0,15" 
+                                            BackgroundColor="#FFFFFF" 
+                                            Stroke="#D5DBE3"  
+                                            StrokeThickness="1"
+                                            HeightRequest="180">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12"/>
+                                        </Border.StrokeShape>
+                                        <Border.Shadow>
+                                            <Shadow Brush="#EAECEE" Offset="2,2" Radius="5" Opacity="0.5"/>
+                                        </Border.Shadow>
+
+                                        <Grid ColumnDefinitions="3*, 3*, 3*" 
+                                              RowDefinitions="Auto, Auto, Auto"
+                                              RowSpacing="8" 
+                                              ColumnSpacing="20">
+
+                                            <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="10" Grid.ColumnSpan="2">
+                                                <Label Text="👤" FontSize="18" VerticalOptions="Center"/>
+                                                <Label Text="{Binding PatientName}" 
+                                                       FontSize="18" 
+                                                       FontAttributes="Bold"
+                                                       TextColor="#2C3E50"
+                                                       VerticalOptions="Center"/>
+                                                <Label Text="{Binding PatientID, StringFormat='(ID: {0})'}"
+                                                       FontSize="14"
+                                                       TextColor="#7F8C8D"
+                                                       VerticalOptions="Center"/>
+                                            </StackLayout>
+
+                                            <Border Grid.Row="0" Grid.Column="2"
+                                                    BackgroundColor="{Binding StatusColor}" 
+                                                    Padding="10,5"
+                                                    HorizontalOptions="End">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="10"/>
+                                                </Border.StrokeShape>
+                                                <Label Text="{Binding Status}" 
+                                                       FontSize="14" 
+                                                       FontAttributes="Bold"
+                                                       TextColor="Black"/>
+                                            </Border>
+
+                                            <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="1" Color="#EAECEE"/>
+
+                                            <VerticalStackLayout Grid.Row="2" Grid.Column="0" Spacing="5">
+                                                <Label Text="Scheduled Date And Time" FontSize="12" TextColor="#7F8C8D"/>
+                                                <Label Text="{Binding AppointmentDate}" 
+                                                       FontSize="16" 
+                                                       FontAttributes="Bold"
+                                                       TextColor="#34495E"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Row="2" Grid.Column="1" Spacing="5">
+                                                <Label Text="Appointment ID" FontSize="12" TextColor="#7F8C8D"/>
+                                                <Label Text="{Binding AppointmentID}" 
+                                                       FontSize="16" 
+                                                       TextColor="#34495E"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Row="2" Grid.Column="2" Spacing="5">
+                                                <Label Text="Reason" FontSize="12" TextColor="#7F8C8D"/>
+                                                <Label Text="{Binding Reason}" 
+                                                       FontSize="16" 
+                                                       TextColor="#34495E"
+                                                       LineBreakMode="TailTruncation"/>
+                                            </VerticalStackLayout>
+
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout IsVisible="{Binding ShowHistoryAppointments}">
+                        <Label Text="APPOINTMENTS HISTORY" 
+                           FontSize="18" 
+                           TextColor="#2C3E50"
+                           FontAttributes="Bold"
+                           Margin="0,10,0,0"/>
+
+                        <Label Text="{Binding HistoryCount, StringFormat='Total: {0} appointments'}" 
+                               FontSize="14" 
+                               TextColor="#7F8C8D"
+                               Margin="0,0,0,10"/>
+
+                        <CollectionView ItemsSource="{Binding HistoryAppointments}" 
+                                        HeightRequest="480"
+                                        EmptyView="No past appointments found.">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Appointment">
+                                    <Border Padding="20" 
+                                            Margin="0,0,0,15" 
+                                            BackgroundColor="#FFFFFF" 
+                                            Stroke="#D5DBE3"  
+                                            StrokeThickness="1"
+                                            HeightRequest="180">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12"/>
+                                        </Border.StrokeShape>
+                                        <Border.Shadow>
+                                            <Shadow Brush="#EAECEE" Offset="2,2" Radius="5" Opacity="0.5"/>
+                                        </Border.Shadow>
+
+                                        <Grid ColumnDefinitions="3*, 3*, 3*" 
+                                              RowDefinitions="Auto, Auto, Auto"
+                                              RowSpacing="8" 
+                                              ColumnSpacing="20">
+
+                                            <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="10" Grid.ColumnSpan="2">
+                                                <Label Text="👤" FontSize="18" VerticalOptions="Center"/>
+                                                <Label Text="{Binding PatientName}" 
+                                                       FontSize="18" 
+                                                       FontAttributes="Bold"
+                                                       TextColor="#2C3E50"
+                                                       VerticalOptions="Center"/>
+                                                <Label Text="{Binding PatientId, StringFormat='(ID: {0})'}"
+                                                       FontSize="14"
+                                                       TextColor="#7F8C8D"
+                                                       VerticalOptions="Center"/>
+                                            </StackLayout>
+
+                                            <Border Grid.Row="0" Grid.Column="2"
+                                                    BackgroundColor="{Binding StatusColor}" 
+                                                    Padding="10,5"
+                                                    HorizontalOptions="End">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="10"/>
+                                                </Border.StrokeShape>
+                                                <Label Text="{Binding DisplayStatus}" 
+                                                       FontSize="14" 
+                                                       FontAttributes="Bold"
+                                                       TextColor="White"/>
+                                            </Border>
+
+                                            <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="1" Color="#EAECEE"/>
+
+                                            <VerticalStackLayout Grid.Row="2" Grid.Column="0" Spacing="5">
+                                                <Label Text="Date/Time" FontSize="12" TextColor="#7F8C8D"/>
+                                                <Label Text="{Binding FormattedDateTime}" 
+                                                       FontSize="16" 
+                                                       FontAttributes="Bold"
+                                                       TextColor="#34495E"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Row="2" Grid.Column="1" Spacing="5">
+                                                <Label Text="Appointment ID" FontSize="12" TextColor="#7F8C8D"/>
+                                                <Label Text="{Binding AppointmentId}" 
+                                                       FontSize="16" 
+                                                       TextColor="#34495E"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Row="2" Grid.Column="2" Spacing="5">
+                                                <Label Text="Reason" FontSize="12" TextColor="#7F8C8D"/>
+                                                <Label Text="{Binding Reason}" 
+                                                       FontSize="16" 
+                                                       TextColor="#34495E"
+                                                       LineBreakMode="TailTruncation"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+                </ContentView>
+                <ContentView  IsVisible="False">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="🔑 Update Profile Credentials" 
+                           FontSize="24"  
+                           TextColor="#34495E" 
+                           FontAttributes="Bold"
+                           Margin="0,0,0,10"/>
+
+                    <VerticalStackLayout>
+                        <Label Text="User ID (Read-Only)" FontSize="12" TextColor="#7F8C8D"/>
+                        <Border Style="{StaticResource DataDisplayBorder}" WidthRequest="400" HorizontalOptions="Start">
+                            <Label Text="{Binding UserId}" FontSize="16" TextColor="#2C3E50"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <HorizontalStackLayout Spacing="30">
+                        <VerticalStackLayout WidthRequest="400">
+                            <Label Text="Current Username (View Only)" FontSize="12" TextColor="#7F8C8D"/>
+                            <Border Style="{StaticResource DataDisplayBorder}">
+                                <Label Text="{Binding UserName}" FontSize="16" TextColor="#2C3E50"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout WidthRequest="400">
+                            <Label Text="Current Password (View Only)" FontSize="12" TextColor="#7F8C8D"/>
+                            <Border Style="{StaticResource DataDisplayBorder}">
+                                <Label Text="●●●●●●●●" FontSize="16" TextColor="#2C3E50"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Label Text="Email Address (Read-Only)" FontSize="12" TextColor="#7F8C8D"/>
+                        <Border Style="{StaticResource DataDisplayBorder}" WidthRequest="830" HorizontalOptions="Start">
+                            <Label Text="{Binding StaffEmail}" FontSize="16" TextColor="#2C3E50"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout>
+                        <Label Text="New Username" FontSize="12" TextColor="#7F8C8D"/>
+                        <Border Style="{StaticResource InputBorder}" WidthRequest="400" HorizontalOptions="Start">
+                            <Entry Placeholder="Enter new username" 
+                                   PlaceholderColor="#7F8C8D"
+                                   Text="{Binding NewUsername, Mode=TwoWay}"
+                                   TextColor="#34495E"
+                                   FontSize="16"
+                                   BackgroundColor="Transparent"
+                                   ClearButtonVisibility="WhileEditing"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <HorizontalStackLayout Spacing="30">
+                        <VerticalStackLayout WidthRequest="400">
+                            <Label Text="New Password" FontSize="12" TextColor="#7F8C8D"/>
+                            <Border Style="{StaticResource InputBorder}">
+                                <Entry Placeholder="Enter new password" 
+                                       PlaceholderColor="#7F8C8D"
+                                       Text="{Binding NewPassword, Mode=TwoWay}"
+                                       TextColor="#34495E"
+                                       FontSize="16"
+                                       BackgroundColor="Transparent"
+                                       IsPassword="True"
+                                       ClearButtonVisibility="WhileEditing"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout WidthRequest="400">
+                            <Label Text="Confirm Password" FontSize="12" TextColor="#7F8C8D"/>
+                            <Border Style="{StaticResource InputBorder}">
+                                <Entry Placeholder="Confirm new password" 
+                                       PlaceholderColor="#7F8C8D"
+                                       Text="{Binding ConfirmPassword, Mode=TwoWay}"
+                                       TextColor="#34495E"
+                                       FontSize="16"
+                                       BackgroundColor="Transparent"
+                                       IsPassword="True"
+                                       ClearButtonVisibility="WhileEditing"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout HorizontalOptions="End" Margin="0, 30, 0, 20" Spacing="20">
+                        <Button Text="Cancel" 
+                                Command="{Binding DiscardChangesCommand}"
+                                BackgroundColor="#BDC3C7"
+                                TextColor="#34495E"
+                                WidthRequest="150"
+                                HeightRequest="50"
+                                CornerRadius="10"
+                                FontAttributes="Bold"/>
+
+                        <Button Text="Save Changes" 
+                                Command="{Binding UpdateProfileCommand}"
+                                BackgroundColor="#27AE60"
+                                TextColor="White"
+                                WidthRequest="250"
+                                HeightRequest="50"
+                                CornerRadius="10"
+                                FontAttributes="Bold"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+                </ContentView>
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+    </ScrollView>
 </ContentPage>

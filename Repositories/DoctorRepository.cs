@@ -41,6 +41,28 @@ namespace Hospital_Management_System.Repositories
             }
             return doctors;
         }
+        public async Task<int> GetDocIDByStaffId(int staffId)
+        {
+            try
+            {
+                int docId = -1;
+                using SqlConnection connection = new SqlConnection(_connectionString);
+                string query = $"Select DoctorID from Doctor where StaffID = {staffId}";
+                using SqlCommand command = new SqlCommand(query, connection);
+                await connection.OpenAsync();
+                using SqlDataReader reader = command.ExecuteReader();
+                if (await reader.ReadAsync())
+                {
+                    docId = reader.GetInt32(0);
+                }
+                return docId;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                return 0;
+            }
+        }
 
 
     }

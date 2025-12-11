@@ -10,3 +10,88 @@ st.LastName as [L.Name],
 st.Role,Doc.Speciality,doc.MaxAppointment,Doc.ConsultationFee from staff st 
 inner join doctor doc
 on st.StaffID=doc.StaffID and st.Role='Doctor'
+
+<-Procedure query to fetch appointment data on the basis of doctor id ->
+create procedure GetAppointmentByDocID @id int
+as
+begin
+	select * from Appointment
+where DoctorID in (
+select DoctorID from Doctor where StaffID=@id)
+end
+
+<-Store Procedure for Fetching appointments that are today->
+create procedure GetTodayAppointmentByDocID @DoctorId int 
+as 
+begin
+  SELECT 
+                            a.AppointmentID,
+                            a.PatientID,
+                            a.DoctorID,
+                            a.CreatedByStaffID,
+                            a.ScheduledAt,
+                            a.Status,
+                            a.Reason,
+                            ISNULL(p.FirstName + ' ' + p.LastName, 'Unknown Patient') as PatientName,
+                            ISNULL(p.Phone, 'N/A') as PatientPhone
+                        FROM Appointment a
+                        LEFT JOIN Patient p ON a.PatientID = p.PatientID
+                        WHERE a.DoctorID = @DoctorID
+                        AND CAST(a.ScheduledAt AS DATE) = CAST(GETDATE() AS DATE)
+                        AND a.Status IN ('Scheduled', 'Pending', 'ScheduledToday', 'Attended')
+                        ORDER BY a.ScheduledAt ASC
+end
+<- Store Procedure to get pending appointments with doctorId ->
+create Procedure GetPendingAppointments @DoctorID int
+as 
+begin 
+ SELECT 
+                            a.AppointmentID,
+                            a.PatientID,
+                            a.DoctorID,
+                            a.CreatedByStaffID,
+                            a.ScheduledAt,
+                            a.Status,
+                            a.Reason,
+                            ISNULL(p.FirstName + ' ' + p.LastName, 'Unknown Patient') as PatientName,
+                            ISNULL(p.Phone, 'N/A') as PatientPhone
+                        FROM Appointment a
+                        LEFT JOIN Patient p ON a.PatientID = p.PatientID
+                        WHERE a.DoctorID = @DoctorID
+                        AND CAST(a.ScheduledAt AS DATE) > CAST(GETDATE() AS DATE)
+                        AND a.Status IN ('Scheduled', 'Pending')
+                        ORDER BY a.ScheduledAt ASC
+end
+
+
+
+
+
+
+
+
+
+create Procedure GetPendingAppointmentsByDocID @DoctorID int
+as
+begin
+SELECT 
+                            a.AppointmentID,
+                            a.PatientID,
+                            a.DoctorID,
+                            a.CreatedByStaffID,
+                            a.ScheduledAt,
+                            a.Status,
+                            a.Reason,
+                            ISNULL(p.FirstName + ' ' + p.LastName, 'Unknown Patient') as PatientName,
+                            ISNULL(p.Phone, 'N/A') as PatientPhone
+                        FROM Appointment a
+                        LEFT JOIN Patient p ON a.PatientID = p.PatientID
+                        WHERE a.DoctorID = @DoctorID
+                        AND (
+                            CAST(a.ScheduledAt AS DATE) < CAST(GETDATE() AS DATE)
+                            OR a.Status IN ('Completed', 'Cancelled', 'Attended', 'Not Attended')
+                        )
+                        ORDER BY a.ScheduledAt DESC
+
+
+                        end

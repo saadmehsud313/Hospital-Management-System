@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Hospital_Management_System.Services
 {
@@ -15,17 +16,14 @@ namespace Hospital_Management_System.Services
         {
             _patientRepository = patientRepository;
         }
-        public async Task<int> GeneratePatientID()
-        {
-            int lastPatientID = await _patientRepository.GetLastPatientAsync();
-            return lastPatientID + 1;
-        }
         
-        public async Task AddPatient(Patient patient)
+        public async Task<bool> AddPatient(Patient patient)
         {     
-            patient.PatientId = await GeneratePatientID();
-
-            await _patientRepository.AddPatientAsync(patient);
+            patient.PatientId = await _patientRepository.GetLastPatientAsync()+1;
+            string createdAt = patient.CreatedAt.GetValueOrDefault().ToString("MMMyy");
+            createdAt = createdAt.ToUpper();
+            patient.MRN = createdAt + '-' + patient.PatientId;
+            return await _patientRepository.AddPatientAsync(patient);
         }
         
     }
