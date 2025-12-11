@@ -95,6 +95,7 @@
 
             <Button Text="Update"
                     Command="{Binding LogoutClickedCommand}"
+                    ImageSource="update_calender_40.png"
                     Background="Transparent">
                 <Button.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
@@ -437,7 +438,7 @@
 
         <!-- Manage Appointments List -->
         <ContentView IsVisible="{Binding ToggleManageAppointment}" IsEnabled="{Binding ToggleManageAppointment}">
-            <ScrollView Margin="20,20,20,10" WidthRequest="1000">
+            <ScrollView Margin="20,20,20,10" WidthRequest="800" >
                 <VerticalStackLayout>
 
                     <!-- Header -->
@@ -459,17 +460,17 @@
                     <!-- Appointments List -->
                     <CollectionView ItemsSource="{Binding Appointments}" 
                                     SelectionMode="Single"
-                                    Margin="0">
+                                    >
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:Appointment">
                                 <Border StrokeShape="RoundRectangle 15" 
                                         Background="White" 
                                         Padding="25"
-                                        Margin="0,0,0,15"
+                                        Margin="0,0,0,35"
                                         StrokeThickness="0">
                                     <Grid RowDefinitions="Auto,Auto" 
                                           ColumnDefinitions="*,*,*,*,*,*"
-                                          ColumnSpacing="20"
+                                          ColumnSpacing="30"
                                           RowSpacing="10">
 
                                         <!-- Labels -->

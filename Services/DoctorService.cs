@@ -23,5 +23,6 @@ namespace Hospital_Management_System.Services
         {
             return await _doctorRepository.GetDocIDByStaffId(staffId);
         }
+
     }
 }

@@ -13,7 +13,7 @@ namespace Hospital_Management_System.Repositories
     {
         string _connectionString;
         public StaffRepository(DatabaseConfig dbConfig) {
-                _connectionString = dbConfig.ConnectionString;
+            _connectionString = dbConfig.ConnectionString;
         }
         public async Task<Staff> GetStaffData(int id)
         {
@@ -47,10 +47,71 @@ namespace Hospital_Management_System.Repositories
                     return null;
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 Debug.WriteLine("Error:" + e.Message);
                 return null;
             }
         }
-     }   
+        //public async Task<bool> UpdateUsernameAsync(string staffId, string newUsername)
+        //{
+        //    try
+        //    {
+
+        //        using (var connection = new SqlConnection(_connectionString))
+        //        {
+        //            await connection.OpenAsync();
+        //            // Update the username
+        //            string updateQuery = "UPDATE Staff SET Username = @Username WHERE StaffID = @StaffID";
+        //            using (var command = new SqlCommand(updateQuery, connection))
+        //            {
+        //                command.Parameters.AddWithValue("@Username", newUsername);
+        //                command.Parameters.AddWithValue("@StaffID", staffId);
+
+        //                int rowsAffected = await command.ExecuteNonQueryAsync();
+        //                bool success = rowsAffected > 0;
+
+        //                Console.WriteLine($"📊 UpdateUsername rows affected: {rowsAffected} - {(success ? "✅ Success" : "❌ Failed")}");
+        //                return success;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"❌ UpdateUsername ERROR: {ex.Message}");
+        //        return false;
+        //    }
+        //}
+
+        
+        public async Task<bool> UpdatePasswordAsync(string staffId, string password)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    // Update the password hash
+                    string updateQuery = "UPDATE Staff SET Password = @Password WHERE StaffID = @StaffID";
+                    using (var command = new SqlCommand(updateQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@Password", password);
+                        command.Parameters.AddWithValue("@StaffID", staffId);
+                        int rowsAffected = await command.ExecuteNonQueryAsync();
+                        bool success = rowsAffected > 0;
+                        Console.WriteLine($"📊 StorePasswordHash rows affected: {rowsAffected} - {(success ? "✅ Success" : "❌ Failed")}");
+                        return success;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ StorePasswordHash ERROR: {ex.Message}");
+                return false;
+            }
+        }
+
+
+
+
+    }
 }

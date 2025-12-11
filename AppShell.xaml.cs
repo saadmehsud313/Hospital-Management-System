@@ -41,18 +41,6 @@ namespace Hospital_Management_System
             {
                 Items.Clear();
                 Items.Add(new FlyoutItem
-                    {
-                    Title="Profile",
-                    Items ={
-                        new ShellContent
-                    {
-                        ContentTemplate=new DataTemplate(typeof(ReceptionistView))
-                    }
-
-                    }
-                    
-                });
-                Items.Add(new FlyoutItem
                 {
                     Title = "View Appointments",
                     Items =

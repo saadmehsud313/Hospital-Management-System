@@ -178,6 +178,15 @@ namespace Hospital_Management_System.ViewModels
             ShowProfileView = true;
         }
 
+        [RelayCommand]
+        private void ShowInfo()
+        {
+            ShowProfileView = false;
+            ShowAppointmentsView = false;
+            ShowInfoView = true;
+        }
+
+
         private async Task LoadStaffData()
         {
             staff = await _staffService.GetStaff(ReceptionistViewModel.user.DocOrStaffId);
@@ -191,7 +200,7 @@ namespace Hospital_Management_System.ViewModels
             StaffStatus = staff.IsActive ? "Active" : "Inactive";
             UserName = staff.FullName;
             StaffEmail = staff.Email;
-
+            UserId = staff.StaffID.ToString();
         }
 
         [RelayCommand]
@@ -374,12 +383,132 @@ namespace Hospital_Management_System.ViewModels
              }
         }
 
-        private async Task LoadHistoryAppointments()
+        // Load REAL data from database
+        private async Task LoadRealDoctorData()
         {
             try
             {
-                Debug.WriteLine("📚 Loading History appointments...");
-                int docID = await _doctorService.GetDocIDByStaffId(staff.StaffID);
+
+                // Load fresh data from database
+                var freshStaffData = await _staffService.GetStaff(staff.StaffID);
+                if (freshStaffData == null)
+                {
+                    await Shell.Current.DisplayAlertAsync("Error", "Could not load your profile data. Please contact administrator.","Okay");
+                    return;
+                }
+
+                // Update all properties with REAL data
+                StaffId = freshStaffData.StaffID.ToString();
+                StaffFirstName = freshStaffData.FirstName;
+                StaffLastName = freshStaffData.LastName;
+                StaffRole = freshStaffData.Role;
+                StaffName = $"{freshStaffData.FirstName} {freshStaffData.LastName}";
+                StaffPhoneNumber = freshStaffData.Phone ?? "Not available";
+                StaffDepartment = freshStaffData.DepartmentName ?? "Not assigned";
+                StaffHireDate = freshStaffData.HireDate;
+                StaffStatus = freshStaffData.IsActive ? "Active" : "Inactive";
+                UserName = freshStaffData.FullName;
+                UserId = freshStaffData.StaffID.ToString();
+                StaffEmail = freshStaffData.Email;
+
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to load profile: {ex.Message}","Okay");
+            }
+        }
+
+
+        [RelayCommand]
+        private async Task UpdateProfile()
+        {
+            try
+            {
+                // Validate inputs
+                if (string.IsNullOrWhiteSpace(NewUsername) && string.IsNullOrWhiteSpace(NewPassword))
+                {
+                    await Shell.Current.DisplayAlertAsync("Error", "Please provide a new username or password to update","Okay");
+                    return;
+                }
+
+                bool anyUpdate = false;
+                string updateMessage = "";
+
+                // Get the service ONCE at the beginning
+                var staffUpdateService = MauiProgram.Services.GetRequiredService<StaffService>();
+
+                // Update Username if provided
+                if (!string.IsNullOrWhiteSpace(NewUsername))
+                {
+                    //var usernameUpdated = await staffUpdateService.UpdateUsername(StaffId, NewUsername);
+                        updateMessage+= "✓ Username update feature is currently disabled\n";
+                        anyUpdate = true;
+                        
+                        // Force refresh profile data
+                        await LoadRealDoctorData();
+                }
+
+                // Update Password if provided - FIXED SECTION
+                if (!string.IsNullOrWhiteSpace(NewPassword))
+                {
+                    if (NewPassword != ConfirmPassword)
+                    {
+                        await Shell.Current.DisplayAlertAsync("Error", "Passwords do not match","Okay");
+                        return;
+                    }
+
+                    if (NewPassword.Length < 6)
+                    {
+                        await Shell.Current.DisplayAlertAsync("Error", "Password must be at least 6 characters","Okay");
+                        return;
+                    }
+
+                    
+                    // FIX: Pass the plain text password, NOT a hash
+                    // The StaffUpdateService should handle the hashing
+                    var passwordUpdated = await staffUpdateService.UpdatePassword(StaffId, NewPassword);
+
+                    if (passwordUpdated)
+                    {
+                        updateMessage += "✓ Password updated successfully\n";
+                        anyUpdate = true;
+                        Debug.WriteLine("✅ Password updated in database");
+
+                        // Clear password fields after successful update
+                        NewPassword = string.Empty;
+                        ConfirmPassword = string.Empty;
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlertAsync("Error", "Failed to update password in database","Okay");
+                        return;
+                    }
+                }
+
+                if (anyUpdate)
+                {
+                    // Clear fields
+                    NewUsername = string.Empty;
+                    NewPassword = string.Empty;
+                    ConfirmPassword = string.Empty;
+
+                    // Show success message
+                    await Shell.Current.DisplayAlertAsync("Success", $"Profile updated successfully!\n\n{updateMessage}","Okay");
+
+                    Debug.WriteLine("✅ Profile update complete");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to update profile: {ex.Message}","Okay");
+            }
+        }
+
+
+        private async Task LoadHistoryAppointments()
+        {
+            try
+            { int docID = await _doctorService.GetDocIDByStaffId(staff.StaffID);
                 var appointments = await _appointmentService.GetHistoryAppointmentByDocID(docID);
 
                     HistoryAppointments.Clear();
@@ -393,13 +522,49 @@ namespace Hospital_Management_System.ViewModels
             }
             catch (Exception ex)
             {
-                Shell.Current.DisplayAlert("Error", $"Failed to load History appointments: {ex.Message}", "Okay");
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to load History appointments: {ex.Message}", "Okay");
 
             }
         }
 
 
+        [RelayCommand]
+        private async Task Logout()
+        {
+            try
+            {
+                // Reset all state
+                ResetState();
 
+                var loginViewModel = MauiProgram.Services.GetRequiredService<LoginViewModel>();
+                var loginPage = new LoginPage(loginViewModel);
+                await Shell.Current.GoToAsync(nameof(LoginPage));
+                }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlertAsync("Error", $"Logout failed: {ex.Message}","Okay");
+            }
+        }
+
+
+        private void ResetState()
+        {
+            TodayAppointments.Clear();
+            PendingAppointments.Clear();
+            HistoryAppointments.Clear();
+
+            TodayCount = 0;
+            PendingCount = 0;
+            HistoryCount = 0;
+            TotalCount = 0;
+
+            ShowNoAppointmentsMessage = false;
+            IsLoading = false;
+
+            _hasInitialLoadCompleted = false;
+            _lastLoadTime = DateTime.MinValue;
+            _lastLoadedDoctorId = null;
+            _isCurrentlyLoading = false;
+        }
     }
-
 }

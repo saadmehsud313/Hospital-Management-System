@@ -102,7 +102,7 @@
                     </Button.GestureRecognizers>
                     <Button.Style>
                         <Style TargetType="Button">
-                            <Setter Property="TextColor" Value="#E74C3C"/>
+                            <Setter Property="TextColor" Value="Black"/>
                             <Setter Property="FontSize" Value="16"/>
                             <Setter Property="Padding" Value="15,12"/>
                             <Setter Property="CornerRadius" Value="10"/>
@@ -339,6 +339,44 @@
                                     </Border>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
+                            <!--New Password and Confirm Password-->
+                            <HorizontalStackLayout Spacing="20" Margin="0,0,0,20">
+                                <VerticalStackLayout>
+                                    <Label Text="New Password" 
+                                           FontSize="12" 
+                                           TextColor="#7F8C8D"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            WidthRequest="390"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="0">
+                                        <Entry Text="{Binding NewPassword}"
+                                                TextColor="#2C3E50"
+                                               Placeholder="New Password"
+                                                FontSize="16"/>
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout>
+                                    <Label Text="Confirm Password" 
+                                            FontSize="12" 
+                                            TextColor="#7F8C8D"
+                                            FontAttributes="Bold"
+                                            Margin="0,0,0,8"/>
+                                    <Border StrokeShape="RoundRectangle 12"
+                                            WidthRequest="390"
+                                            Stroke="#E1E8ED"
+                                            Background="#F8FAFB"
+                                            Padding="0,0">
+                                    <Entry Text="{Binding ConfirmPassword}"
+                                           Placeholder="Confirm Password"    
+                                           TextColor="#2C3E50"
+                                               FontSize="16"/>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
 
                             <!-- Email Field -->
                             <VerticalStackLayout Margin="0,0,0,30">
@@ -375,7 +413,7 @@
                                     </Button.Style>
                                 </Button>
 
-                                <Button Text="Change Password" BackgroundColor="#4A90E2">
+                                <Button Text="Change Password" Command="{Binding UpdateProfileCommand}">
                                     <Button.GestureRecognizers>
                                         <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
                                     </Button.GestureRecognizers>

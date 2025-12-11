@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Hospital_Management_System"
     Title="SAZ Hospital"
-    FlyoutBackgroundColor="#FAC898"
+    FlyoutBackgroundColor="#4A90E2"
     FlyoutWidth="250"
     >
     

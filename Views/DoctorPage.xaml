@@ -424,6 +424,7 @@
                                Margin="0,0,0,10"/>
 
                         <CollectionView ItemsSource="{Binding HistoryAppointments}" 
+                                        x:DataType="models:Appointment"
                                         HeightRequest="480"
                                         EmptyView="No past appointments found.">
                             <CollectionView.ItemTemplate>
@@ -453,7 +454,7 @@
                                                        FontAttributes="Bold"
                                                        TextColor="#2C3E50"
                                                        VerticalOptions="Center"/>
-                                                <Label Text="{Binding PatientId, StringFormat='(ID: {0})'}"
+                                                <Label Text="{Binding PatientID, StringFormat='(ID: {0})'}"
                                                        FontSize="14"
                                                        TextColor="#7F8C8D"
                                                        VerticalOptions="Center"/>
@@ -466,17 +467,17 @@
                                                 <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="10"/>
                                                 </Border.StrokeShape>
-                                                <Label Text="{Binding DisplayStatus}" 
+                                                <Label Text="{Binding Status}" 
                                                        FontSize="14" 
                                                        FontAttributes="Bold"
-                                                       TextColor="White"/>
+                                                       TextColor="Black"/>
                                             </Border>
 
                                             <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="1" Color="#EAECEE"/>
 
                                             <VerticalStackLayout Grid.Row="2" Grid.Column="0" Spacing="5">
                                                 <Label Text="Date/Time" FontSize="12" TextColor="#7F8C8D"/>
-                                                <Label Text="{Binding FormattedDateTime}" 
+                                                <Label Text="{Binding AppointmentDate}" 
                                                        FontSize="16" 
                                                        FontAttributes="Bold"
                                                        TextColor="#34495E"/>
@@ -484,7 +485,7 @@
 
                                             <VerticalStackLayout Grid.Row="2" Grid.Column="1" Spacing="5">
                                                 <Label Text="Appointment ID" FontSize="12" TextColor="#7F8C8D"/>
-                                                <Label Text="{Binding AppointmentId}" 
+                                                <Label Text="{Binding AppointmentID}" 
                                                        FontSize="16" 
                                                        TextColor="#34495E"/>
                                             </VerticalStackLayout>
@@ -504,7 +505,7 @@
                     </VerticalStackLayout>
                 </VerticalStackLayout>
                 </ContentView>
-                <ContentView  IsVisible="False">
+                <ContentView  IsVisible="{Binding ShowInfoView}" IsEnabled="{Binding ShowInfoView}">
                 <VerticalStackLayout Spacing="20">
                     <Label Text="🔑 Update Profile Credentials" 
                            FontSize="24"  

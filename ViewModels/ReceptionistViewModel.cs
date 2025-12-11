@@ -57,6 +57,18 @@ namespace Hospital_Management_System.ViewModels
         bool profileViewStatus = true;
         [ObservableProperty]
         bool infoViewState = false;
+        [ObservableProperty]
+        string newUsername;
+        [ObservableProperty]
+        string newPassword;
+        [ObservableProperty]
+        string confirmPassword;
+        
+
+
+
+
+
         [RelayCommand]
         public void ToggleProfileView()
         {
@@ -97,8 +109,126 @@ namespace Hospital_Management_System.ViewModels
             }
             else
             {
-                Application.Current.MainPage.DisplayAlertAsync("Staff Not Found","Staff With mentioned user id cannot be acces.","Ok");
+                await Shell.Current.DisplayAlertAsync("Staff Not Found","Staff With mentioned user id cannot be acces.","Ok");
             }
         }
+        [RelayCommand]
+        private async Task UpdateProfile()
+        {
+            try
+            {
+                // Validate inputs
+                if (string.IsNullOrWhiteSpace(NewUsername) && string.IsNullOrWhiteSpace(NewPassword))
+                {
+                    await Shell.Current.DisplayAlertAsync("Error", "Please provide a new username or password to update", "Okay");
+                    return;
+                }
+
+                bool anyUpdate = false;
+                string updateMessage = "";
+
+                // Get the service ONCE at the beginning
+                var staffUpdateService = MauiProgram.Services.GetRequiredService<StaffService>();
+
+                // Update Username if provided
+                if (!string.IsNullOrWhiteSpace(NewUsername))
+                {
+                    //var usernameUpdated = await staffUpdateService.UpdateUsername(StaffId, NewUsername);
+                    updateMessage += "✓ Username update feature is currently disabled\n";
+                    anyUpdate = true;
+
+                    // Force refresh profile data
+                    await LoadRealDoctorData();
+                }
+
+                // Update Password if provided - FIXED SECTION
+                if (!string.IsNullOrWhiteSpace(NewPassword))
+                {
+                    if (NewPassword != ConfirmPassword)
+                    {
+                        await Shell.Current.DisplayAlertAsync("Error", "Passwords do not match", "Okay");
+                        return;
+                    }
+
+                    if (NewPassword.Length < 6)
+                    {
+                        await Shell.Current.DisplayAlertAsync("Error", "Password must be at least 6 characters", "Okay");
+                        return;
+                    }
+
+
+                    // FIX: Pass the plain text password, NOT a hash
+                    var passwordUpdated = await staffUpdateService.UpdatePassword(StaffId, NewPassword);
+
+                    if (passwordUpdated)
+                    {
+                        updateMessage += "✓ Password updated successfully\n";
+                        anyUpdate = true;
+                        // Clear password fields after successful update
+                        NewPassword = string.Empty;
+                        ConfirmPassword = string.Empty;
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlertAsync("Error", "Failed to update password in database", "Okay");
+                        return;
+                    }
+                }
+
+                if (anyUpdate)
+                {
+                    // Clear fields
+                    NewUsername = string.Empty;
+                    NewPassword = string.Empty;
+                    ConfirmPassword = string.Empty;
+
+                    // Show success message
+                    await Shell.Current.DisplayAlertAsync("Success", $"Profile updated successfully!\n\n{updateMessage}", "Okay");
+
+                    Debug.WriteLine("✅ Profile update complete");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to update profile: {ex.Message}", "Okay");
+            }
+        }
+
+        // Load REAL data from database
+        private async Task LoadRealDoctorData()
+        {
+            try
+            {
+
+                // Load fresh data from database
+                var freshStaffData = await _staffService.GetStaff(_staff.StaffID);
+                if (freshStaffData == null)
+                {
+                    await Shell.Current.DisplayAlertAsync("Error", "Could not load your profile data. Please contact administrator.", "Okay");
+                    return;
+                }
+
+                // Update all properties with REAL data
+                StaffId = freshStaffData.StaffID.ToString();
+                StaffFirstName = freshStaffData.FirstName;
+                StaffLastName = freshStaffData.LastName;
+                StaffRole = freshStaffData.Role;
+                StaffName = $"{freshStaffData.FirstName} {freshStaffData.LastName}";
+                StaffPhoneNumber = freshStaffData.Phone ?? "Not available";
+                StaffDepartment = freshStaffData.DepartmentName ?? "Not assigned";
+                StaffHireDate = freshStaffData.HireDate;
+                StaffStatus = freshStaffData.IsActive ? "Active" : "Inactive";
+                UserName = freshStaffData.FullName;
+                UserId = freshStaffData.StaffID.ToString();
+                StaffEmail = freshStaffData.Email;
+
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlertAsync("Error", $"Failed to load profile: {ex.Message}", "Okay");
+            }
+        }
+
+
     }
 }
