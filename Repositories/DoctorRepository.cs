@@ -11,12 +11,12 @@ namespace Hospital_Management_System.Repositories
 {
     public class DoctorRepository
     {
-        private  readonly  string _connectionString;
+        private readonly string _connectionString;
         public DoctorRepository(DatabaseConfig config)
         {
             _connectionString = config.ConnectionString;
         }
-        public  List<Doctor> GetAllDOctors()
+        public List<Doctor> GetAllDOctors()
         {
             List<Doctor> doctors = new List<Doctor>();
             using SqlConnection connect = new SqlConnection(_connectionString);
@@ -34,10 +34,10 @@ namespace Hospital_Management_System.Repositories
                     doctor.LastName = reader.GetString(3);
                     doctor.Speciality = reader.GetString(5);
                     doctor.MaxAppointments = reader.GetInt32(6);
-                    doctor.ConsultationFee =reader.GetDouble(7);
+                    doctor.ConsultationFee = reader.GetDouble(7);
                 }
                 doctors.Add(doctor);
-                
+
             }
             return doctors;
         }
@@ -63,7 +63,38 @@ namespace Hospital_Management_System.Repositories
                 return 0;
             }
         }
+        public async Task<Doctor> GetDoctorByIDAsync(int doctorId)
+        {
+            try
+            {
+                Doctor doctor = null;
+                using SqlConnection connection = new SqlConnection(_connectionString);
+                string query = $"Select * from DoctorView where DocID = {doctorId}";
+                using SqlCommand command = new SqlCommand(query, connection);
+                await connection.OpenAsync();
+                using SqlDataReader reader = command.ExecuteReader();
+                if (await reader.ReadAsync())
+                {
+                    doctor = new Doctor()
+                    {
+                        StaffID = reader.GetInt32(0),
+                        DoctorId = reader.GetInt32(1),
+                        FirstName = reader.GetString(2),
+                        LastName = reader.GetString(3),
+                        Speciality = reader.GetString(5),
+                        MaxAppointments = reader.GetInt32(6),
+                        ConsultationFee = reader.GetDouble(7)
+                    };
+                }
+                return doctor;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                return null;
+            }
 
 
+        }
     }
 }

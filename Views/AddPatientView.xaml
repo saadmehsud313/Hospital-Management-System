@@ -22,9 +22,9 @@
                     Stroke="#4A90E2"
                     StrokeThickness="3"
                     Background="#E8F4FF">
-                <Label Text="{Binding StaffName, StringFormat='{0:substring(0,1)}'}"
+                <Label Text="🤵🏾"
                        TextColor="#4A90E2"
-                       FontSize="25"
+                       FontSize="80"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"/>
@@ -75,7 +75,7 @@
                 </Button.Style>
             </Button>
 
-            <Button Text="Cancel"
+            <Button Text="Manage"
                     ImageSource="cancel_appointment_logo_40.png"
                     Command="{Binding ShowManageAppointmentCommand}"
                     Background="Transparent">
@@ -93,8 +93,8 @@
                 </Button.Style>
             </Button>
 
-            <Button Text="Update"
-                    Command="{Binding LogoutClickedCommand}"
+            <Button Text="History"
+                    Command="{Binding ShowAllAppointmentCommand}"
                     ImageSource="update_calender_40.png"
                     Background="Transparent">
                 <Button.GestureRecognizers>
@@ -449,7 +449,7 @@
                             StrokeThickness="0">
                         <HorizontalStackLayout Spacing="10">
                             <BoxView Color="#4A90E2" WidthRequest="4" HeightRequest="32" CornerRadius="2"/>
-                            <Label Text="Manage Appointments" 
+                            <Label Text="Appointments" 
                                    FontSize="28"
                                    TextColor="#2C3E50" 
                                    FontAttributes="Bold"
@@ -459,8 +459,14 @@
 
                     <!-- Appointments List -->
                     <CollectionView ItemsSource="{Binding Appointments}" 
-                                    SelectionMode="Single"
+                                    SelectionMode="None"
+                                    SelectedItem="{Binding SelectedAppointment}"
                                     >
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" 
+                                               ItemSpacing="5"
+                                             />
+                        </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:Appointment">
                                 <Border StrokeShape="RoundRectangle 15" 
@@ -468,11 +474,15 @@
                                         Padding="25"
                                         Margin="0,0,0,35"
                                         StrokeThickness="0">
+                                    
                                     <Grid RowDefinitions="Auto,Auto" 
                                           ColumnDefinitions="*,*,*,*,*,*"
                                           ColumnSpacing="30"
                                           RowSpacing="10">
-
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:AddPatientViewModel}},Path=TappedCommand}"
+                                                                  CommandParameter="{Binding .}"/>
+                                        </Grid.GestureRecognizers>
                                         <!-- Labels -->
                                         <VerticalStackLayout Grid.Row="0" Grid.Column="0">
                                             <Label Text="Appointment ID" 
@@ -544,6 +554,134 @@
                                                        TextColor="#27AE60"
                                                        FontSize="13"
                                                        FontAttributes="Bold"/>
+                                            </Border>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
+        </ContentView>
+        <!-- Manage Appointments List -->
+        <ContentView IsVisible="{Binding ToggleAllAppointment}" IsEnabled="{Binding ToggleAllAppointment}">
+            <ScrollView Margin="20,20,20,10" WidthRequest="800" >
+                <VerticalStackLayout>
+
+                    <!-- Header -->
+                    <Border StrokeShape="RoundRectangle 20" 
+                     Background="White" 
+                     Padding="30,20"
+                     Margin="0,0,0,20"
+                     StrokeThickness="0">
+                        <HorizontalStackLayout Spacing="10">
+                            <BoxView Color="#4A90E2" WidthRequest="4" HeightRequest="32" CornerRadius="2"/>
+                            <Label Text="Appointments" 
+                            FontSize="28"
+                            TextColor="#2C3E50" 
+                            FontAttributes="Bold"
+                            VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Appointments List -->
+                    <CollectionView ItemsSource="{Binding Appointments}" 
+                             SelectionMode="None"
+                             SelectedItem="{Binding SelectedAppointment}"
+                             >
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" 
+                                        ItemSpacing="5"
+                                      />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Appointment">
+                                <Border StrokeShape="RoundRectangle 15" 
+                                 Background="White" 
+                                 Padding="25"
+                                 Margin="0,0,0,35"
+                                 StrokeThickness="0">
+
+                                    <Grid RowDefinitions="Auto,Auto" 
+                                   ColumnDefinitions="*,*,*,*,*,*"
+                                   ColumnSpacing="30"
+                                   RowSpacing="10">
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:AddPatientViewModel}},Path=TappedCommand}"
+                                                           CommandParameter="{Binding .}"/>
+                                        </Grid.GestureRecognizers>
+                                        <!-- Labels -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                                            <Label Text="Appointment ID" 
+                                            FontSize="11" 
+                                            TextColor="#7F8C8D"
+                                            FontAttributes="Bold"/>
+                                            <Label Text="{Binding AppointmentID}" 
+                                            TextColor="#4A90E2"
+                                            FontSize="15"
+                                            FontAttributes="Bold"
+                                            Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                                            <Label Text="Patient ID" 
+                                            FontSize="11" 
+                                            TextColor="#7F8C8D"
+                                            FontAttributes="Bold"/>
+                                            <Label Text="{Binding PatientID}" 
+                                            TextColor="#2C3E50"
+                                            FontSize="15"
+                                            Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="2">
+                                            <Label Text="Doctor ID" 
+                                            FontSize="11" 
+                                            TextColor="#7F8C8D"
+                                            FontAttributes="Bold"/>
+                                            <Label Text="{Binding DoctorID}" 
+                                            TextColor="#2C3E50"
+                                            FontSize="15"
+                                            Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="3">
+                                            <Label Text="Date" 
+                                            FontSize="11" 
+                                            TextColor="#7F8C8D"
+                                            FontAttributes="Bold"/>
+                                            <Label Text="{Binding AppointmentDate}" 
+                                            TextColor="#2C3E50"
+                                            FontSize="15"
+                                            Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="4">
+                                            <Label Text="Reason" 
+                                            FontSize="11" 
+                                            TextColor="#7F8C8D"
+                                            FontAttributes="Bold"/>
+                                            <Label Text="{Binding Reason}" 
+                                            TextColor="#2C3E50"
+                                            FontSize="15"
+                                            Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="5">
+                                            <Label Text="Status" 
+                                            FontSize="11" 
+                                            TextColor="#7F8C8D"
+                                            FontAttributes="Bold"/>
+                                            <Border StrokeShape="RoundRectangle 12"
+                                             Background="#E8F8F5"
+                                             Padding="8,4"
+                                             Margin="0,5,0,0"
+                                             HorizontalOptions="Start">
+                                                <Label Text="{Binding Status}" 
+                                                TextColor="{Binding StatusColor}"
+                                                FontSize="13"
+                                                FontAttributes="Bold"/>
                                             </Border>
                                         </VerticalStackLayout>
                                     </Grid>

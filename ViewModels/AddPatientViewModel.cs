@@ -7,6 +7,8 @@ using Hospital_Management_System.Services;
 using System.Diagnostics;
 using Hospital_Management_System.Repositories;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using Hospital_Management_System.Repository;
 
 namespace Hospital_Management_System.ViewModels
 {
@@ -63,28 +65,32 @@ namespace Hospital_Management_System.ViewModels
         [ObservableProperty]
         bool toggleManageAppointment;
         [ObservableProperty]
+        Appointment selectedAppointment;
+        [ObservableProperty]
         TimeSpan appointmentTime;
-        
+        [ObservableProperty]
+        bool toggleAllAppointment = false;
+
         //Constructor to initialize services and load data
-        public AddPatientViewModel(PatientService patientService, DoctorService doctorService,AppointmentService appointmentService)
+        public AddPatientViewModel(PatientService patientService, DoctorService doctorService, AppointmentService appointmentService)
         {
             Today = DateOnly.FromDateTime(DateTime.Now);
             _patientService = patientService;
             _doctorService = doctorService;
             _appointmentService = appointmentService;
             ToggleNewAppointment = true;
-            ToggleManageAppointment= false;
+            ToggleManageAppointment = false;
             LoadStaffData();
             allDoctors = _doctorService.GetAllDoctors();
             specializations = allDoctors.Select(d => d.Speciality).Distinct().ToList();
             filteredDoctors = new ObservableCollection<Doctor>();
-           
+
         }
         //Update the doctor picker an only shows name of doctors with the selected specialization
         partial void OnSelectedSpecializationChanged(string value)
         {
             FilteredDoctors.Clear();
-             if(!string.IsNullOrEmpty(value))
+            if (!string.IsNullOrEmpty(value))
             {
                 var doctors = allDoctors.Where(d => d.Speciality == Specializations[Convert.ToInt32(value)]);
                 foreach (Doctor doc in doctors)
@@ -106,7 +112,7 @@ namespace Hospital_Management_System.ViewModels
             {
                 Shell.Current.DisplayAlertAsync("Error", "Appointment Date is required.", "OK");
             }
-            else if (SelectedBloodGroup is null )
+            else if (SelectedBloodGroup is null)
             {
                 Shell.Current.DisplayAlertAsync("Error", "Please select a Blood Group.", "OK");
                 return false;
@@ -114,7 +120,7 @@ namespace Hospital_Management_System.ViewModels
             }
             else if (String.IsNullOrEmpty(Age))
             {
-                if(!(int.TryParse(Age, out int ageValue)))
+                if (!(int.TryParse(Age, out int ageValue)))
                 {
                     Shell.Current.DisplayAlertAsync("Error", "Please enter a valid Age.", "OK");
                     return false;
@@ -157,7 +163,7 @@ namespace Hospital_Management_System.ViewModels
         public async Task AddPatient()
         {
             //Merges The Date And time from the separate pickers into one Datetime object
-            AppointmentDate = AppointmentDate+AppointmentTime;
+            AppointmentDate = AppointmentDate + AppointmentTime;
             //Verifies that no input is left empty 
             if (VerifyPatient())
             {
@@ -173,13 +179,13 @@ namespace Hospital_Management_System.ViewModels
                     EmergencyContactName = EmergencyContactName,
                     EmergencyContactPhone = EmergencyContactPhone
                 };
-                
+
                 await _patientService.AddPatient(_patient);
                 Appointment appointment = new()
                 {
                     DoctorID = DoctorSelected.DoctorId,
                     CreatedByStaff = ReceptionistViewModel.user.DocOrStaffId,
-                    PatientID= _patient.PatientId,
+                    PatientID = _patient.PatientId,
                     AppointmentDate = AppointmentDate ?? DateTime.Now,
                     Status = "Scheduled",
                     Reason = Reason
@@ -209,23 +215,50 @@ namespace Hospital_Management_System.ViewModels
             }
         }
         [RelayCommand]
-        public async Task LoadAppointments()
+        public async Task LoadScheduledAppointments()
         {
-            Appointments = new ObservableCollection<Appointment>(await _appointmentService.GetAllAppointmentsAsync());
+            Appointments = new ObservableCollection<Appointment>(await _appointmentService.GetScheduledAppointmentsAsync());
         }
+
         [RelayCommand]
         public void ShowNewAppointment()
         {
             ToggleManageAppointment = false;
             ToggleNewAppointment = true;
+            ToggleAllAppointment = false;
         }
         [RelayCommand]
         public async Task ShowManageAppointment()
         {
             ToggleNewAppointment = false;
             ToggleManageAppointment = true;
-            await LoadAppointments();
+            ToggleAllAppointment = false;
+            await LoadScheduledAppointments();
         }
-
+        [RelayCommand]
+        public async Task OnTapped(Appointment appointment)
+        {
+            await Shell.Current.GoToAsync(nameof(AppointmentView), true, new Dictionary<string, object>
+            {
+                { "SelectedAppointment",appointment}
+            });
+        }
+        [RelayCommand]
+        public  void ShowAllAppointment()
+        {
+            ToggleNewAppointment = false;
+            ToggleManageAppointment = false;
+            ToggleAllAppointment = true;
+            LoadAllAppointments();
+        }
+        public async Task OnAppearing()
+        {
+            await LoadScheduledAppointments();
+        }
+        private async void LoadAllAppointments()
+        {
+            var _appointmentRepository=MauiProgram.Services.GetRequiredService<AppointmentRepository>();
+            Appointments =new ObservableCollection<Appointment>(await _appointmentRepository.GetAllAppointmentsAsync());
+        }
     }
 }

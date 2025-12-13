@@ -89,6 +89,7 @@ namespace Hospital_Management_System.Repository
                 appointments.Add(appointment);
             }
             return appointments;
+
         }
         public async Task<List<Appointment>> GetAppointmentsByDocIDAsync(int docID)
         {
@@ -194,6 +195,55 @@ namespace Hospital_Management_System.Repository
             }
 
             return appointments;
+        }
+        public async Task<bool> UpdateAppointmentStatusAsync(int appointmentID, string status)
+        {
+            try
+            {
+                using SqlConnection connection = new(_connectionString);
+                string query = "UPDATE Appointment SET Status = @Status WHERE AppointmentID = @AppointmentID";
+                using SqlCommand command = new(query, connection);
+                command.Parameters.AddWithValue("@Status", status);
+                command.Parameters.AddWithValue("@AppointmentID", appointmentID);
+                await connection.OpenAsync();
+                int rowsAffected = await command.ExecuteNonQueryAsync();
+                return rowsAffected > 0;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error updating appointment status: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<List<Appointment>> GetScheduledAppointments()
+        {
+            List<Appointment> appointments = new();
+            using SqlConnection connection = new(_connectionString);
+            string query = "SELECT AppointmentID, PatientID, DoctorID, CreatedByStaffID, ScheduledAt, Reason, Status FROM Appointment Where Status='Scheduled'";
+            await connection.OpenAsync();
+            using SqlCommand command = new(query, connection);
+            using SqlDataReader reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                Appointment appointment = new()
+                {
+                    AppointmentID = reader.GetInt32(0),
+                    PatientID = reader.GetInt32(1),
+                    DoctorID = reader.GetInt32(2),
+                    CreatedByStaff = reader.GetInt32(3),
+                    AppointmentDate = reader.GetDateTime(4),
+                    Reason = reader.GetString(5),
+                    Status = reader.GetString(6)
+                };
+                if (appointment.Status.Equals("Scheduled"))
+                { 
+                 appointments.Add(appointment);
+                }
+                
+            }
+            return appointments;
+
         }
     }
 }

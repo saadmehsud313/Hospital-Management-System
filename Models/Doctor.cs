@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Hospital_Management_System.Models
 {
-    public class Doctor
+    public class Doctor : Staff
     {
         int _doctorId;
         int _staffID;

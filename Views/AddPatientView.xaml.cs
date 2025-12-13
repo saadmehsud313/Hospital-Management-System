@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 namespace Hospital_Management_System.Views;
     public partial class AddPatientView : ContentPage
     {
+    AddPatientViewModel _viewModel;
         public AddPatientView(AddPatientViewModel vm)
         {
             InitializeComponent();
-            BindingContext = vm;
+            BindingContext =_viewModel =vm;
 
     }
     private void ChangePasswordClicked(object sender, EventArgs e)
@@ -66,5 +67,11 @@ namespace Hospital_Management_System.Views;
         {
             Debug.WriteLine("Button is null");
         }
+    }
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await _viewModel.OnAppearing();
+
     }
 }

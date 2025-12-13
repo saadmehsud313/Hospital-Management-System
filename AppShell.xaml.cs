@@ -7,6 +7,7 @@ namespace Hospital_Management_System
         public AppShell(string role)
         {
             InitializeComponent();
+            Routing.RegisterRoute(nameof(AppointmentView),typeof(AppointmentView));
             SetupFlyout(role);
         }
         public void SetupFlyout(string role)

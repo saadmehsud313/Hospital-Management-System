@@ -23,6 +23,9 @@ namespace Hospital_Management_System.Services
         {
             return await _doctorRepository.GetDocIDByStaffId(staffId);
         }
-
+        public async Task<Doctor> GetDoctorByIDAsync(int doctorId)
+        {
+            return await _doctorRepository.GetDoctorByIDAsync(doctorId);
+        }
     }
 }

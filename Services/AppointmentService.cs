@@ -23,9 +23,9 @@ namespace Hospital_Management_System.Services
             return await _appointmentRepository.AddAppointmentAsync(appointment);
             //return true;
         }
-        public async Task<List<Appointment>> GetAllAppointmentsAsync()
+        public async Task<List<Appointment>> GetScheduledAppointmentsAsync()
         {
-            return await _appointmentRepository.GetAllAppointmentsAsync();
+            return await _appointmentRepository.GetScheduledAppointments();
         }
         public async Task<List<Appointment>> GetTodayAppointmentsByDocID(int docID)
         {
@@ -39,7 +39,12 @@ namespace Hospital_Management_System.Services
         {
             return await _appointmentRepository.GetHistoryAppointmentsByDocIDAsync(docID);
         }
+        public async Task<bool> UpdateAppointmentStatusAsync(int appointmentID, string status)
+        {
+            return await _appointmentRepository.UpdateAppointmentStatusAsync(appointmentID, status);
+        }
 
     }
+
 
 }

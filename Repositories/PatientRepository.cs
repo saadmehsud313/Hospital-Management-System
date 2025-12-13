@@ -26,12 +26,12 @@ namespace Hospital_Management_System.Repository
                 using SqlConnection connect = new(_connectionString);
 
                 string query = @"
-        INSERT INTO PATIENT 
-        (PatientId, FirstName, LastName, MRN, Gender, Phone, BloodGroup, 
-         EmergencyContactName, EmergencyContactPhone, CreatedAt, IsActive, Age)
-        VALUES 
-        (@PatientId, @FirstName, @LastName, @MRN, @Gender, @Phone, @BloodGroup, 
-         @EmergencyContactName, @EmergencyContactPhone, @CreatedAt, @IsActive, @Age)";
+                            INSERT INTO PATIENT 
+                            (PatientId, FirstName, LastName, MRN, Gender, Phone, BloodGroup, 
+                             EmergencyContactName, EmergencyContactPhone, CreatedAt, IsActive, Age)
+                            VALUES 
+                            (@PatientId, @FirstName, @LastName, @MRN, @Gender, @Phone, @BloodGroup, 
+                             @EmergencyContactName, @EmergencyContactPhone, @CreatedAt, @IsActive, @Age)";
 
                 using SqlCommand command = new(query, connect);
 
@@ -72,7 +72,7 @@ namespace Hospital_Management_System.Repository
                 {
                     Debug.WriteLine(reader.GetInt32(0));
                     return reader.GetInt32(0);
-                    
+
                 }
                 else
                 {
@@ -80,11 +80,51 @@ namespace Hospital_Management_System.Repository
                 }
             }
             catch (Exception e)
-             {
-                await  Shell.Current.DisplayAlertAsync("Error",$"Error:{e.Message}", "OK");
+            {
+                await Shell.Current.DisplayAlertAsync("Error", $"Error:{e.Message}", "OK");
                 return 0;
             }
         }
+        public async Task<Patient> GetPatientAsync(int patientId)
+        {
+            try
+            {
+                using SqlConnection connect = new(_connectionString);
+                await connect.OpenAsync();
+                string query = $"SELECT * FROM Patient WHERE PatientId = @PatientId";
+                using SqlCommand command = new(query, connect);
+                command.Parameters.AddWithValue("@PatientId", patientId);
+                using SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (await reader.ReadAsync())
+                {
+                    Patient patient = new Patient
+                    {
+                        PatientId = reader.GetInt32(reader.GetOrdinal("PatientId")),
+                        FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                        LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                        MRN = reader.GetString(reader.GetOrdinal("MRN")),
+                        CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
+                        Gender = reader.GetString(reader.GetOrdinal("Gender")),
+                        IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
+                        Phone = reader.GetString(reader.GetOrdinal("Phone")),
+                        BloodGroup = reader.GetString(reader.GetOrdinal("BloodGroup")),
+                        EmergencyContactName = reader.GetString(reader.GetOrdinal("EmergencyContactName")),
+                        EmergencyContactPhone = reader.GetString(reader.GetOrdinal("EmergencyContactPhone")),
+                        Age = reader.GetInt32(reader.GetOrdinal("Age"))
+                    };
+                    return patient;
 
+                }
+                else {
+                    return null;
+                }
+            }
+
+            catch (Exception e)
+            {
+                await Shell.Current.DisplayAlertAsync("Error", $"Error: {e.Message}", "OK");
+                return null;
+            }
+        }
+        }
     }
-}

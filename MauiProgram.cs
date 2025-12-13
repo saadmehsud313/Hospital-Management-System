@@ -67,7 +67,9 @@ namespace Hospital_Management_System
             builder.Services.AddTransient<Patient>();
             builder.Services.AddTransient<PatientService>();
             builder.Services.AddSingleton<AddPatientView>();
+            builder.Services.AddTransient<AppointmentView>();
             builder.Services.AddSingleton<AddPatientViewModel>();
+            builder.Services.AddTransient<AppointmentViewModel>();
             builder.Services.AddTransient<Doctor>();
             builder.Services.AddTransient<DoctorService>();
             builder.Services.AddSingleton<DoctorViewModel>();

@@ -25,6 +25,9 @@ namespace Hospital_Management_System.Services
             patient.MRN = createdAt + '-' + patient.PatientId;
             return await _patientRepository.AddPatientAsync(patient);
         }
-        
+        public async Task<Patient> GetPatient(int patientId)
+        {
+            return await _patientRepository.GetPatientAsync(patientId);
+        }
     }
 }

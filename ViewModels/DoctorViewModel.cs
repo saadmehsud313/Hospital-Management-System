@@ -508,7 +508,8 @@ namespace Hospital_Management_System.ViewModels
         private async Task LoadHistoryAppointments()
         {
             try
-            { int docID = await _doctorService.GetDocIDByStaffId(staff.StaffID);
+            {
+                int docID = await _doctorService.GetDocIDByStaffId(staff.StaffID);
                 var appointments = await _appointmentService.GetHistoryAppointmentByDocID(docID);
 
                     HistoryAppointments.Clear();
