@@ -234,5 +234,9 @@ namespace Hospital_Management_System.ViewModels
             PatientId = presentAppointment.PatientID.ToString();
             AppointmentId = presentAppointment.DoctorID.ToString();
         }
+        //public async Task OnAppearing()
+        //{
+
+        //}
     }
 }

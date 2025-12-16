@@ -4,9 +4,17 @@ namespace Hospital_Management_System.Views;
 
 public partial class VisitPage : ContentPage
 {
-	public VisitPage(VisitManagementViewModel vm)
+	private readonly VisitManagementViewModel _viewModel;
+    public VisitPage(VisitManagementViewModel vm)
 	{
 		InitializeComponent();
-		BindingContext = vm;
+		BindingContext = _viewModel = vm;
     }
+
+	protected override void OnAppearing()
+	{
+		base.OnAppearing();
+		//_viewModel.OnAppearing();
+    }
+
 }

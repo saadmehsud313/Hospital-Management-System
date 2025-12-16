@@ -100,13 +100,25 @@ namespace Hospital_Management_System.ViewModels
             }
         }
 
+
+        private bool HasSpecialChars(string yourString)
+        {
+            return yourString.Any(ch => !char.IsLetterOrDigit(ch));
+        }
         //Verify all required fields are filled
         private bool VerifyPatient()
         {
             if (FirstName.IsWhiteSpace() || LastName is null)
             {
+                
                 Shell.Current.DisplayAlertAsync("Error", "First Name and Last Name are required.", "OK");
                 return false;
+            }
+            else if ((HasSpecialChars(FirstName) && FirstName.Length > 10) || (HasSpecialChars(LastName) && LastName.Length>10))
+            {
+                Shell.Current.DisplayAlertAsync("Error", "First Name or Last Name contains special characters or is too long.", "OK");
+                return false;
+
             }
             else if (AppointmentDate.Equals(null))
             {
@@ -120,17 +132,17 @@ namespace Hospital_Management_System.ViewModels
             }
             else if (String.IsNullOrEmpty(Age))
             {
-                if (!(int.TryParse(Age, out int ageValue)))
-                {
-                    Shell.Current.DisplayAlertAsync("Error", "Please enter a valid Age.", "OK");
-                    return false;
-                }
-                else if (ageValue <= 0 || ageValue > 120)
-                {
-                    Shell.Current.DisplayAlertAsync("Error", "Please enter a valid Age.", "OK");
-                    return false;
-                }
                 Shell.Current.DisplayAlertAsync("Error", "Enter a valid age.", "OK");
+                return false;
+            }
+            else if (!(int.TryParse(Age, out int ageValue)))
+            {
+                Shell.Current.DisplayAlertAsync("Error", "Please enter a valid Age.", "OK");
+                return false;
+            }
+            else if (ageValue <= 0 || ageValue > 120)
+            {
+                Shell.Current.DisplayAlertAsync("Error", "Please enter age between 0 and 120.", "OK");
                 return false;
             }
             else if (DoctorSelected is null)
@@ -142,12 +154,30 @@ namespace Hospital_Management_System.ViewModels
             {
                 Shell.Current.DisplayAlertAsync("Error", "Please select a Gender.", "OK");
             }
+            else if (String.IsNullOrEmpty(Phone) || Phone.Length != 11 || !Phone.All(char.IsDigit))
+            {
+                Shell.Current.DisplayAlertAsync("Error", "Please enter a valid 11-digit Phone Number.", "OK");
+                return false;
+            }
+            else if(String.IsNullOrEmpty(EmergencyContactName) || HasSpecialChars(EmergencyContactName) || EmergencyContactName.Length>20)
+            {
+                Shell.Current.DisplayAlertAsync("Error", "Emergency Contact Name is required.", "OK");
+                return false;
+            }
+            else if (!String.IsNullOrEmpty(EmergencyContactPhone) && (EmergencyContactPhone.Length != 11 || !EmergencyContactPhone.All(char.IsDigit)))
+            {
+                Shell.Current.DisplayAlertAsync("Error", "Please enter a valid 11-digit Emergency Contact Phone Number.", "OK");
+                return false;
+            }
             else
             {
                 return true;
             }
             return false;
         }
+
+
+
         //Load the staff data for the logged in user
         public void LoadStaffData()
         {

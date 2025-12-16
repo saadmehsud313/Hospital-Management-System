@@ -3,69 +3,503 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Hospital_Management_System.Views.AdmitPatientView"
              xmlns:viewmodels="clr-namespace:Hospital_Management_System.ViewModels"
-             Title="AdmitPatientView">
-    <HorizontalStackLayout VerticalOptions="Start" Background="Wheat">
+             xmlns:models="clr-namespace:Hospital_Management_System.Models"
+             Shell.NavBarIsVisible="False">
 
-        <VerticalStackLayout Margin="20,20,10,10" WidthRequest="200" Background="AntiqueWhite">
-            <Border WidthRequest="150" Margin="0,20,0,0" HeightRequest="150" BackgroundColor="Aqua">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="120"/>
-                </Border.StrokeShape>
-                <Image ></Image>
+    
+    <HorizontalStackLayout Background="#F5F7FA">
+
+        <!-- Sidebar Navigation -->
+        <VerticalStackLayout Margin="20" WidthRequest="280" Background="White" Padding="20">
+            <Border StrokeShape="RoundRectangle 60"
+                    WidthRequest="120"
+                    HeightRequest="120"
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,10"
+                    Stroke="#4A90E2"
+                    StrokeThickness="3"
+                    Background="#E8F4FF">
+                <Label Text="🤵🏾"
+                       TextColor="#4A90E2"
+                       FontSize="50"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
             </Border>
+
             <Label Text="{Binding StaffName}"
-                TextColor="Black"
-                HorizontalOptions="Center" 
-                FontSize="Medium" 
-                Padding="4" 
-                Margin="20,8,25,6"/>
-            <Label Text="{Binding StaffDepartment}" 
-                HorizontalOptions="Center" 
-                FontSize="Medium"
-                Padding="4" 
-                TextColor="Black"
-                Margin="20,8,25,6"/>
-            <Label Text="{Binding StaffRole}" 
-                HorizontalOptions="Center" 
-                FontSize="Small"
-                Padding="4" 
-                TextColor="Black"
-                Margin="20,8,25,15"/>
-            <Button Text="Admit Patien"    Background="#EC9C13">
+                   TextColor="#2C3E50"
+                   HorizontalOptions="Center"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   Margin="0,10,0,5"/>
+
+            <Label Text="{Binding StaffRole}"
+                   HorizontalOptions="Center"
+                   FontSize="14"
+                   TextColor="#7F8C8D"
+                   Margin="0,0,0,5"/>
+
+            <Border StrokeShape="RoundRectangle 15"
+                    Background="#E8F4FF"
+                    Padding="10,5"
+                    HorizontalOptions="Center"
+                    Margin="0,5,0,20">
+                <Label Text="{Binding StaffDepartment}"
+                       HorizontalOptions="Center"
+                       FontSize="12"
+                       TextColor="#4A90E2"
+                       FontAttributes="Bold"/>
+            </Border>
+
+            <BoxView Color="#E1E8ED" HeightRequest="1" Margin="0,10,0,20"/>
+
+            <Button Text="Assign Room"
+                    ImageSource="add_appointment_40.png"
+                    Command="{Binding ShowNewRoomAssignmentCommand}"
+                    Background="Transparent">
                 <Button.Style>
                     <Style TargetType="Button">
-                        <Setter Property="TextColor" Value="White"/>
-                        <Setter Property="WidthRequest" Value="150"/>
-                        <Setter Property="Padding" Value="10"/>
-                        <Setter Property="Margin" Value="0,35,0,20"/>
-
+                        <Setter Property="TextColor" Value="#2C3E50"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Padding" Value="15,12"/>
+                        <Setter Property="Margin" Value="0,10"/>
+                        <Setter Property="CornerRadius" Value="10"/>
                     </Style>
                 </Button.Style>
-
             </Button>
-            <Button Text="Discharge Patient" Command="{Binding ToggleInfoViewCommand}" Background="#EC9C13">
+
+            <Button Text="Manage"
+                    ImageSource="cancel_appointment_logo_40.png"
+                    Command="{Binding ShowManageAssignmentCommand}"
+                    Background="Transparent">
                 <Button.Style>
                     <Style TargetType="Button">
-                        <Setter Property="BackgroundColor" Value="Green"/>
-                        <Setter Property="TextColor" Value="White"/>
-                        <Setter Property="WidthRequest" Value="150"/>
-                        <Setter Property="Padding" Value="10"/>
-                        <Setter Property="Margin" Value="0,10,0,20"/>
-
+                        <Setter Property="TextColor" Value="#2C3E50"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Padding" Value="15,12"/>
+                        <Setter Property="Margin" Value="0,5"/>
+                        <Setter Property="CornerRadius" Value="10"/>
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Text="Logout" Command="{Binding LogoutClickedCommand}" Background="#EC9C13">
+
+            <Button Text="Show History"
+                    Command="{Binding ShowAssignmentHistoryCommand}"
+                    ImageSource="update_calender_40.png"
+                    Background="Transparent">
                 <Button.Style>
                     <Style TargetType="Button">
-                        <Setter Property="BackgroundColor" Value="Green"/>
-                        <Setter Property="TextColor" Value="White"/>
-                        <Setter Property="WidthRequest" Value="150"/>
-                        <Setter Property="Padding" Value="10"/>
-                        <Setter Property="Margin" Value="0,10,0,100"/>
+                        <Setter Property="TextColor" Value="#2C3E50"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Padding" Value="15,12"/>
+                        <Setter Property="Margin" Value="0,5,0,20"/>
+                        <Setter Property="CornerRadius" Value="10"/>
                     </Style>
                 </Button.Style>
             </Button>
         </VerticalStackLayout>
+
+        <!-- Admit Requests Collection View -->
+        <ContentView IsVisible="{Binding ShowAdmitRequests}" IsEnabled="{Binding ShowAdmitRequests}">
+            <VerticalStackLayout Spacing="20" Margin="20,20,20,10">
+
+                <!-- Header -->
+                <Border StrokeShape="RoundRectangle 20" 
+                Background="White" 
+                Padding="30,20" 
+                StrokeThickness="0">
+                    <HorizontalStackLayout Spacing="10">
+                        <BoxView Color="#4A90E2" WidthRequest="4" HeightRequest="32" CornerRadius="2"/>
+                        <Label Text="🏥 Admit Requests" 
+                       FontSize="28" 
+                       TextColor="#2C3E50" 
+                       FontAttributes="Bold" 
+                       VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <!-- Total Count Badge -->
+                <Border StrokeShape="RoundRectangle 15" 
+                Background="#E8F4FF" 
+                Padding="15,10" 
+                Margin="0,0,0,15" 
+                HorizontalOptions="Start">
+                    <Label Text="{Binding TotalAdmitRequests, StringFormat='Total Requests: {0}'}" 
+                   FontSize="14" 
+                   TextColor="#4A90E2"
+                   FontAttributes="Bold"/>
+                </Border>
+
+                <!-- Admit Requests Collection -->
+                <CollectionView ItemsSource="{Binding AdmitRequests}" 
+                        SelectionMode="None"
+                        Margin="0"
+                        EmptyView="No admit requests available.">
+                    <CollectionView.ItemTemplate>
+                        <!--x:DataType="models:AdmitRequest"-->
+                        <DataTemplate >
+                            <Border StrokeShape="RoundRectangle 15" 
+                            Background="White" 
+                            Padding="25"
+                            Margin="0,0,0,15"
+                            StrokeThickness="0">
+
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" 
+                              ColumnDefinitions="*,*"
+                              ColumnSpacing="20"
+                              RowSpacing="15">
+
+                                    <!-- Row 0: Request ID & Status -->
+                                    <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                                        <Label Text="Request ID" 
+                                       FontSize="11" 
+                                       TextColor="#7F8C8D"
+                                       FontAttributes="Bold"/>
+                                        <Label Text="{Binding RequestID}" 
+                                       TextColor="#4A90E2"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       Margin="0,5,0,0"/>
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Row="0" Grid.Column="1" HorizontalOptions="End">
+                                        <Label Text="Status" 
+                                       FontSize="11" 
+                                       TextColor="#7F8C8D"
+                                       FontAttributes="Bold"/>
+                                        <Border StrokeShape="RoundRectangle 12"
+                                        Background="{Binding StatusColor}"
+                                        Padding="12,6"
+                                        Margin="0,5,0,0"
+                                        HorizontalOptions="End">
+                                            <Label Text="{Binding Status}" 
+                                           TextColor="White"
+                                           FontSize="13"
+                                           FontAttributes="Bold"/>
+                                        </Border>
+                                    </VerticalStackLayout>
+
+                                    <!-- Row 1: Divider -->
+                                    <BoxView Grid.Row="1" 
+                                     Grid.ColumnSpan="2" 
+                                     HeightRequest="1" 
+                                     Color="#E1E8ED"/>
+
+                                    <!-- Row 2: Patient Information -->
+                                    <VerticalStackLayout Grid.Row="2" Grid.Column="0">
+                                        <Label Text="Patient Information" 
+                                       FontSize="11" 
+                                       TextColor="#7F8C8D"
+                                       FontAttributes="Bold"/>
+                                        <HorizontalStackLayout Spacing="5" Margin="0,5,0,0">
+                                            <Label Text="👤" FontSize="16" VerticalOptions="Center"/>
+                                            <Label Text="{Binding PatientName}" 
+                                           TextColor="#2C3E50"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Center"/>
+                                        </HorizontalStackLayout>
+                                        <Label Text="{Binding PatientID, StringFormat='ID: {0}'}" 
+                                       TextColor="#7F8C8D"
+                                       FontSize="13"
+                                       Margin="21,2,0,0"/>
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Row="2" Grid.Column="1">
+                                        <Label Text="Patient Details" 
+                                       FontSize="11" 
+                                       TextColor="#7F8C8D"
+                                       FontAttributes="Bold"/>
+                                        <Label Text="{Binding PatientAge, StringFormat='Age: {0} years'}" 
+                                       TextColor="#2C3E50"
+                                       FontSize="14"
+                                       Margin="0,5,0,2"/>
+                                        <Label Text="{Binding PatientGender, StringFormat='Gender: {0}'}" 
+                                       TextColor="#2C3E50"
+                                       FontSize="14"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Row 3: Doctor & Visit Information -->
+                                    <VerticalStackLayout Grid.Row="3" Grid.Column="0">
+                                        <Label Text="Requesting Doctor" 
+                                       FontSize="11" 
+                                       TextColor="#7F8C8D"
+                                       FontAttributes="Bold"/>
+                                        <Label Text="{Binding DoctorName}" 
+                                       TextColor="#2C3E50"
+                                       FontSize="15"
+                                       FontAttributes="Bold"
+                                       Margin="0,5,0,2"/>
+                                        <Label Text="{Binding DoctorSpecialization}" 
+                                       TextColor="#4A90E2"
+                                       FontSize="13"
+                                       FontAttributes="Bold"/>
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Row="3" Grid.Column="1">
+                                        <Label Text="Visit Date" 
+                                       FontSize="11" 
+                                       TextColor="#7F8C8D"
+                                       FontAttributes="Bold"/>
+                                        <Label Text="{Binding VisitDate, StringFormat='{0:dd MMM yyyy, hh:mm tt}'}" 
+                                       TextColor="#2C3E50"
+                                       FontSize="14"
+                                       Margin="0,5,0,0"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Row 4: Reason & Action Button -->
+                                    <VerticalStackLayout Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+                                        <Label Text="Reason for Admission" 
+                                       FontSize="11" 
+                                       TextColor="#7F8C8D"
+                                       FontAttributes="Bold"/>
+                                        <Label Text="{Binding Reason}" 
+                                       TextColor="#2C3E50"
+                                       FontSize="14"
+                                       LineBreakMode="WordWrap"
+                                       Margin="0,5,0,10"/>
+
+                                        <!-- Action Button -->
+                                        <Button Text="Process Admission"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:YourViewModel}}, Path=ProcessAdmissionCommand}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#27AE60"
+                                        TextColor="White"
+                                        FontSize="15"
+                                        FontAttributes="Bold"
+                                        CornerRadius="10"
+                                        Padding="15,10"
+                                        HorizontalOptions="End"
+                                        IsEnabled="{Binding IsPending}"/>
+                                    </VerticalStackLayout>
+
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ContentView>
+        <!-- Manage Room Assignments List -->
+        <ContentView IsVisible="{Binding ToggleManageAssignment}" IsEnabled="{Binding ToggleManageAssignment}">
+            <ScrollView Margin="20,20,20,10" WidthRequest="900">
+                <VerticalStackLayout>
+
+                    <!-- Header -->
+                    <Border StrokeShape="RoundRectangle 20"
+                            Background="White"
+                            Padding="30,20"
+                            Margin="0,0,0,20"
+                            StrokeThickness="0">
+                        <HorizontalStackLayout Spacing="10">
+                            <BoxView Color="#4A90E2" WidthRequest="4" HeightRequest="32" CornerRadius="2"/>
+                            <Label Text="Current Room Assignments"
+                                   FontSize="28"
+                                   TextColor="#2C3E50"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Room Assignments List -->
+                    <CollectionView ItemsSource="{Binding RoomAssignments}"
+                                    SelectionMode="None"
+                                    SelectedItem="{Binding SelectedRoomAssignment}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical"
+                                               ItemSpacing="5"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:RoomAssignment">
+                                <Border StrokeShape="RoundRectangle 15"
+                                        Background="White"
+                                        Padding="25"
+                                        Margin="0,0,0,20"
+                                        StrokeThickness="0">
+
+                                    <Grid RowDefinitions="Auto"
+                                          ColumnDefinitions="*,*,*,*"
+                                          ColumnSpacing="20"
+                                          RowSpacing="10">
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RoomAssignmentViewModel}}, Path=RoomTappedCommand}"
+                                                                  CommandParameter="{Binding .}"/>
+                                        </Grid.GestureRecognizers>
+
+                                        <!-- Patient ID -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                                            <Label Text="Patient ID"
+                                                   FontSize="11"
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding PatientID}"
+                                                   TextColor="#4A90E2"
+                                                   FontSize="15"
+                                                   FontAttributes="Bold"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+
+                                        <!-- Room ID -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                                            <Label Text="Room ID"
+                                                   FontSize="11"
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding RoomID}"
+                                                   TextColor="#2C3E50"
+                                                   FontSize="15"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+
+                                        <!-- Nurse ID -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="2">
+                                            <Label Text="Nurse ID"
+                                                   FontSize="11"
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding NurseID}"
+                                                   TextColor="#2C3E50"
+                                                   FontSize="15"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+
+                                        <!-- Admit Date -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="3">
+                                            <Label Text="Admit Date"
+                                                   FontSize="11"
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding AdmitDate, StringFormat='{0:yyyy-MM-dd}'}"
+                                                   TextColor="#2C3E50"
+                                                   FontSize="15"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
+        </ContentView>
+
+        <!-- Room Assignment History -->
+        <ContentView IsVisible="{Binding ToggleAssignmentHistory}" IsEnabled="{Binding ToggleAssignmentHistory}">
+            <ScrollView Margin="20,20,20,10" WidthRequest="900">
+                <VerticalStackLayout>
+
+                    <!-- Header -->
+                    <Border StrokeShape="RoundRectangle 20"
+                            Background="White"
+                            Padding="30,20"
+                            Margin="0,0,0,20"
+                            StrokeThickness="0">
+                        <HorizontalStackLayout Spacing="10">
+                            <BoxView Color="#4A90E2" WidthRequest="4" HeightRequest="32" CornerRadius="2"/>
+                            <Label Text="Assignment History"
+                                   FontSize="28"
+                                   TextColor="#2C3E50"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- History List -->
+                    <CollectionView ItemsSource="{Binding RoomAssignmentHistory}"
+                                    SelectionMode="None"
+                                    SelectedItem="{Binding SelectedRoomAssignmentHistory}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical"
+                                               ItemSpacing="5"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:RoomAssignment">
+                                <Border StrokeShape="RoundRectangle 15"
+                                        Background="White"
+                                        Padding="25"
+                                        Margin="0,0,0,20"
+                                        StrokeThickness="0">
+
+                                    <Grid RowDefinitions="Auto"
+                                          ColumnDefinitions="*,*,*,*,*"
+                                          ColumnSpacing="20"
+                                          RowSpacing="10">
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RoomAssignmentViewModel}}, Path=RoomHistoryTappedCommand}"
+                                                                  CommandParameter="{Binding .}"/>
+                                        </Grid.GestureRecognizers>
+
+                                        <!-- Patient ID -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                                            <Label Text="Patient ID"
+                                                   FontSize="11"
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding PatientID}"
+                                                   TextColor="#4A90E2"
+                                                   FontSize="15"
+                                                   FontAttributes="Bold"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+
+                                        <!-- Room ID -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                                            <Label Text="Room ID"
+                                                   FontSize="11"
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding RoomID}"
+                                                   TextColor="#2C3E50"
+                                                   FontSize="15"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+
+                                        <!-- Nurse ID -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="2">
+                                            <Label Text="Nurse ID"
+                                                   FontSize="11"
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding NurseID}"
+                                                   TextColor="#2C3E50"
+                                                   FontSize="15"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+
+                                        <!-- Admit Date -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="3">
+                                            <Label Text="Admit Date"
+                                                   FontSize="11"
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding AdmitDate, StringFormat='{0:yyyy-MM-dd}'}"
+                                                   TextColor="#2C3E50"
+                                                   FontSize="15"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+
+                                        <!-- Discharge Date -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="4">
+                                            <Label Text="Discharge Date"
+                                                   FontSize="11"
+                                                   TextColor="#7F8C8D"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding DischargeDate, StringFormat='{0:yyyy-MM-dd}'}"
+                                                   TextColor="#2C3E50"
+                                                   FontSize="15"
+                                                   Margin="0,5,0,0"/>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
+        </ContentView>
+
     </HorizontalStackLayout>
+
 </ContentPage>

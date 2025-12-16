@@ -40,7 +40,7 @@ namespace Hospital_Management_System.Views;
         {
             // Modern hover effect with blue theme
             button.TextColor = Colors.White;
-            button.Background = Color.FromArgb("#4A90E2");
+            button.Background = Color.FromArgb("s");
             button.FontAttributes = FontAttributes.Bold;
             button.BorderWidth = 0;
 

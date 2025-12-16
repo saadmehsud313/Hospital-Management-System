@@ -4,9 +4,15 @@ namespace Hospital_Management_System.Views;
 
 public partial class DoctorPage : ContentPage
 {
-	public DoctorPage(DoctorViewModel model)
+	private readonly DoctorViewModel _viewModel;
+    public DoctorPage(DoctorViewModel model)
 	{
 		InitializeComponent();
-		BindingContext=model;
+		BindingContext= _viewModel =model;
+    }
+	protected override void OnAppearing()
+	{
+		base.OnAppearing();
+		_viewModel.OnAppearing();
     }
 }

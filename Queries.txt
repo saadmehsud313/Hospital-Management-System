@@ -180,3 +180,50 @@ CREATE TABLE ROOM_ASSIGNMENT (
     CONSTRAINT FK_RoomAssignment_Staff FOREIGN KEY (AssignedByStaffID) REFERENCES STAFF(StaffID),
     CONSTRAINT UQ_Nurse_Room_Date_Shift UNIQUE (NurseID, RoomID, AssignmentDate, Shift)
 );
+--Stored Procedure For Insert Patient 
+CREATE PROCEDURE InsertPatient
+(
+    @FirstName VARCHAR(50),
+    @LastName VARCHAR(50),
+    @Gender VARCHAR(10),
+    @Phone VARCHAR(20),
+    @BloodGroup VARCHAR(5),
+    @EmergencyContactName VARCHAR(50),
+    @EmergencyContactPhone VARCHAR(20),
+    @CreatedAt DATETIME,
+    @IsActive BIT,
+    @Age INT
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Patient
+    (
+        MRN,  -- placeholder, overwritten by trigger
+        FirstName,
+        LastName,
+        Gender,
+        Phone,
+        BloodGroup,
+        EmergencyContactName,
+        EmergencyContactPhone,
+        CreatedAt,
+        IsActive,
+        Age
+    )
+    VALUES
+    (
+        '', -- temporary value (required, NOT NULL)
+        @FirstName,
+        @LastName,
+        @Gender,
+        @Phone,
+        @BloodGroup,
+        @EmergencyContactName,
+        @EmergencyContactPhone,
+        @CreatedAt,
+        @IsActive,
+        @Age
+    );
+END;
