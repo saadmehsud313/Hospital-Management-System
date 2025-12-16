@@ -547,7 +547,12 @@ namespace Hospital_Management_System.ViewModels
             }
         }
 
-
+        [RelayCommand]
+        private async Task CreateVisit()
+        {
+            Debug.WriteLine("Visit Function Called");
+            await    Shell.Current.GoToAsync(nameof(VisitPage));
+        }
         private void ResetState()
         {
             TodayAppointments.Clear();

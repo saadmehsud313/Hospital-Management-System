@@ -5,6 +5,7 @@ using Hospital_Management_System.Models;
 using System.Diagnostics.Metrics;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq.Expressions;
 namespace Hospital_Management_System.Repository
 {
     public class AppointmentRepository
@@ -158,7 +159,7 @@ namespace Hospital_Management_System.Repository
                     await connection.OpenAsync();
 
                     // FIXED: Use SQL GETDATE() and get past appointments OR completed/cancelled
-                    string query = "exec  GetPendingAppointmentsByDocID @DoctorID";
+                    string query = "exec  GetHistoryAppointmentByDocID @DoctorID";
 
                     using (var command = new SqlCommand(query, connection))
                     {
@@ -244,6 +245,18 @@ namespace Hospital_Management_System.Repository
             }
             return appointments;
 
+        }
+        public async Task<bool> UpdatAppointmentAsync(Appointment appointment)
+        {
+            try
+            {
+                using SqlConnection connection = new(_connectionString);
+                string query = $"Update Appointment  set ";
+                return true;
+            }
+            catch{
+                return false;
+            }
         }
     }
 }

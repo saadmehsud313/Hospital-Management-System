@@ -260,5 +260,20 @@ namespace Hospital_Management_System.ViewModels
             var _appointmentRepository=MauiProgram.Services.GetRequiredService<AppointmentRepository>();
             Appointments =new ObservableCollection<Appointment>(await _appointmentRepository.GetAllAppointmentsAsync());
         }
-    }
+        //[ObservableProperty]
+        //Color statusBadgeColor;
+        //private void UpdateStatusBadgeColor()
+        //{
+        //    StatusBadgeColor = Status?.ToLower() switch
+        //    {
+        //        "scheduled" => Color.FromArgb("#F39C12"),
+        //        "confirmed" => Color.FromArgb("#3498DB"),
+        //        "completed" => Color.FromArgb("#27AE60"),
+        //        "cancelled" => Color.FromArgb("#95A5A6"),
+        //        "no show" => Color.FromArgb("#E74C3C"),
+        //        "pending" => Color.FromArgb("#F39C12"),
+        //        _ => Color.FromArgb("#7F8C8D")
+        //    };
+        //}
+        }
 }

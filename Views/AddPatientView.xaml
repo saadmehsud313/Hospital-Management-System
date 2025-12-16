@@ -564,134 +564,83 @@
                 </VerticalStackLayout>
             </ScrollView>
         </ContentView>
-        <!-- Manage Appointments List -->
-        <ContentView IsVisible="{Binding ToggleAllAppointment}" IsEnabled="{Binding ToggleAllAppointment}">
-            <ScrollView Margin="20,20,20,10" WidthRequest="800" >
-                <VerticalStackLayout>
+        <!-- Manage Assigned Rooms List -->
 
-                    <!-- Header -->
-                    <Border StrokeShape="RoundRectangle 20" 
-                     Background="White" 
-                     Padding="30,20"
-                     Margin="0,0,0,20"
-                     StrokeThickness="0">
-                        <HorizontalStackLayout Spacing="10">
-                            <BoxView Color="#4A90E2" WidthRequest="4" HeightRequest="32" CornerRadius="2"/>
-                            <Label Text="Appointments" 
-                            FontSize="28"
-                            TextColor="#2C3E50" 
-                            FontAttributes="Bold"
-                            VerticalOptions="Center"/>
-                        </HorizontalStackLayout>
-                    </Border>
+        <ContentView >
+            <ScrollView>
+                <VerticalStackLayout Padding="15" Spacing="10">
 
-                    <!-- Appointments List -->
-                    <CollectionView ItemsSource="{Binding Appointments}" 
-                             SelectionMode="None"
-                             SelectedItem="{Binding SelectedAppointment}"
-                             >
+                    <CollectionView ItemsSource="{Binding RoomAssignments}" 
+                            SelectionMode="None"
+                            SelectedItem="{Binding SelectedRoomAssignment}">
                         <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Vertical" 
-                                        ItemSpacing="5"
-                                      />
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
                         </CollectionView.ItemsLayout>
+
                         <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:Appointment">
+                            <DataTemplate x:DataType="models:RoomAssignment">
                                 <Border StrokeShape="RoundRectangle 15" 
-                                 Background="White" 
-                                 Padding="25"
-                                 Margin="0,0,0,35"
-                                 StrokeThickness="0">
-
+                                Background="White" 
+                                Padding="20"
+                                Margin="0,0,0,20"
+                                StrokeThickness="0">
                                     <Grid RowDefinitions="Auto,Auto" 
-                                   ColumnDefinitions="*,*,*,*,*,*"
-                                   ColumnSpacing="30"
-                                   RowSpacing="10">
+                                  ColumnDefinitions="*,*,*,*,*"
+                                  ColumnSpacing="20"
+                                  RowSpacing="10">
                                         <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:AddPatientViewModel}},Path=TappedCommand}"
-                                                           CommandParameter="{Binding .}"/>
+                                            <TapGestureRecognizer 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RoomAssignmentViewModel}}, Path=RoomTappedCommand}"
+                                        CommandParameter="{Binding .}" />
                                         </Grid.GestureRecognizers>
-                                        <!-- Labels -->
+
+                                        <!-- Room Number -->
                                         <VerticalStackLayout Grid.Row="0" Grid.Column="0">
-                                            <Label Text="Appointment ID" 
-                                            FontSize="11" 
-                                            TextColor="#7F8C8D"
-                                            FontAttributes="Bold"/>
-                                            <Label Text="{Binding AppointmentID}" 
-                                            TextColor="#4A90E2"
-                                            FontSize="15"
-                                            FontAttributes="Bold"
-                                            Margin="0,5,0,0"/>
+                                            <Label Text="Room Number" FontSize="11" TextColor="#7F8C8D" FontAttributes="Bold"/>
+                                            <Label Text="{Binding RoomNumber}" FontSize="15" TextColor="#4A90E2" FontAttributes="Bold" Margin="0,5,0,0"/>
                                         </VerticalStackLayout>
 
+                                        <!-- Room Type -->
                                         <VerticalStackLayout Grid.Row="0" Grid.Column="1">
-                                            <Label Text="Patient ID" 
-                                            FontSize="11" 
-                                            TextColor="#7F8C8D"
-                                            FontAttributes="Bold"/>
-                                            <Label Text="{Binding PatientID}" 
-                                            TextColor="#2C3E50"
-                                            FontSize="15"
-                                            Margin="0,5,0,0"/>
+                                            <Label Text="Room Type" FontSize="11" TextColor="#7F8C8D" FontAttributes="Bold"/>
+                                            <Label Text="{Binding RoomType}" FontSize="15" TextColor="#2C3E50" Margin="0,5,0,0"/>
                                         </VerticalStackLayout>
 
+                                        <!-- Patient ID -->
                                         <VerticalStackLayout Grid.Row="0" Grid.Column="2">
-                                            <Label Text="Doctor ID" 
-                                            FontSize="11" 
-                                            TextColor="#7F8C8D"
-                                            FontAttributes="Bold"/>
-                                            <Label Text="{Binding DoctorID}" 
-                                            TextColor="#2C3E50"
-                                            FontSize="15"
-                                            Margin="0,5,0,0"/>
+                                            <Label Text="Patient ID" FontSize="11" TextColor="#7F8C8D" FontAttributes="Bold"/>
+                                            <Label Text="{Binding PatientID}" FontSize="15" TextColor="#2C3E50" Margin="0,5,0,0"/>
                                         </VerticalStackLayout>
 
+                                        <!-- Patient Name -->
                                         <VerticalStackLayout Grid.Row="0" Grid.Column="3">
-                                            <Label Text="Date" 
-                                            FontSize="11" 
-                                            TextColor="#7F8C8D"
-                                            FontAttributes="Bold"/>
-                                            <Label Text="{Binding AppointmentDate}" 
-                                            TextColor="#2C3E50"
-                                            FontSize="15"
-                                            Margin="0,5,0,0"/>
+                                            <Label Text="Patient Name" FontSize="11" TextColor="#7F8C8D" FontAttributes="Bold"/>
+                                            <Label Text="{Binding PatientName}" FontSize="15" TextColor="#2C3E50" Margin="0,5,0,0"/>
                                         </VerticalStackLayout>
 
+                                        <!-- Status -->
                                         <VerticalStackLayout Grid.Row="0" Grid.Column="4">
-                                            <Label Text="Reason" 
-                                            FontSize="11" 
-                                            TextColor="#7F8C8D"
-                                            FontAttributes="Bold"/>
-                                            <Label Text="{Binding Reason}" 
-                                            TextColor="#2C3E50"
-                                            FontSize="15"
-                                            Margin="0,5,0,0"/>
-                                        </VerticalStackLayout>
-
-                                        <VerticalStackLayout Grid.Row="0" Grid.Column="5">
-                                            <Label Text="Status" 
-                                            FontSize="11" 
-                                            TextColor="#7F8C8D"
-                                            FontAttributes="Bold"/>
+                                            <Label Text="Status" FontSize="11" TextColor="#7F8C8D" FontAttributes="Bold"/>
                                             <Border StrokeShape="RoundRectangle 12"
-                                             Background="#E8F8F5"
-                                             Padding="8,4"
-                                             Margin="0,5,0,0"
-                                             HorizontalOptions="Start">
+                                            Background="{Binding StatusColorBackground}"
+                                            Padding="8,4"
+                                            Margin="0,5,0,0"
+                                            HorizontalOptions="Start">
                                                 <Label Text="{Binding Status}" 
-                                                TextColor="{Binding StatusColor}"
-                                                FontSize="13"
-                                                FontAttributes="Bold"/>
+                                               TextColor="{Binding StatusColor}" 
+                                               FontSize="13" 
+                                               FontAttributes="Bold"/>
                                             </Border>
                                         </VerticalStackLayout>
+
                                     </Grid>
                                 </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
+
                 </VerticalStackLayout>
             </ScrollView>
         </ContentView>
-
     </HorizontalStackLayout>
 </ContentPage>

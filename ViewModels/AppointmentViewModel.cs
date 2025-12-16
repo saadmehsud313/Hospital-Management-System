@@ -247,7 +247,7 @@ namespace Hospital_Management_System.ViewModels
                 SelectedAppointment.AppointmentDate = combinedDateTime;
                 SelectedAppointment.Reason = NewReasonForVisit;
 
-                //await _appointmentService.UpdateAppointmentAsync(SelectedAppointment);
+                await _appointmentService.UpdateAppointmentAsync(SelectedAppointment);
 
                 AppointmentDate = NewAppointmentDate;
                 AppointmentTime = NewAppointmentTime;

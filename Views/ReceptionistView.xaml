@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Hospital_Management_System.Views.ReceptionistView"
              xmlns:viewmodels="clr-namespace:Hospital_Management_System.ViewModels"
+             xmlns:models="clr-namespace:Hospital_Management_System.Models"
              x:DataType="viewmodels:ReceptionistViewModel"
              Title="Profile"
              Background="#F5F7FA"
@@ -72,6 +73,8 @@
                         </Style>
                     </Button.Style>
                 </Button>
+
+                
 
                 <Button Text="Password" Command="{Binding ToggleInfoViewCommand}" 
                         BackgroundColor="Transparent" 
@@ -434,6 +437,8 @@
                     </Border>
                 </VerticalStackLayout>
             </ContentView>
+
+           
 
         </HorizontalStackLayout>
     </ScrollView>

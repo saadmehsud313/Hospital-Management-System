@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Hospital_Management_System.Views.VisitPage"
+             xmlns:viewmodels="clr-namespace:Hospital_Management_System.ViewModels"
+             x:DataType="viewmodels:VisitManagementViewModel"
+             Title="Visit Management"
+             Background="#F5F7FA"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <Style x:Key="InputBorder" TargetType="Border">
+            <Setter Property="Stroke" Value="#E1E8ED"/>
+            <Setter Property="BackgroundColor" Value="#F8FAFB"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="StrokeShape">
+                <RoundRectangle CornerRadius="12"/>
+            </Setter>
+        </Style>
+
+        <Style x:Key="LabelBorder" TargetType="Border">
+            <Setter Property="Stroke" Value="#E1E8ED"/>
+            <Setter Property="BackgroundColor" Value="#F8FAFB"/>
+            <Setter Property="Padding" Value="16,14"/>
+            <Setter Property="StrokeShape">
+                <RoundRectangle CornerRadius="12"/>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid ColumnDefinitions="Auto,*" Background="#F5F7FA">
+
+        <!-- Left Sidebar - Doctor Information -->
+        <VerticalStackLayout Grid.Column="0" 
+                             Margin="20" 
+                             WidthRequest="280" 
+                             Background="White" 
+                             Padding="20"
+                             VerticalOptions="Fill">
+
+            <!-- Doctor Avatar -->
+            <Border StrokeShape="RoundRectangle 60" 
+                    WidthRequest="120" 
+                    HeightRequest="120" 
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,10"
+                    Stroke="#4A90E2"
+                    StrokeThickness="3"
+                    Background="#E8F4FF">
+                <Label Text="👨‍⚕️"
+                       FontSize="56"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Border>
+
+            <Label Text="{Binding DoctorName}"
+                   TextColor="#2C3E50"
+                   HorizontalOptions="Center" 
+                   FontSize="20" 
+                   FontAttributes="Bold"
+                   Margin="0,10,0,5"/>
+
+            <Label Text="{Binding DoctorId, StringFormat='ID: {0}'}" 
+                   HorizontalOptions="Center" 
+                   FontSize="14"
+                   TextColor="#7F8C8D"
+                   Margin="0,0,0,5"/>
+
+            <Border StrokeShape="RoundRectangle 15"
+                    Background="#E8F4FF"
+                    Padding="10,5"
+                    HorizontalOptions="Center"
+                    Margin="0,5,0,20">
+                <Label Text="{Binding DoctorSpecialization}" 
+                       HorizontalOptions="Center" 
+                       FontSize="12"
+                       TextColor="#4A90E2"
+                       FontAttributes="Bold"/>
+            </Border>
+
+            <BoxView Color="#E1E8ED" HeightRequest="1" Margin="0,10,0,20"/>
+
+            <!-- Doctor Details -->
+            <VerticalStackLayout Spacing="15">
+                <VerticalStackLayout>
+                    <Label Text="Department" 
+                           FontSize="11" 
+                           TextColor="#7F8C8D"
+                           FontAttributes="Bold"/>
+                    <Label Text="{Binding DoctorDepartment}" 
+                           FontSize="15" 
+                           TextColor="#2C3E50"
+                           Margin="0,5,0,0"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout>
+                    <Label Text="Email" 
+                           FontSize="11" 
+                           TextColor="#7F8C8D"
+                           FontAttributes="Bold"/>
+                    <Label Text="{Binding DoctorEmail}" 
+                           FontSize="14" 
+                           TextColor="#2C3E50"
+                           Margin="0,5,0,0"
+                           LineBreakMode="TailTruncation"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout>
+                    <Label Text="Phone" 
+                           FontSize="11" 
+                           TextColor="#7F8C8D"
+                           FontAttributes="Bold"/>
+                    <Label Text="{Binding DoctorPhone}" 
+                           FontSize="15" 
+                           TextColor="#2C3E50"
+                           Margin="0,5,0,0"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout>
+                    <Label Text="Consultation Fee" 
+                           FontSize="11" 
+                           TextColor="#7F8C8D"
+                           FontAttributes="Bold"/>
+                    <Label Text="{Binding ConsultationFee, StringFormat='${0:F2}'}" 
+                           FontSize="16" 
+                           TextColor="#27AE60"
+                           FontAttributes="Bold"
+                           Margin="0,5,0,0"/>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <BoxView Color="#E1E8ED" HeightRequest="1" Margin="0,20,0,10"/>
+
+            <!-- Back Button -->
+            <Button Text="Back" 
+                    Command="{Binding BackCommand}" 
+                    BackgroundColor="#7F8C8D" 
+                    TextColor="White" 
+                    WidthRequest="240" 
+                    HeightRequest="50" 
+                    CornerRadius="10"
+                    Margin="0,60,0,0"
+                    FontSize="16"
+                    FontAttributes="Bold"/>
+        </VerticalStackLayout>
+
+        <!-- Right Side - Visit Form -->
+        <ScrollView Grid.Column="1" 
+                    Margin="20,20,20,10"
+                    VerticalScrollBarVisibility="Always">
+
+            <Border StrokeShape="RoundRectangle 20" 
+                    Background="White" 
+                    Padding="40" 
+                    StrokeThickness="0">
+
+                <VerticalStackLayout Spacing="20">
+
+                    <!-- Header -->
+                    <HorizontalStackLayout Spacing="10" Margin="0,0,0,30">
+                        <BoxView Color="#4A90E2" WidthRequest="4" HeightRequest="32" CornerRadius="2"/>
+                        <Label Text="📋 Create Patient Visit" 
+                               FontSize="28"
+                               TextColor="#2C3E50" 
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <!-- Patient ID & Appointment ID -->
+                    <HorizontalStackLayout Spacing="20">
+                        <VerticalStackLayout WidthRequest="390">
+                            <Label Text="Patient ID" 
+                                   FontSize="12" 
+                                   TextColor="#7F8C8D" 
+                                   FontAttributes="Bold" 
+                                   Margin="0,0,0,8"/>
+                            <Border Style="{StaticResource InputBorder}">
+                                <Entry Placeholder="Enter Patient ID" 
+                                       PlaceholderColor="#95A5A6"
+                                       Text="{Binding PatientId}"
+                                       TextColor="#2C3E50"
+                                       FontSize="16"
+                                       Keyboard="Numeric"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout WidthRequest="390">
+                            <Label Text="Appointment ID (Optional)" 
+                                   FontSize="12" 
+                                   TextColor="#7F8C8D" 
+                                   FontAttributes="Bold" 
+                                   Margin="0,0,0,8"/>
+                            <Border Style="{StaticResource InputBorder}">
+                                <Entry Placeholder="Enter Appointment ID" 
+                                       PlaceholderColor="#95A5A6"
+                                       Text="{Binding AppointmentId}"
+                                       TextColor="#2C3E50"
+                                       FontSize="16"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <!-- Visit Date (Read-only) -->
+                    <VerticalStackLayout>
+                        <Label Text="Visit Date" 
+                               FontSize="12" 
+                               TextColor="#7F8C8D" 
+                               FontAttributes="Bold" 
+                               Margin="0,0,0,8"/>
+                        <Border Style="{StaticResource LabelBorder}" 
+                                WidthRequest="400" 
+                                HorizontalOptions="Start">
+                            <Label Text="{Binding VisitDate, StringFormat='{0:dd MMMM yyyy, hh:mm tt}'}" 
+                                   TextColor="#2C3E50" 
+                                   FontSize="16"
+                                   FontAttributes="Bold"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Symptoms -->
+                    <VerticalStackLayout>
+                        <Label Text="Symptoms" 
+                               FontSize="12" 
+                               TextColor="#7F8C8D" 
+                               FontAttributes="Bold" 
+                               Margin="0,0,0,8"/>
+                        <Border Style="{StaticResource InputBorder}" 
+                                WidthRequest="800" 
+                                HorizontalOptions="Start"
+                                Padding="10">
+                            <Editor Placeholder="Describe patient symptoms..." 
+                                    PlaceholderColor="#95A5A6"
+                                    Text="{Binding Symptoms}"
+                                    TextColor="#2C3E50"
+                                    FontSize="16"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="100"
+                                    AutoSize="TextChanges"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Diagnosis Summary -->
+                    <VerticalStackLayout>
+                        <Label Text="Diagnosis Summary" 
+                               FontSize="12" 
+                               TextColor="#7F8C8D" 
+                               FontAttributes="Bold" 
+                               Margin="0,0,0,8"/>
+                        <Border Style="{StaticResource InputBorder}" 
+                                WidthRequest="800" 
+                                HorizontalOptions="Start"
+                                Padding="10">
+                            <Editor Placeholder="Enter diagnosis summary..." 
+                                    PlaceholderColor="#95A5A6"
+                                    Text="{Binding DiagnosisSummary}"
+                                    TextColor="#2C3E50"
+                                    FontSize="16"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="100"
+                                    AutoSize="TextChanges"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Treatment -->
+                    <VerticalStackLayout>
+                        <Label Text="Treatment" 
+                               FontSize="12" 
+                               TextColor="#7F8C8D" 
+                               FontAttributes="Bold" 
+                               Margin="0,0,0,8"/>
+                        <Border Style="{StaticResource InputBorder}" 
+                                WidthRequest="800" 
+                                HorizontalOptions="Start"
+                                Padding="10">
+                            <Editor Placeholder="Enter treatment plan..." 
+                                    PlaceholderColor="#95A5A6"
+                                    Text="{Binding Treatment}"
+                                    TextColor="#2C3E50"
+                                    FontSize="16"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="100"
+                                    AutoSize="TextChanges"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Prescription -->
+                    <VerticalStackLayout>
+                        <Label Text="Prescription" 
+                               FontSize="12" 
+                               TextColor="#7F8C8D" 
+                               FontAttributes="Bold" 
+                               Margin="0,0,0,8"/>
+                        <Border Style="{StaticResource InputBorder}" 
+                                WidthRequest="800" 
+                                HorizontalOptions="Start"
+                                Padding="10">
+                            <Editor Placeholder="Enter prescription details..." 
+                                    PlaceholderColor="#95A5A6"
+                                    Text="{Binding Prescription}"
+                                    TextColor="#2C3E50"
+                                    FontSize="16"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="100"
+                                    AutoSize="TextChanges"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Follow-up Date & Visit Type -->
+                    <HorizontalStackLayout Spacing="20">
+                        <VerticalStackLayout WidthRequest="390">
+                            <Label Text="Follow-up Date (Optional)" 
+                                   FontSize="12" 
+                                   TextColor="#7F8C8D" 
+                                   FontAttributes="Bold" 
+                                   Margin="0,0,0,8"/>
+                            <Border Style="{StaticResource InputBorder}">
+                                <DatePicker Date="{Binding FollowUpDate}" 
+                                            MinimumDate="{Binding TodayDate}"
+                                            TextColor="#2C3E50"
+                                            FontSize="16"
+                                            BackgroundColor="Transparent"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout WidthRequest="390">
+                            <Label Text="Visit Type" 
+                                   FontSize="12" 
+                                   TextColor="#7F8C8D" 
+                                   FontAttributes="Bold" 
+                                   Margin="0,0,0,8"/>
+                            <Border Style="{StaticResource InputBorder}">
+                                <Picker SelectedItem="{Binding SelectedVisitType}"
+                                        TextColor="#2C3E50"
+                                        FontSize="16">
+                                    <Picker.Items>
+                                        <x:String>General Check Up</x:String>
+                                        <x:String>Follow Up</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </Border>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <!-- Request Admission Checkbox -->
+                    <HorizontalStackLayout Spacing="10" Margin="0,10,0,0">
+                        <CheckBox IsChecked="{Binding RequestAdmission}"
+                                  Color="#4A90E2"/>
+                        <Label Text="Request patient admission" 
+                               FontSize="16" 
+                               TextColor="#2C3E50"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <!-- Admission Reason (Visible when checkbox is checked) -->
+                    <VerticalStackLayout IsVisible="{Binding RequestAdmission}">
+                        <Label Text="Reason for Admission" 
+                               FontSize="12" 
+                               TextColor="#7F8C8D" 
+                               FontAttributes="Bold" 
+                               Margin="0,0,0,8"/>
+                        <Border Style="{StaticResource InputBorder}" 
+                                WidthRequest="800" 
+                                HorizontalOptions="Start"
+                                Padding="10">
+                            <Editor Placeholder="Enter reason for admission..." 
+                                    PlaceholderColor="#95A5A6"
+                                    Text="{Binding AdmissionReason}"
+                                    TextColor="#2C3E50"
+                                    FontSize="16"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="80"
+                                    AutoSize="TextChanges"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Action Buttons -->
+                    <HorizontalStackLayout HorizontalOptions="End" 
+                                           Margin="0,30,0,0" 
+                                           Spacing="15">
+                        <Button Text="Clear Form" 
+                                Command="{Binding ClearFormCommand}"
+                                BackgroundColor="White"
+                                TextColor="#7F8C8D"
+                                WidthRequest="150"
+                                HeightRequest="50"
+                                CornerRadius="10"
+                                BorderWidth="2"
+                                BorderColor="#E1E8ED"
+                                FontSize="15"/>
+
+                        <Button Text="Save Visit" 
+                                Command="{Binding SaveVisitCommand}"
+                                BackgroundColor="#27AE60"
+                                TextColor="White"
+                                WidthRequest="180"
+                                HeightRequest="50"
+                                CornerRadius="10"
+                                FontAttributes="Bold"
+                                FontSize="15"/>
+                    </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

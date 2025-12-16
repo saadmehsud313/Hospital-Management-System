@@ -8,6 +8,7 @@ namespace Hospital_Management_System
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(AppointmentView),typeof(AppointmentView));
+            Routing.RegisterRoute(nameof(VisitPage),typeof(VisitPage));
             SetupFlyout(role);
         }
         public void SetupFlyout(string role)
@@ -28,13 +29,23 @@ namespace Hospital_Management_System
                 });
                 Items.Add(new FlyoutItem
                 {
-                    Title="Create Appointment",
+                    Title="Manage Appointments",
                     Items =
                     {
                         new ShellContent
                         {
                             ContentTemplate=new DataTemplate(typeof(AddPatientView))
                         }
+                    }
+                });
+                Items.Add(new FlyoutItem
+                {
+                    Title="Manage Rooms",
+                    Items =
+                    {
+                        new ShellContent{
+                            ContentTemplate=new DataTemplate(typeof(RoomAssignmentPage))
+                    }
                     }
                 });
             }
@@ -52,6 +63,30 @@ namespace Hospital_Management_System
                     }
                 });
 
+            }
+            else if(role.Equals("Nurse"))
+            {
+                Items.Clear();
+                Items.Add(new FlyoutItem
+                {
+                    Title = "Profile",
+                    Items =
+                    {
+                        new ShellContent{
+                            ContentTemplate=new DataTemplate(typeof(ReceptionistView))
+                    }
+                    }
+                });
+                Items.Add(new FlyoutItem
+                {
+                    Title = "Assigned Room Details",
+                    Items =
+                    {
+                        new ShellContent{
+                            ContentTemplate=new DataTemplate(typeof(NursePage))
+                    }
+                    }
+                });
             }
         }
     }

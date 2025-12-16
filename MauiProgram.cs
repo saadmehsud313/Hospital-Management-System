@@ -74,6 +74,22 @@ namespace Hospital_Management_System
             builder.Services.AddTransient<DoctorService>();
             builder.Services.AddSingleton<DoctorViewModel>();
             builder.Services.AddTransient<DoctorPage>();
+            builder.Services.AddTransient<NursePage>();
+            builder.Services.AddTransient<NurseViewModel>();
+            builder.Services.AddTransient<NurseService>();
+            builder.Services.AddTransient<RoomAssignmentRepository>();
+            builder.Services.AddTransient<RoomAssignmentService>();
+            builder.Services.AddTransient<RoomAssignmentPage>();
+            builder.Services.AddTransient<RoomAssignmentViewModel>();
+            builder.Services.AddTransient<VisitManagementViewModel>();
+            builder.Services.AddTransient<VisitPage>();
+            builder.Services.AddTransient<NurseRepository>(
+                sp=>
+                {
+                    var dbConfig = sp.GetRequiredService<DatabaseConfig>();
+                    return new NurseRepository(dbConfig);
+                }
+                );
             builder.Services.AddTransient<DoctorRepository>(
                 sp=>
                 {

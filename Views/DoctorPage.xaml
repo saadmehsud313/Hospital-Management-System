@@ -332,7 +332,8 @@
 
                         <CollectionView ItemsSource="{Binding PendingAppointments}" 
                                         HeightRequest="480"
-                                        EmptyView="No upcoming appointments found.">
+                                        EmptyView="No upcoming appointments found."
+                                        SelectionMode="None">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="models:Appointment">
                                     <Border Padding="20" 
@@ -352,6 +353,9 @@
                                               RowDefinitions="Auto, Auto, Auto"
                                               RowSpacing="8" 
                                               ColumnSpacing="20">
+                                                <Grid.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType=x:Type viewmodels:DoctorViewModel},Path=CreateVisitCommand}"/>
+                                                </Grid.GestureRecognizers>
 
                                             <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="10" Grid.ColumnSpan="2">
                                                 <Label Text="👤" FontSize="18" VerticalOptions="Center"/>
@@ -424,7 +428,6 @@
                                Margin="0,0,0,10"/>
 
                         <CollectionView ItemsSource="{Binding HistoryAppointments}" 
-                                        x:DataType="models:Appointment"
                                         HeightRequest="480"
                                         EmptyView="No past appointments found.">
                             <CollectionView.ItemTemplate>

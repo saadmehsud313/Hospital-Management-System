@@ -43,6 +43,11 @@ namespace Hospital_Management_System.Services
         {
             return await _appointmentRepository.UpdateAppointmentStatusAsync(appointmentID, status);
         }
+        public async Task<bool> UpdateAppointmentAsync(Appointment appointment)
+        {
+            return true;
+            //return await _appointmentRepository.UpdateAppointmentAsync(appointment);
+        }
 
     }
 

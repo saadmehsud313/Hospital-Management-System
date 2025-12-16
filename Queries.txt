@@ -95,3 +95,88 @@ SELECT
 
 
                         end
+
+
+
+-- TABLE 5: VISIT
+-- ============================================
+CREATE TABLE VISIT (
+    VisitID int PRIMARY KEY,
+    PatientID int NOT NULL,
+    DoctorID int NOT NULL,
+    VisitDateTime DATETIME NOT NULL DEFAULT GETDATE(),
+    DiagnosisSummary VARCHAR(1000),
+    Symptoms VARCHAR(500),
+    Treatment VARCHAR(1000),
+    Prescription VARCHAR(1000),
+    FollowUpDate DATETIME,
+    VisitType VARCHAR(50) CHECK (VisitType IN ('Emergency', 'Regular', 'Follow-up', 'Walk-in')),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_Visit_Patient FOREIGN KEY (PatientID) REFERENCES PATIENT(PatientID) ON DELETE CASCADE,
+    CONSTRAINT FK_Visit_Doctor FOREIGN KEY (DoctorID) REFERENCES DOCTOR(DoctorID)
+);
+
+-- ============================================
+-- TABLE 6: NURSE
+-- ============================================
+CREATE TABLE NURSE (
+    NurseID int PRIMARY KEY,
+    StaffID int NOT NULL,
+    Shift VARCHAR(20) CHECK (Shift IN ('Morning', 'Evening', 'Night')),
+    Department VARCHAR(100),
+    Qualification VARCHAR(100),
+    CONSTRAINT FK_Nurse_Staff FOREIGN KEY (StaffID) REFERENCES STAFF(StaffID) ON DELETE CASCADE
+);
+
+-- ============================================
+-- TABLE 7: ROOM
+-- ============================================
+CREATE TABLE ROOM (
+    RoomID int PRIMARY KEY,
+    RoomNumber VARCHAR(20) NOT NULL UNIQUE,
+    Ward VARCHAR(100) NOT NULL,
+    RoomType VARCHAR(50) CHECK (RoomType IN ('General', 'Private', 'ICU', 'Emergency', 'Operation Theater')),
+    Capacity INT CHECK (Capacity > 0),
+    CurrentOccupancy INT DEFAULT 0 CHECK (CurrentOccupancy >= 0),
+    IsAvailable BIT DEFAULT 1,
+    DailyRate FLOAT CHECK (DailyRate >= 0),
+    CONSTRAINT CHK_Room_Occupancy CHECK (CurrentOccupancy <= Capacity)
+);
+
+-- ============================================
+-- TABLE 8: ADMISSION
+-- ============================================
+CREATE TABLE ADMISSION (
+    AdmissionID int PRIMARY KEY,
+    VisitID int NOT NULL,
+    PatientID int NOT NULL,
+    RoomID int NOT NULL,
+    AdmitDate DATETIME NOT NULL DEFAULT GETDATE(),
+    DischargeDate DATETIME,
+    Status VARCHAR(20) DEFAULT 'Admitted' CHECK (Status IN ('Admitted', 'Discharged', 'Transferred')),
+    AdmittingDoctorID int,
+    DischargeNotes VARCHAR(1000),
+    TotalCost FLOAT DEFAULT 0 CHECK (TotalCost >= 0),
+    CONSTRAINT FK_Admission_Visit FOREIGN KEY (VisitID) REFERENCES VISIT(VisitID),
+    CONSTRAINT FK_Admission_Patient FOREIGN KEY (PatientID) REFERENCES PATIENT(PatientID) ON DELETE CASCADE,
+    CONSTRAINT FK_Admission_Room FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID),
+    CONSTRAINT FK_Admission_Doctor FOREIGN KEY (AdmittingDoctorID) REFERENCES DOCTOR(DoctorID),
+    CONSTRAINT CHK_Admission_Dates CHECK (DischargeDate IS NULL OR DischargeDate > AdmitDate)
+);
+
+-- ============================================
+-- TABLE 9: ROOM_ASSIGNMENT (Junction Table)
+-- ============================================
+CREATE TABLE ROOM_ASSIGNMENT (
+    AssignmentID int PRIMARY KEY,
+    NurseID int NOT NULL,
+    RoomID int NOT NULL,
+    AssignmentDate DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
+    AssignedByStaffID int,
+    IsActive BIT DEFAULT 1,
+    Shift VARCHAR(20) CHECK (Shift IN ('Morning', 'Evening', 'Night')),
+    CONSTRAINT FK_RoomAssignment_Nurse FOREIGN KEY (NurseID) REFERENCES NURSE(NurseID) ON DELETE CASCADE,
+    CONSTRAINT FK_RoomAssignment_Room FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID),
+    CONSTRAINT FK_RoomAssignment_Staff FOREIGN KEY (AssignedByStaffID) REFERENCES STAFF(StaffID),
+    CONSTRAINT UQ_Nurse_Room_Date_Shift UNIQUE (NurseID, RoomID, AssignmentDate, Shift)
+);
