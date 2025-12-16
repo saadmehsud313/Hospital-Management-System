@@ -354,7 +354,8 @@
                                               RowSpacing="8" 
                                               ColumnSpacing="20">
                                                 <Grid.GestureRecognizers>
-                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType=x:Type viewmodels:DoctorViewModel},Path=CreateVisitCommand}"/>
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DoctorViewModel}},Path=CreateVisitCommand}"
+                                                                          CommandParameter="{Binding .}"/>
                                                 </Grid.GestureRecognizers>
 
                                             <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="10" Grid.ColumnSpan="2">

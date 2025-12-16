@@ -82,6 +82,7 @@
 
             <!-- Doctor Details -->
             <VerticalStackLayout Spacing="15">
+                <!--
                 <VerticalStackLayout>
                     <Label Text="Department" 
                            FontSize="11" 
@@ -114,19 +115,8 @@
                            FontSize="15" 
                            TextColor="#2C3E50"
                            Margin="0,5,0,0"/>
-                </VerticalStackLayout>
+                </VerticalStackLayout>-->
 
-                <VerticalStackLayout>
-                    <Label Text="Consultation Fee" 
-                           FontSize="11" 
-                           TextColor="#7F8C8D"
-                           FontAttributes="Bold"/>
-                    <Label Text="{Binding ConsultationFee, StringFormat='${0:F2}'}" 
-                           FontSize="16" 
-                           TextColor="#27AE60"
-                           FontAttributes="Bold"
-                           Margin="0,5,0,0"/>
-                </VerticalStackLayout>
             </VerticalStackLayout>
 
             <BoxView Color="#E1E8ED" HeightRequest="1" Margin="0,20,0,10"/>
@@ -139,7 +129,7 @@
                     WidthRequest="240" 
                     HeightRequest="50" 
                     CornerRadius="10"
-                    Margin="0,60,0,0"
+                    Margin="0,30,0,0"
                     FontSize="16"
                     FontAttributes="Bold"/>
         </VerticalStackLayout>
@@ -174,13 +164,11 @@
                                    TextColor="#7F8C8D" 
                                    FontAttributes="Bold" 
                                    Margin="0,0,0,8"/>
-                            <Border Style="{StaticResource InputBorder}">
-                                <Entry Placeholder="Enter Patient ID" 
-                                       PlaceholderColor="#95A5A6"
-                                       Text="{Binding PatientId}"
+                            <Border Style="{StaticResource LabelBorder}">
+                                <Label Text="{Binding PatientId}"
                                        TextColor="#2C3E50"
                                        FontSize="16"
-                                       Keyboard="Numeric"/>
+                                       />
                             </Border>
                         </VerticalStackLayout>
 
@@ -190,10 +178,8 @@
                                    TextColor="#7F8C8D" 
                                    FontAttributes="Bold" 
                                    Margin="0,0,0,8"/>
-                            <Border Style="{StaticResource InputBorder}">
-                                <Entry Placeholder="Enter Appointment ID" 
-                                       PlaceholderColor="#95A5A6"
-                                       Text="{Binding AppointmentId}"
+                            <Border Style="{StaticResource LabelBorder}">
+                                <Label Text="{Binding AppointmentId}"
                                        TextColor="#2C3E50"
                                        FontSize="16"/>
                             </Border>

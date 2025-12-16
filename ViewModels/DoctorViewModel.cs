@@ -548,10 +548,14 @@ namespace Hospital_Management_System.ViewModels
         }
 
         [RelayCommand]
-        private async Task CreateVisit()
+        private async Task CreateVisit(Appointment appointment)
         {
             Debug.WriteLine("Visit Function Called");
-            await    Shell.Current.GoToAsync(nameof(VisitPage));
+            await    Shell.Current.GoToAsync(nameof(VisitPage),true,new Dictionary<string,object>
+            {
+                {"SelectedAppointment",appointment },
+                {"Doctor",staff}
+            });
         }
         private void ResetState()
         {

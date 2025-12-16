@@ -1,14 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Hospital_Management_System.Models;
+using System.Diagnostics;
 
 namespace Hospital_Management_System.ViewModels
 {
+    [QueryProperty(nameof(PresentAppointment),"SelectedAppointment")]
+    [QueryProperty(nameof(PresentStaff),"Doctor")]
     public partial class VisitManagementViewModel : ObservableObject
     {
         // ============================================
         // DOCTOR INFORMATION (Sidebar)
         // ============================================
+        [ObservableProperty]
+        Appointment presentAppointment;
+        [ObservableProperty]
+        Staff presentStaff;
 
         [ObservableProperty]
         private string doctorName;
@@ -82,7 +89,7 @@ namespace Hospital_Management_System.ViewModels
         public VisitManagementViewModel()
         {
             // Initialize with default values or load doctor data
-            // LoadDoctorData();
+             LoadDoctorData();
         }
 
         // ============================================
@@ -165,13 +172,30 @@ namespace Hospital_Management_System.ViewModels
         // HELPER METHODS (For Loading Data)
         // ============================================
 
-        public void LoadDoctorData(string doctorId)
+        public void LoadDoctorData()
         {
             // TODO: Load doctor data from service
             // var doctor = await _doctorService.GetDoctorByIdAsync(doctorId);
             // DoctorName = doctor.FullName;
             // DoctorId = doctor.DoctorId;
             // etc...
+        }
+        partial void OnPresentAppointmentChanged(Appointment value)
+        {
+            if (value != null)
+            {
+                LoadAppointmentData(value);
+            }
+        }
+        public void LoadAppointmentData(Appointment presentAppointment)
+        {
+            if (presentAppointment == null)
+            {
+                Debug.WriteLine("No appointment data provided.");
+                return;
+            }
+            PatientId = presentAppointment.PatientName;
+            DoctorId = presentAppointment.DoctorID.ToString();
         }
     }
 }
