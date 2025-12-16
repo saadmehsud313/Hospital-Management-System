@@ -83,6 +83,14 @@ namespace Hospital_Management_System
             builder.Services.AddTransient<RoomAssignmentViewModel>();
             builder.Services.AddTransient<VisitManagementViewModel>();
             builder.Services.AddTransient<VisitPage>();
+            builder.Services.AddTransient<VisitService>();
+            builder.Services.AddTransient<PatientRepository>(
+                sp=>
+                {
+                    var dbConfig = sp.GetRequiredService<DatabaseConfig>();
+                    return new PatientRepository(dbConfig);
+                }
+                );
             builder.Services.AddTransient<NurseRepository>(
                 sp=>
                 {
@@ -97,12 +105,13 @@ namespace Hospital_Management_System
                     return new DoctorRepository(dbConfig);
                 }
                 );
-            builder.Services.AddTransient<PatientRepository>(sp=>
-            {
-                var dbConfig = sp.GetRequiredService<DatabaseConfig>();
-                return new PatientRepository(dbConfig);
-            });
-            
+            builder.Services.AddTransient<VisitRepository>(
+                sp=>
+                {
+                    var dbConfig = sp.GetRequiredService<DatabaseConfig>();
+                    return new VisitRepository(dbConfig);
+                }
+                );
             builder.Services.AddSingleton<DatabaseConfig>(new DatabaseConfig
                 {
                 ConnectionString = @"Data Source=127.0.0.1,1433;Database=HospitalDatabase;User ID=saadmehsud;password=mrcomputer313;Encrypt=false;TrustServerCertificate=true;Connect Timeout=30;"

@@ -115,7 +115,8 @@ namespace Hospital_Management_System.Repository
                     return patient;
 
                 }
-                else {
+                else
+                {
                     return null;
                 }
             }
@@ -126,5 +127,7 @@ namespace Hospital_Management_System.Repository
                 return null;
             }
         }
-        }
+
     }
+
+}

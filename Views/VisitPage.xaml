@@ -82,7 +82,6 @@
 
             <!-- Doctor Details -->
             <VerticalStackLayout Spacing="15">
-                <!--
                 <VerticalStackLayout>
                     <Label Text="Department" 
                            FontSize="11" 
@@ -93,7 +92,6 @@
                            TextColor="#2C3E50"
                            Margin="0,5,0,0"/>
                 </VerticalStackLayout>
-
                 <VerticalStackLayout>
                     <Label Text="Email" 
                            FontSize="11" 
@@ -105,7 +103,6 @@
                            Margin="0,5,0,0"
                            LineBreakMode="TailTruncation"/>
                 </VerticalStackLayout>
-
                 <VerticalStackLayout>
                     <Label Text="Phone" 
                            FontSize="11" 
@@ -115,7 +112,7 @@
                            FontSize="15" 
                            TextColor="#2C3E50"
                            Margin="0,5,0,0"/>
-                </VerticalStackLayout>-->
+                </VerticalStackLayout>
 
             </VerticalStackLayout>
 
@@ -319,8 +316,10 @@
                                         TextColor="#2C3E50"
                                         FontSize="16">
                                     <Picker.Items>
-                                        <x:String>General Check Up</x:String>
-                                        <x:String>Follow Up</x:String>
+                                        <x:String>Emergency</x:String>
+                                        <x:String>Follow-up</x:String>
+                                        <x:String>Regular</x:String>
+                                        <x:String>Walk-up</x:String>
                                     </Picker.Items>
                                 </Picker>
                             </Border>

@@ -29,5 +29,6 @@ namespace Hospital_Management_System.Services
         {
             return await _patientRepository.GetPatientAsync(patientId);
         }
+        
     }
 }

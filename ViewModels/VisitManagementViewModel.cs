@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Hospital_Management_System.Models;
+using Hospital_Management_System.Services;
 using System.Diagnostics;
 
 namespace Hospital_Management_System.ViewModels
@@ -12,6 +13,7 @@ namespace Hospital_Management_System.ViewModels
         // ============================================
         // DOCTOR INFORMATION (Sidebar)
         // ============================================
+        private readonly VisitService _visitService;
         [ObservableProperty]
         Appointment presentAppointment;
         [ObservableProperty]
@@ -88,13 +90,11 @@ namespace Hospital_Management_System.ViewModels
 
         public VisitManagementViewModel()
         {
-            // Initialize with default values or load doctor data
-             LoadDoctorData();
+            _visitService = MauiProgram.Services.GetRequiredService<VisitService>();
+
         }
 
-        // ============================================
         // COMMANDS (UI Interactions Only)
-        // ============================================
 
         [RelayCommand]
         private void ClearForm()
@@ -152,9 +152,33 @@ namespace Hospital_Management_System.ViewModels
             }
 
             // TODO: Add your save logic here
-            // await _visitService.CreateVisitAsync(visit);
+            Visit visit = new Visit
+            {
+                DoctorId = int.Parse(DoctorId),
+                PatientId = int.Parse(PatientId),
+                AppointmentId = int.Parse(AppointmentId),
+                Symptoms = Symptoms,
+                DiagnosisSummary = DiagnosisSummary,
+                Prescriptions = Prescription,
+                VisitType = SelectedVisitType,
+                VisitDateTime = VisitDate,
+                CreatedAt = DateTime.Now,
+                FollowUpDate = RequestAdmission ? (DateTime?)FollowUpDate : null
+            };
+            if (RequestAdmission)
+            {
+                // Create an admission request object
+                RoomRequest admissionRequest = new RoomRequest
+                {
+                    PatientId = int.Parse(PatientId),
+                    DoctorId = int.Parse(DoctorId),
+                    Status = "Pending"
+                };
+            }   
+                
+                 await _visitService.CreateVisit(visit);
 
-            await Shell.Current.DisplayAlertAsync(
+                await Shell.Current.DisplayAlertAsync(
                 "Success",
                 "Visit recorded successfully!",
                 "OK");
@@ -172,13 +196,22 @@ namespace Hospital_Management_System.ViewModels
         // HELPER METHODS (For Loading Data)
         // ============================================
 
-        public void LoadDoctorData()
+        public void LoadDoctorData(Staff staff)
         {
-            // TODO: Load doctor data from service
-            // var doctor = await _doctorService.GetDoctorByIdAsync(doctorId);
-            // DoctorName = doctor.FullName;
-            // DoctorId = doctor.DoctorId;
-            // etc...
+            if (staff == null)
+            {
+                return;
+            }
+            else
+            {
+                DoctorName = $"{staff.FirstName} {staff.LastName}";
+                DoctorId = staff.StaffID.ToString();
+                DoctorSpecialization = staff.Role;
+                DoctorDepartment = staff.DepartmentName;
+                DoctorEmail = staff.Email;
+                DoctorPhone = staff.Phone;
+
+            }
         }
         partial void OnPresentAppointmentChanged(Appointment value)
         {
@@ -187,6 +220,10 @@ namespace Hospital_Management_System.ViewModels
                 LoadAppointmentData(value);
             }
         }
+        partial void OnPresentStaffChanged(Staff value)
+        {
+            LoadDoctorData(value);
+        }
         public void LoadAppointmentData(Appointment presentAppointment)
         {
             if (presentAppointment == null)
@@ -194,44 +231,8 @@ namespace Hospital_Management_System.ViewModels
                 Debug.WriteLine("No appointment data provided.");
                 return;
             }
-            PatientId = presentAppointment.PatientName;
-            DoctorId = presentAppointment.DoctorID.ToString();
+            PatientId = presentAppointment.PatientID.ToString();
+            AppointmentId = presentAppointment.DoctorID.ToString();
         }
     }
 }
-
-
-// ============================================
-// CODE-BEHIND (VisitManagementView.xaml.cs)
-// ============================================
-
-/*
-using Hospital_Management_System.ViewModels;
-
-namespace Hospital_Management_System.Views
-{
-    public partial class VisitManagementView : ContentPage
-    {
-        public VisitManagementView(VisitManagementViewModel viewModel)
-        {
-            InitializeComponent();
-            BindingContext = viewModel;
-        }
-    }
-}
-*/
-
-
-// ============================================
-// REGISTRATION (MauiProgram.cs)
-// ============================================
-
-/*
-// Register in MauiProgram.cs:
-
-builder.Services.AddTransient<VisitManagementViewModel>();
-builder.Services.AddTransient<VisitManagementView>();
-
-// Register route in AppShell.xaml.cs:
-Routing.RegisterRoute(nameof(VisitManagementView), typeof(VisitManagementView));
-*/
