@@ -7,9 +7,12 @@
              x:DataType="viewmodels:AddPatientViewModel"
              Shell.NavBarIsVisible="False"
              Title="Create Appointment">
-    <ContentPage.Resources>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" IsEnabled="False"/>
+    </Shell.BackButtonBehavior>
+    <!--<ContentPage.Resources>
         <StyleSheetExtension Source="../Resources/Styles/Style.css" />
-    </ContentPage.Resources>
+    </ContentPage.Resources>-->
     <HorizontalStackLayout Background="#F5F7FA">
 
         <!-- Sidebar Navigation -->
@@ -414,7 +417,7 @@
                                 <Button x:Name="AddPatient"
                                         Text="Add Patient"
                                         Command="{Binding AddPatientCommand}"
-                                        BackgroundColor="#4A90E2">
+                                        >
                                     <Button.GestureRecognizers>
                                         <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
                                     </Button.GestureRecognizers>

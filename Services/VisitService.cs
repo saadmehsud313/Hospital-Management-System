@@ -16,15 +16,10 @@ namespace Hospital_Management_System.Services
         }
         public async Task<bool> CreateVisit(Visit visit)
         {
-            visit.VisitId = await _visitRepository.GetLastVisitAsync() + 1;
-            visit.CreatedAt = DateTime.Now;
-            var _docService = MauiProgram.Services.GetRequiredService<DoctorService>();
-            int id= await _docService.GetDocIDByStaffId(visit.DoctorId);
+            var doc_service = MauiProgram.Services.GetRequiredService<DoctorService>();
+            int id =await doc_service.GetDocIDByStaffId(visit.DoctorId);
             visit.DoctorId = id;
-            var _appointmentRepository = MauiProgram.Services.GetRequiredService<AppointmentRepository>();
-            bool visStatus = await _visitRepository.CreateVisitAsync(visit);
-            bool appStatus= await _appointmentRepository.UpdateAppointmentStatusAsync(visit.AppointmentId, "Completed");
-            return appStatus && visStatus;
+            return await _visitRepository.CreateVisitAsync(visit);
         }
     }
 }

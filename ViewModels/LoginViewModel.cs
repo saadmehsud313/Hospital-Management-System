@@ -63,6 +63,13 @@ namespace Hospital_Management_System.ViewModels
 
                 return false;
             }
+            else if (!EmailEntry.Contains("@jinnah.com"))
+            {
+                Application.Current.MainPage.DisplayAlertAsync("Error!", "The email should only consist of hospital domain.", "Ok");
+
+                return false;
+
+            }
             if (PasswordEntry is null)
             {
                 Application.Current.MainPage.DisplayAlertAsync("Error!", "Please enter password", "Ok");

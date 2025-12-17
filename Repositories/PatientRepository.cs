@@ -25,20 +25,12 @@ namespace Hospital_Management_System.Repository
             {
                 using SqlConnection connect = new(_connectionString);
 
-                string query = @"
-                            INSERT INTO PATIENT 
-                            (PatientId, FirstName, LastName, MRN, Gender, Phone, BloodGroup, 
-                             EmergencyContactName, EmergencyContactPhone, CreatedAt, IsActive, Age)
-                            VALUES 
-                            (@PatientId, @FirstName, @LastName, @MRN, @Gender, @Phone, @BloodGroup, 
-                             @EmergencyContactName, @EmergencyContactPhone, @CreatedAt, @IsActive, @Age)";
+                string query = @"exec InsertPatient  @FirstName, @LastName, @Gender, @Phone, @BloodGroup, 
+                             @EmergencyContactName, @EmergencyContactPhone, @CreatedAt, @IsActive, @Age";
 
                 using SqlCommand command = new(query, connect);
-
-                command.Parameters.AddWithValue("@PatientId", patient.PatientId);
                 command.Parameters.AddWithValue("@FirstName", patient.FirstName);
                 command.Parameters.AddWithValue("@LastName", patient.LastName);
-                command.Parameters.AddWithValue("@MRN", patient.MRN);
                 command.Parameters.AddWithValue("@Gender", patient.Gender);
                 command.Parameters.AddWithValue("@Phone", patient.Phone);
                 command.Parameters.AddWithValue("@BloodGroup", patient.BloodGroup);
@@ -49,10 +41,31 @@ namespace Hospital_Management_System.Repository
                 command.Parameters.AddWithValue("@Age", patient.Age);
 
                 await connect.OpenAsync();
-                int affectedRows = await command.ExecuteNonQueryAsync();
-                return affectedRows > 0;
+                using SqlDataReader reader = await command.ExecuteReaderAsync();
+                if(await reader.ReadAsync())
+                {
+                    bool result = reader.GetInt32(reader.GetOrdinal("Success"))==1;
+                    string message = reader.GetString(reader.GetOrdinal("Message"));
+                    string MRN = reader.GetString(reader.GetOrdinal("MRN"));
+                    int id = reader.GetInt32(reader.GetOrdinal("PatientId"));
+                    if(!result)
+                    {
+                        await Shell.Current.DisplayAlertAsync("Error", message, "OK");
+                        return false;
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlertAsync("Success", $"Patient added successfully with \n  MRN: {MRN} and \n ID: {id}", "OK");
+                        return true;
+                    }
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlertAsync("Error", "Failed to add patient.", "OK");
+                    return false;
+                }
             }
-            catch (Exception e)
+            catch (SqlException e)
             {
                 await Shell.Current.DisplayAlertAsync("Error", $"Error: {e.Message}", "OK");
                 return false;

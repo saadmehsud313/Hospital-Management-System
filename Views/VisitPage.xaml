@@ -244,27 +244,7 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- Treatment -->
-                    <VerticalStackLayout>
-                        <Label Text="Treatment" 
-                               FontSize="12" 
-                               TextColor="#7F8C8D" 
-                               FontAttributes="Bold" 
-                               Margin="0,0,0,8"/>
-                        <Border Style="{StaticResource InputBorder}" 
-                                WidthRequest="800" 
-                                HorizontalOptions="Start"
-                                Padding="10">
-                            <Editor Placeholder="Enter treatment plan..." 
-                                    PlaceholderColor="#95A5A6"
-                                    Text="{Binding Treatment}"
-                                    TextColor="#2C3E50"
-                                    FontSize="16"
-                                    BackgroundColor="Transparent"
-                                    HeightRequest="100"
-                                    AutoSize="TextChanges"/>
-                        </Border>
-                    </VerticalStackLayout>
+                    
 
                     <!-- Prescription -->
                     <VerticalStackLayout>
@@ -313,6 +293,7 @@
                                    Margin="0,0,0,8"/>
                             <Border Style="{StaticResource InputBorder}">
                                 <Picker SelectedItem="{Binding SelectedVisitType}"
+                                        x:DataType="x:String"
                                         TextColor="#2C3E50"
                                         FontSize="16">
                                     <Picker.Items>
@@ -335,28 +316,6 @@
                                TextColor="#2C3E50"
                                VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
-                    <!-- Admission Reason (Visible when checkbox is checked) -->
-                    <VerticalStackLayout IsVisible="{Binding RequestAdmission}">
-                        <Label Text="Reason for Admission" 
-                               FontSize="12" 
-                               TextColor="#7F8C8D" 
-                               FontAttributes="Bold" 
-                               Margin="0,0,0,8"/>
-                        <Border Style="{StaticResource InputBorder}" 
-                                WidthRequest="800" 
-                                HorizontalOptions="Start"
-                                Padding="10">
-                            <Editor Placeholder="Enter reason for admission..." 
-                                    PlaceholderColor="#95A5A6"
-                                    Text="{Binding AdmissionReason}"
-                                    TextColor="#2C3E50"
-                                    FontSize="16"
-                                    BackgroundColor="Transparent"
-                                    HeightRequest="80"
-                                    AutoSize="TextChanges"/>
-                        </Border>
-                    </VerticalStackLayout>
 
                     <!-- Action Buttons -->
                     <HorizontalStackLayout HorizontalOptions="End" 

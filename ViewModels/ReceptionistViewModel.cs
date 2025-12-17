@@ -153,7 +153,6 @@ namespace Hospital_Management_System.ViewModels
                 if (user != null)
                 {
                     await LoadStaffData(user.DocOrStaffId);
-                    Debug.WriteLine($"✅ ReceptionistViewModel initialized for: {StaffName}");
                 }
             }
             catch (Exception ex)

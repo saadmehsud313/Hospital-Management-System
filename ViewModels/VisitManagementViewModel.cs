@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Hospital_Management_System.Models;
+using Hospital_Management_System.Repositories;
 using Hospital_Management_System.Services;
 using System.Diagnostics;
 
@@ -79,7 +80,7 @@ namespace Hospital_Management_System.ViewModels
         // ============================================
 
         [ObservableProperty]
-        private bool requestAdmission = false;
+        public bool requestAdmission = false;
 
         [ObservableProperty]
         private string admissionReason;
@@ -152,6 +153,7 @@ namespace Hospital_Management_System.ViewModels
             }
 
             // TODO: Add your save logic here
+            
             Visit visit = new Visit
             {
                 DoctorId = int.Parse(DoctorId),
@@ -165,6 +167,8 @@ namespace Hospital_Management_System.ViewModels
                 CreatedAt = DateTime.Now,
                 FollowUpDate = RequestAdmission ? (DateTime?)FollowUpDate : null
             };
+            bool visitStatus= await _visitService.CreateVisit(visit);
+            bool request = true;
             if (RequestAdmission)
             {
                 // Create an admission request object
@@ -174,16 +178,31 @@ namespace Hospital_Management_System.ViewModels
                     DoctorId = int.Parse(DoctorId),
                     Status = "Pending"
                 };
-            }   
-                
-                 await _visitService.CreateVisit(visit);
-
+                var admissionRepository = MauiProgram.Services.GetRequiredService<AdmissionRepository>();
+                request = await admissionRepository.CreateAdmitRequest(admissionRequest);
+            }
+            if (request && visitStatus)
+            {
                 await Shell.Current.DisplayAlertAsync(
-                "Success",
-                "Visit recorded successfully!",
-                "OK");
-
-            ClearForm();
+                    "Success",
+                    "Visit and Admission Request recorded successfully!",
+                    "OK");
+                _ = Back();
+            }
+            else if (request == false)
+            {
+                await Shell.Current.DisplayAlertAsync(
+                    "Error",
+                    "Failed to create admission request.",
+                    "OK");
+            }
+            else if(visitStatus == false)
+            {
+                await Shell.Current.DisplayAlertAsync(
+                    "Error",
+                    "Failed to record visit.",
+                    "OK");
+            }
         }
 
         [RelayCommand]
@@ -232,7 +251,7 @@ namespace Hospital_Management_System.ViewModels
                 return;
             }
             PatientId = presentAppointment.PatientID.ToString();
-            AppointmentId = presentAppointment.DoctorID.ToString();
+            AppointmentId = presentAppointment.AppointmentID.ToString();
         }
         //public async Task OnAppearing()
         //{

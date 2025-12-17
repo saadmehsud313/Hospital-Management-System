@@ -108,6 +108,8 @@ namespace Hospital_Management_System.ViewModels
         //Verify all required fields are filled
         private bool VerifyPatient()
         {
+            TimeOnly startTime = new TimeOnly(8, 0, 0);
+            TimeOnly endTime = new TimeOnly(22, 0, 0);
             if (FirstName.IsWhiteSpace() || LastName is null)
             {
                 
@@ -167,6 +169,11 @@ namespace Hospital_Management_System.ViewModels
             else if (!String.IsNullOrEmpty(EmergencyContactPhone) && (EmergencyContactPhone.Length != 11 || !EmergencyContactPhone.All(char.IsDigit)))
             {
                 Shell.Current.DisplayAlertAsync("Error", "Please enter a valid 11-digit Emergency Contact Phone Number.", "OK");
+                return false;
+            }
+            else if(AppointmentTime < startTime.ToTimeSpan() || AppointmentTime >= endTime.ToTimeSpan())
+            {
+                Shell.Current.DisplayAlertAsync("Error", "Appointment time must be between 08:00 and 22:00.", "OK");
                 return false;
             }
             else

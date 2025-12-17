@@ -23,7 +23,7 @@ namespace Hospital_Management_System.Repositories
             {
                using SqlConnection connect = new(_connectionString);
                await connect.OpenAsync();
-               string query = $"select * from User_Account where User_Account.StaffID={userID};";
+               string query = $"select * from User_Account where User_Account.Email='{userID}';";
                using SqlCommand command = new(query, connect);
                 SqlDataReader reader = await command.ExecuteReaderAsync();
                 

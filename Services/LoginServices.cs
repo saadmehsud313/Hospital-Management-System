@@ -27,7 +27,7 @@ namespace Hospital_Management_System.Services
                     await Application.Current.MainPage.DisplayAlertAsync("User Not Found", "User Does Not Exist", "Ok");
                     return false;
                 }
-                else if(userID.Equals($"{user.DocOrStaffId}") && password.Equals(user.Password))
+                else if(userID.Equals($"{user.Email}") && password.Equals(user.Password))
                 {
                     return true;
                 }

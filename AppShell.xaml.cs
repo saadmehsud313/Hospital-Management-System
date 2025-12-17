@@ -8,6 +8,7 @@ namespace Hospital_Management_System
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(AppointmentView),typeof(AppointmentView));
+            Routing.RegisterRoute(nameof(AdmitPatientView),typeof(AdmitPatientView));
             Routing.RegisterRoute(nameof(VisitPage),typeof(VisitPage));
             SetupFlyout(role);
         }
@@ -40,11 +41,11 @@ namespace Hospital_Management_System
                 });
                 Items.Add(new FlyoutItem
                 {
-                    Title="Manage Rooms",
+                    Title="Manage Admissions",
                     Items =
                     {
                         new ShellContent{
-                            ContentTemplate=new DataTemplate(typeof(RoomAssignmentPage))
+                            ContentTemplate=new DataTemplate(typeof(AdmitPatientView))
                     }
                     }
                 });

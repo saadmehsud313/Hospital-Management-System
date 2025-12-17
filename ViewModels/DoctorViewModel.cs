@@ -162,7 +162,7 @@ namespace Hospital_Management_System.ViewModels
             UserName = string.Empty;
             StaffEmail = string.Empty;
             UserId = string.Empty;
-            LoadStaffData();
+            _=LoadStaffData();
 
         }
         [RelayCommand]
@@ -232,7 +232,6 @@ namespace Hospital_Management_System.ViewModels
         {
             try
             {
-                Debug.WriteLine("📅 Switching to Today tab...");
 
                 // 1. Update visibility flags
                 ShowTodayAppointments = true;
@@ -390,7 +389,7 @@ namespace Hospital_Management_System.ViewModels
             {
 
                 // Load fresh data from database
-                var freshStaffData = await _staffService.GetStaff(staff.StaffID);
+                var freshStaffData = await _staffService.GetStaff(ReceptionistViewModel.user.DocOrStaffId);
                 if (freshStaffData == null)
                 {
                     await Shell.Current.DisplayAlertAsync("Error", "Could not load your profile data. Please contact administrator.", "Okay");

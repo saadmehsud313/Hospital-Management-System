@@ -7,6 +7,9 @@
              Title="Appointment Details"
              Background="#F5F7FA"
              Shell.NavBarIsVisible="False">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" IsEnabled="False"/>
+    </Shell.BackButtonBehavior>
 
     <ContentPage.Resources>
         <Style x:Key="DataDisplayBorder" TargetType="Border">

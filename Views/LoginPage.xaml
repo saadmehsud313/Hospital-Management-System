@@ -10,7 +10,7 @@
              Shell.FlyoutBehavior="Disabled">
 
     <Shell.BackButtonBehavior>
-        <BackButtonBehavior IsVisible="False" IsEnabled="False"/>
+        <BackButtonBehavior IsEnabled="False" IsVisible="False"/>
     </Shell.BackButtonBehavior>
 
     <Grid RowDefinitions="*,Auto,*"

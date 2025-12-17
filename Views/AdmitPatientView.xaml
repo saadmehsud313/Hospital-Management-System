@@ -3,10 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Hospital_Management_System.Views.AdmitPatientView"
              xmlns:viewmodels="clr-namespace:Hospital_Management_System.ViewModels"
+             x:DataType="viewmodels:AdmitPatientViewModel"
              xmlns:models="clr-namespace:Hospital_Management_System.Models"
              Shell.NavBarIsVisible="False">
 
-    
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" IsEnabled="False"/>
+    </Shell.BackButtonBehavior>
     <HorizontalStackLayout Background="#F5F7FA">
 
         <!-- Sidebar Navigation -->
@@ -101,7 +104,8 @@
         </VerticalStackLayout>
 
         <!-- Admit Requests Collection View -->
-        <ContentView IsVisible="{Binding ShowAdmitRequests}" IsEnabled="{Binding ShowAdmitRequests}">
+        <ContentView IsVisible="{Binding ToggleNewAssignment}" IsEnabled="{Binding ToggleNewAssignment}">
+            <ScrollView WidthRequest="900">
             <VerticalStackLayout Spacing="20" Margin="20,20,20,10">
 
                 <!-- Header -->
@@ -262,7 +266,7 @@
 
                                         <!-- Action Button -->
                                         <Button Text="Process Admission"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:YourViewModel}}, Path=ProcessAdmissionCommand}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:AdmitPatientViewModel}}, Path=ProcessAdmissionCommand}"
                                         CommandParameter="{Binding .}"
                                         BackgroundColor="#27AE60"
                                         TextColor="White"
@@ -281,6 +285,7 @@
                 </CollectionView>
 
             </VerticalStackLayout>
+            </ScrollView>
         </ContentView>
         <!-- Manage Room Assignments List -->
         <ContentView IsVisible="{Binding ToggleManageAssignment}" IsEnabled="{Binding ToggleManageAssignment}">

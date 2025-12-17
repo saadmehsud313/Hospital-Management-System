@@ -39,16 +39,10 @@ namespace Hospital_Management_System.Repository
             {
                 using SqlConnection connection = new(_connectionString);
 
-                string query = @"
-            INSERT INTO Appointment 
-            (AppointmentID, PatientID, DoctorID, CreatedByStaffID, ScheduledAt, Reason, Status)
-            VALUES
-            (@AppointmentID, @PatientID, @DoctorID, @CreatedByStaffID, @ScheduledAt, @Reason, @Status);
-        ";
+                string query = @"exec sp_InsertAppointment @PatientID,@DoctorID,@CreatedByStaffID,@ScheduledAt,@Reason,@Status";
 
                 using SqlCommand command = new(query, connection);
 
-                command.Parameters.AddWithValue("@AppointmentID", appointment.AppointmentID);
                 command.Parameters.AddWithValue("@PatientID", appointment.PatientID);
                 command.Parameters.AddWithValue("@DoctorID", appointment.DoctorID);
                 command.Parameters.AddWithValue("@CreatedByStaffID", appointment.CreatedByStaff);
@@ -57,13 +51,32 @@ namespace Hospital_Management_System.Repository
                 command.Parameters.AddWithValue("@Status", appointment.Status);
 
                 await connection.OpenAsync();
-                int rowsAffected = await command.ExecuteNonQueryAsync();
-
-                return rowsAffected > 0;
-            }
-            catch (Exception ex)
+                using SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (await reader.ReadAsync())
+                {
+                    bool success = reader.GetInt32(reader.GetOrdinal("Success")) == 1;
+                    string message = reader.GetString(reader.GetOrdinal("Message"));
+                    int appointmentId = reader.IsDBNull(reader.GetOrdinal("AppointmentID")) ? 0 : reader.GetInt32(reader.GetOrdinal("AppointmentID"));
+                    DateTime scheduledAt = reader.IsDBNull(reader.GetOrdinal("ScheduledAt")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("ScheduledAt"));
+                    if (!success)
+                    {
+                        await Shell.Current.DisplayAlertAsync("Error", message, "Okay");
+                        return false;
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlertAsync("Success", $"Appointment ID: {appointmentId} scheduled at {scheduledAt}", "Okay");
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+             }
+            catch(SqlException ex)
             {
-                await Shell.Current.DisplayAlertAsync("Error", $"Error: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", $"Error:{ex.Message} occured", "Okay");
                 return false;
             }
         }
@@ -122,31 +135,40 @@ namespace Hospital_Management_System.Repository
         }
         public async Task<List<Appointment>> GetPendingAppointmentsByDocIDAsync(int docID)
         {
-            List<Appointment> appointments = new();
-            using SqlConnection connection = new(_connectionString);
-            string query = "exec GetPendingAppointments @DoctorID";
-            await connection.OpenAsync();
-            using SqlCommand command = new(query, connection);
-            command.Parameters.AddWithValue("@DoctorID", docID);
-            using SqlDataReader reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            try
             {
-                Debug.WriteLine("Reading appointment record...");
-                Appointment appointment = new()
+                List<Appointment> appointments = new();
+                using SqlConnection connection = new(_connectionString);
+                string query = "exec GetPendingAppointments @DoctorID";
+                await connection.OpenAsync();
+                using SqlCommand command = new(query, connection);
+                command.Parameters.AddWithValue("@DoctorID", docID);
+                using SqlDataReader reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
                 {
-                    AppointmentID = reader.GetInt32(0),
-                    PatientID = reader.GetInt32(1),
-                    DoctorID = reader.GetInt32(2),
-                    CreatedByStaff = reader.GetInt32(3),
-                    AppointmentDate = reader.GetDateTime(4),
-                    Status = reader.GetString(5),
-                    Reason = reader.GetString(6),
-                    PatientName = reader.GetString(7),
-                    PatientPhone = reader.GetString(8)
-                };
-                appointments.Add(appointment);
+                    Debug.WriteLine("Reading appointment record...");
+                    Appointment appointment = new()
+                    {
+                        AppointmentID = reader.GetInt32(0),
+                        PatientID = reader.GetInt32(1),
+                        DoctorID = reader.GetInt32(2),
+                        CreatedByStaff = reader.GetInt32(3),
+                        AppointmentDate = reader.GetDateTime(4),
+                        Status = reader.GetString(5),
+                        Reason = reader.GetString(6),
+                        PatientName = reader.GetString(7),
+                        PatientPhone = reader.GetString(8)
+                    };
+                    appointments.Add(appointment);
+                }
+                    return appointments;
             }
-            return appointments;
+            catch(SqlException ex)
+            {
+                await Shell.Current.DisplayAlertAsync("Error", $"Error:{ex.Message} occured", "Okay");
+                return null;
+            }
+                
         }
         public async Task<List<Appointment>> GetHistoryAppointmentsByDocIDAsync(int docID)
         {
@@ -189,10 +211,9 @@ namespace Hospital_Management_System.Repository
                     }
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-                Debug.WriteLine($"ERROR in GetAppointmentHistory: {ex.Message}");
-                Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
+                await Shell.Current.DisplayAlertAsync("Error", $"Error:{ex.Message} occured", "Okay");
             }
 
             return appointments;
@@ -251,7 +272,35 @@ namespace Hospital_Management_System.Repository
             try
             {
                 using SqlConnection connection = new(_connectionString);
-                string query = $"Update Appointment  set ";
+                string query = @"exec sp_UpdateAppointment @AppointmentID,@PatientID,@DoctorID,@CreatedByStaffID,@ScheduledAt
+                                @Reason,@Status";
+                using SqlCommand command = new(query, connection);
+                command.Parameters.AddWithValue("@AppointmentID", appointment.AppointmentID);
+                command.Parameters.AddWithValue("@PatientID", appointment.PatientID);
+                command.Parameters.AddWithValue("@DoctorID", appointment.DoctorID);
+                command.Parameters.AddWithValue("@CreatedByStaffID", appointment.CreatedByStaff);
+                command.Parameters.AddWithValue("@ScheduledAt", appointment.AppointmentDate);
+                command.Parameters.AddWithValue("@Reason", appointment.Reason);
+                command.Parameters.AddWithValue("@Status", appointment.Status);
+                await connection.OpenAsync();
+                using SqlDataReader reader = await command.ExecuteReaderAsync();
+                if(await reader.ReadAsync())
+                {
+                    bool success = reader.GetInt32(reader.GetOrdinal("Success")) == 1;
+                    string message = reader.GetString(reader.GetOrdinal("Message"));
+                    DateTime scheduledAt=reader.GetDateTime(reader.GetOrdinal("ScheduledAt"));
+
+                    if (!success)
+                    {
+                        await Shell.Current.DisplayAlertAsync("Error", message, "Okay");
+                        return false;
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlertAsync("Success",$"{message}\n New Appointment  Scheduled At:{scheduledAt}", "Okay");
+                        return true;
+                     }
+                }
                 return true;
             }
             catch{

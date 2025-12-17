@@ -21,9 +21,9 @@
                         Stroke="#4A90E2"
                         StrokeThickness="3"
                         Background="#E8F4FF">
-                    <Label Text="{Binding StaffName, StringFormat='{0:substring(0,1)}'}"
+                    <Label Text="🤵🏾"
                            TextColor="#4A90E2"
-                           FontSize="30"
+                           FontSize="80"
                            FontAttributes="Bold"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"/>

@@ -20,9 +20,6 @@ namespace Hospital_Management_System.Services
         public async Task<bool> AddPatient(Patient patient)
         {     
             patient.PatientId = await _patientRepository.GetLastPatientAsync()+1;
-            string createdAt = patient.CreatedAt.GetValueOrDefault().ToString("MMMyy");
-            createdAt = createdAt.ToUpper();
-            patient.MRN = createdAt + '-' + patient.PatientId;
             return await _patientRepository.AddPatientAsync(patient);
         }
         public async Task<Patient> GetPatient(int patientId)
