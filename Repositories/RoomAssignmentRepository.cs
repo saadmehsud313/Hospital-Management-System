@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Hospital_Management_System.Models;
+using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Hospital_Management_System.Models;
-using Microsoft.Data.SqlClient;
 
 namespace Hospital_Management_System.Repository
 {
@@ -382,6 +383,47 @@ namespace Hospital_Management_System.Repository
                 Debug.WriteLine($"❌ GetNurseRoomCountAsync error: {ex.Message}");
                 return -1;
             }
+        }
+        public async Task<List<RoomAssignment>> GetRoomAssignments(int nurseID,DateTime? filterFromDate)
+        {
+            var assignments = new List<RoomAssignment>();
+
+            string query = $"exec GetRoomAssignmentsByNurse @NurseID={nurseID}";
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                
+                // Pass NULLs so SQL returns all data
+                cmd.Parameters.AddWithValue("@NurseID", DBNull.Value);
+                cmd.Parameters.AddWithValue("@RoomID", DBNull.Value);
+                cmd.Parameters.AddWithValue("@IsActive", DBNull.Value);
+                cmd.Parameters.AddWithValue("@FromDate", DBNull.Value);
+                cmd.Parameters.AddWithValue("@ToDate", DBNull.Value);
+
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        assignments.Add(new RoomAssignment
+                        {
+                            AssignmentID = reader.GetInt32(0),
+                            NurseID = reader.GetInt32(1),
+                            RoomID = reader.GetInt32(2),
+                            AssignmentDate = reader.GetDateTime(3),
+                            AssignedByStaffID = reader.GetInt32(4),
+                            IsActive = reader.IsDBNull(5) ? false : reader.GetBoolean(5)
+                        });
+                    }
+                }
+            }
+
+            // 🔹 Filter in C#
+            if (filterFromDate.HasValue)
+                assignments = assignments
+                    .Where(a => a.AssignmentDate.Date >= filterFromDate.Value.Date)
+                    .ToList();
+            return assignments;
         }
     }
 }

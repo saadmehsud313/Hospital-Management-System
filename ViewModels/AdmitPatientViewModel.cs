@@ -71,6 +71,8 @@ namespace Hospital_Management_System.ViewModels
         string staffRole;
         [ObservableProperty]
         string staffDepartment;
+        [ObservableProperty]
+        ObservableCollection<RoomRequest> admitRequets;
         public AdmitPatientViewModel()
         {
             _staffService = MauiProgram.Services.GetRequiredService<StaffService>();
@@ -90,26 +92,26 @@ namespace Hospital_Management_System.ViewModels
             DischargeDate = null;
         }
 
-        private bool CanAssignRoom()
-        {
-            return SelectedRoom != null && SelectedNurse != null && !string.IsNullOrWhiteSpace(PatientIDInput);
-        }
+        //private bool CanAssignRoom()
+        //{
+        //    return SelectedRoom != null && SelectedNurse != null && !string.IsNullOrWhiteSpace(PatientIDInput);
+        //}
 
-        private void OnRoomTapped(object? parameter)
-        {
-            //if (parameter is RoomAssignment ra)
-            //{
-            //    SelectedRoomAssignment = ra;
-            //}
-        }
+        //private void OnRoomTapped(object? parameter)
+        //{
+        //    //if (parameter is RoomAssignment ra)
+        //    //{
+        //    //    SelectedRoomAssignment = ra;
+        //    //}
+        //}
 
-        private void OnRoomHistoryTapped(object? parameter)
-        {
-            //if (parameter is RoomAssignment ra)
-            //{
-            //    SelectedRoomAssignmentHistory = ra;
-            //}
-        }
+        //private void OnRoomHistoryTapped(object? parameter)
+        //{
+        //    //if (parameter is RoomAssignment ra)
+        //    //{
+        //    //    SelectedRoomAssignmentHistory = ra;
+        //    //}
+        //}
         private async Task LoadNursesAsync()
         {
             try
@@ -136,6 +138,65 @@ namespace Hospital_Management_System.ViewModels
             {
                 var roomList = await _roomAssignmentRepository.GetAvailableRoomsAsync(SelectedDate);
                 AvailableRooms.Clear();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 foreach (var room in roomList)
                 {
@@ -168,6 +229,7 @@ namespace Hospital_Management_System.ViewModels
                 Debug.WriteLine($"❌ LoadTodayAssignmentsAsync error: {ex.Message}");
             }
         }
+
         [RelayCommand]
         private async Task AssignRoom()
         {

@@ -23,6 +23,11 @@ namespace Hospital_Management_System.Repositories
             {
                using SqlConnection connect = new(_connectionString);
                await connect.OpenAsync();
+                if(connect.State!=System.Data.ConnectionState.Open)
+                {
+                    Debug.WriteLine("Database connection failed.");
+                    return null;
+                }
                string query = $"select * from User_Account where User_Account.Email='{userID}';";
                using SqlCommand command = new(query, connect);
                 SqlDataReader reader = await command.ExecuteReaderAsync();

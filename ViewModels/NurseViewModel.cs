@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Hospital_Management_System.Models;
+using Hospital_Management_System.Repository;
 using Hospital_Management_System.Services;
 using Hospital_Management_System.Views;
 using System;
@@ -317,8 +318,8 @@ namespace Hospital_Management_System.ViewModels
             try
             {
                 Debug.WriteLine($"Loading room assignments for date: {SelectedHistoryDate.Value:yyyy-MM-dd}");
-
-                var assignments = await _roomAssignmentService.GetRoomAssignmentsByDate(nurseID, SelectedHistoryDate.Value);
+                var _roomRepository = MauiProgram.Services.GetRequiredService<RoomAssignmentRepository>();
+                var assignments = await _roomRepository.GetRoomAssignments(StaffId, SelectedHistoryDate.Value);
 
                 HistoryRoomAssignments.Clear();
                 foreach (var assignment in assignments)

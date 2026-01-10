@@ -142,16 +142,14 @@ namespace Hospital_Management_System.ViewModels
                     "OK");
                 return;
             }
-
-            if (RequestAdmission && string.IsNullOrWhiteSpace(AdmissionReason))
+            if (string.IsNullOrEmpty(SelectedVisitType))
             {
                 await Shell.Current.DisplayAlertAsync(
                     "Validation Error",
-                    "Please enter reason for admission",
+                    "Please select visit type",
                     "OK");
                 return;
             }
-
             // TODO: Add your save logic here
             
             Visit visit = new Visit
@@ -171,11 +169,14 @@ namespace Hospital_Management_System.ViewModels
             bool request = true;
             if (RequestAdmission)
             {
+                var doc_service = MauiProgram.Services.GetRequiredService<DoctorService>();
+                int id = await doc_service.GetDocIDByStaffId(int.Parse(DoctorId));
+                Debug.WriteLine("ID:", id);
                 // Create an admission request object
                 RoomRequest admissionRequest = new RoomRequest
                 {
                     PatientId = int.Parse(PatientId),
-                    DoctorId = int.Parse(DoctorId),
+                    DoctorId = id,
                     Status = "Pending"
                 };
                 var admissionRepository = MauiProgram.Services.GetRequiredService<AdmissionRepository>();

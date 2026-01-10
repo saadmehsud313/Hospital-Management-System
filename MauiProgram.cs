@@ -87,11 +87,12 @@ namespace Hospital_Management_System
             builder.Services.AddSingleton<AdmitPatientViewModel>();
             builder.Services.AddTransient<AdmitPatientView>();
             builder.Services.AddTransient<AdmissionRepository>(
-                sp =>
-                {
-                    var dbConfig = sp.GetRequiredService<DatabseConfig>();
-                    return new AdmissionRepository(dbConfig);
-                });
+               sp=>
+               {
+                   var dbConfig = sp.GetRequiredService<DatabaseConfig>();
+                   return new AdmissionRepository(dbConfig);
+               }
+                );
             builder.Services.AddTransient<PatientRepository>(
                 sp=>
                 {
@@ -122,7 +123,7 @@ namespace Hospital_Management_System
                 );
             builder.Services.AddSingleton<DatabaseConfig>(new DatabaseConfig
                 {
-                ConnectionString = @"Data Source=127.0.0.1,1433;Database=HospitalDatabase;User ID=saadmehsud;password=mrcomputer313;Encrypt=false;TrustServerCertificate=true;Connect Timeout=30;"
+                ConnectionString = @"Data Source=MR-ANDROID\SQLEXPRESS;Database=HospitalDatabase;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Command Timeout=30"
             });
             builder.Services.AddTransient<LoginRepository>(sp =>
             {

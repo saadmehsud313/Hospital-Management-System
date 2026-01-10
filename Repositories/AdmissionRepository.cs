@@ -10,7 +10,7 @@ namespace Hospital_Management_System.Repositories
     {
         private readonly string _connectionString;
 
-        public AdmissionRepository(DatabseConfig databseConfig)
+        public AdmissionRepository(DatabaseConfig databseConfig)
         {
             _connectionString = databseConfig.ConnectionString;
         }
