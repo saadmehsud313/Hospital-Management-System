@@ -6,25 +6,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace Hospital_Management_System.Services
 {
     public class StaffService
     {
         private readonly StaffRepository _staffRepository;
-        public StaffService(StaffRepository staffRepository)
+        private readonly HttpClient _httpClient;
+        public StaffService(StaffRepository staffRepository, IHttpClientFactory factory)
         {
             _staffRepository = staffRepository;
+            _httpClient = factory.CreateClient("api");
         }
         public async Task<Staff> GetStaff(int id)
         {
-            Staff staff= await _staffRepository.GetStaffData(id);
-            if (staff is not null)
-            { 
-                return staff; }
+            Debug.WriteLine(id);
+            HttpResponseMessage response = await _httpClient.GetAsync($"api/Staff/{id}");
+            if(response.IsSuccessStatusCode)
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine(apiResponse);
+                Staff? staff = JsonConvert.DeserializeObject<Staff>(apiResponse);
+                return staff;
+            }
             else
-            { 
-                return null; }
+            {
+                Debug.WriteLine($"❌ StaffService Error in GetStaff: {response.ReasonPhrase}");
+                return null;
+            }
+            
         }
         //public async Task<bool> UpdateUsername(string staffId, string newUsername)
         //{

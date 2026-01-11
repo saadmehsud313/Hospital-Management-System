@@ -217,8 +217,7 @@ namespace Hospital_Management_System.ViewModels
         {
             try
             {
-                Debug.WriteLine($"🔄 Loading staff data for ID: {staffId}");
-
+                
                 Staff staff = await _staffService.GetStaff(staffId);
 
                 if (staff != null)

@@ -8,7 +8,7 @@ namespace Hospital_Management_System.Models
 {
     public class DatabaseConfig
     {
-       
-        public string ConnectionString { get; set;}
+
+        public string ConnectionString { get; set; } = string.Empty;
     }
 }

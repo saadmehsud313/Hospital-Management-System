@@ -9,6 +9,8 @@ using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
 using Microsoft.Maui.LifecycleEvents;
 using Hospital_Management_System.Repository;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Http;
 
 #if WINDOWS
 using WinRT.Interop;
@@ -55,6 +57,11 @@ namespace Hospital_Management_System
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+            builder.Services.AddHttpClient("api", client =>
+            {
+                client.BaseAddress = new Uri("http://10.53.209.22:5000/");
+            });
+
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<MainViewModel>();
             builder.Services.AddSingleton<LoginPage>();
